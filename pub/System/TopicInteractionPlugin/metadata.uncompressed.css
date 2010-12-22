@@ -1,0 +1,277 @@
+.foswikiMetaData {
+  margin-top:2.7692em; /* 36px */
+}
+.foswikiMetaData .jqTab {
+  border-left-width:0px;
+  border-right-width:0px;
+  border-bottom-width:0px;
+  border-color:#ddd;
+}
+.foswikiMetaData .jqTabContents {
+  padding:0px;
+}
+.foswikiMetaData .foswikiDataForm,
+.foswikiMetaData .foswikiAttachments,
+.foswikiMetaData .foswikiComments,
+.foswikiMetaData .foswikiAttachmentsProcess {
+  border:0px;
+  background-color:transparent;
+}
+.foswikiMetaData .foswikiFormFirst {
+  margin-bottom:1.3864em; /* 18px */
+}
+.foswikiMetaData .jqTabContents .foswikiFormSteps {
+  padding:1.3846em; /* 18px */
+}
+.foswikiMetaDataNotAllowed .foswikiMetaDataEdit {
+  display:none;
+}
+
+/* attachments */
+.foswikiMetaData .jqTabContents .foswikiAttachments {
+  padding-left:1em;
+  padding-right:1em;
+}
+.foswikiAttachments {
+  padding:1px 0px 0px 0px;
+}
+.foswikiAttachmentsUploadToggleContainer {
+  display:none;
+}
+.foswikiAttachmentsOptions,
+.foswikiAttachmentsUploadToggleContainer .jqUploader {
+  margin:1.3864em 0em; /* 18px 0px */
+}
+.foswikiAttachmentsOptionsToggleContainer {
+  display:none;
+  height:67px; /* fighting back jumping toggle animations */
+}
+.foswikiAttachmentsOptions {
+  padding:1.3864em 0.6923em; /* 18px 9px */
+
+  /* SMELL: from foswikiFormSteps */
+  border-top:1px solid #EDE3CE;
+  border-bottom:1px solid #EDE3CE;
+  background:#FEF8EB;
+}
+.foswikiAttachmentsOptions a {
+  text-decoration:none;
+  padding:0.1538em 0.3846em; /* 2px 5px */
+  margin:0em -0.1538em; /* 0px -2px */
+}
+.foswikiAttachmentsOptions b {
+  padding:0.1538em 0.3846em; /* 2px 5px */
+}
+a.foswikiAttachmentsOptionsToggle:hover {
+  background-color:transparent;
+  color:red;
+}
+a.foswikiAttachmentsOptionsToggle {
+  color:inherit;
+  text-decoration:underline;
+  height:23px;
+  line-height:23px;
+}
+.foswikiFormSteps .foswikiAttachmentsOptions .foswikiCheckbox {
+  margin-right:0px;
+}
+.foswikiAttachments .foswikiFilter,
+.foswikiAttachments .foswikiSortBy,
+.foswikiAttachments .foswikiResultsPerPage {
+  margin-right:0.5em;
+}
+.foswikiAttachments .foswikiAlert {
+  margin-top:0.6923em; /* 9px */
+}
+.foswikiAttachments .foswikiFilter input {
+  margin:-4px 0px -3px;
+}
+.foswikiAttachmentsContainer {
+  border-top:1px solid #ddd;
+}
+.foswikiAttachments .current {
+  background:#aaa;
+  color:#fff;
+}
+.foswikiAttachments .current:hover {
+  text-decoration:none;
+}
+.foswikiThumbnail a {
+  overflow:hidden;
+  width:4.7693em; /* 62px */
+  display:block;
+}
+.foswikiThumbnail a:hover {
+  background-color:transparent;
+}
+.foswikiThumbnail img {
+  max-width:4.1538em; /* 54px */
+  max-height:4.1538em; /* 54px */
+}
+#simplemodal-container .foswikiThumbnail a {
+  width:auto;
+  margin:0px 0px 1em 1em;
+}
+.foswikiAttachments .foswikiAttachmentEditor .foswikiFormSteps {
+  padding:0.6923em 0.3846em 0.6923em 5.1538em; /* 9px 5px 9px 67px */
+  margin:-0.6923em -0.3846em;
+  border:0px;
+}
+.foswikiAttachmentInfo {
+  margin:0em 0.6923em 0em 4.7693em; /* 0px 9px 0px 62px */
+}
+.foswikiAttachment {
+  position:relative;
+  width:auto;
+}
+.foswikiAttachmentSelected.foswikiAttachmentEdit,
+.foswikiAttachment {
+  border-bottom:1px solid #ddd;
+  border-top:0px;
+}
+.foswikiAttachmentContainer {
+  padding:0.6923em 0.3846em; /* 9px 5px */
+}
+.foswikiAttachmentsCols2 .foswikiAttachment {
+  float:left;
+  width:50%;
+}
+.foswikiAttachmentsCols3 .foswikiAttachment {
+  float:left;
+  width:33%;
+}
+
+.foswikiAttachmentHover {
+  background-color:#f9f9f9;
+}
+.foswikiAttachmentSelected .foswikiAttachmentControl,
+.foswikiAttachmentSelected {
+  background-color:#FBE3E4;
+}
+.foswikiAttachmentSelected {
+  border-top:1px solid #E7B6B9;
+  border-bottom:1px solid #E7B6B9;
+  margin-top:-1px;
+}
+.foswikiAttachmentSelected.foswikiAttachmentEdit {
+  margin-top:0px;
+}
+.foswikiAttachmentSelected .foswikiAttachmentInfo {
+  color:#6D5657;
+}
+.foswikiAttachmentSelected .foswikiAttachmentInfo .foswikiGrayText {
+  color:#A88486;
+}
+.foswikiAttachmentSelected .foswikiAttachmentInfo a {
+  color:#EA5D65;
+}
+.foswikiAttachmentSelected .foswikiAttachmentInfo a:hover {
+  color:#fff;
+}
+.foswikiAttachmentControl {
+  display:none;
+  position:absolute;
+  right:0.6923em;
+  top:0.6923em;
+  background-color:#f9f9f9;
+}
+.foswikiAttachmentControl a {
+  margin-left:0.6923em;
+}
+.foswikiAttachmentHover .foswikiAttachmentControl {
+  display:block;
+}
+
+.foswikiAttachmentsPager .foswikiAttachmentsPagerPrev,
+.foswikiAttachmentsPager .foswikiAttachmentsPagerNext,
+.foswikiAttachmentsPager a {
+  margin:0px 1px;
+  padding:0.1538em 0.3846em; /* 2px 5px */
+  text-decoration:none;
+}
+.foswikiAttachmentsPager a:hover,
+.foswikiAttachmentsPager a.current:visited,
+.foswikiAttachmentsPager a.current {
+  background:#0055B5;
+  background:#bb2222;
+  color:#fff;
+  text-decoration:none;
+}
+.foswikiAttachmentsPagerEllipsis {
+  margin:0em 0.3846em; /* 0px 5px */
+}
+.foswikiAttachmentsPager .foswikiAttachmentsPagerPrev,
+.foswikiAttachmentsPager .foswikiAttachmentsPagerNext {
+  font-weight:bold;
+}
+.foswikiAttachmentsPager .foswikiAttachmentsPagerPrev {
+  margin:0em 0.5em 0em 0em;
+}
+.foswikiAttachmentsPager .foswikiAttachmentsPagerNext {
+  margin:0em 0em 0em 0.5em;
+}
+
+.foswikiAttachmentsBottomActions {
+  margin-top:1.3864em; /* 18px */
+}
+.foswikiAttachmentsBulkAction {
+  display:none;
+  float:left;
+}
+.foswikiAttachmentsUnselectAll {
+  display:none;
+}
+.foswikiAttachmentsSelect {
+  margin:0.3864em 0em; /* 5px */
+}
+.foswikiAttachmentsBulkAction .jqButton {
+  margin-top:-2px;
+}
+
+.foswikiAttachmentBulkMessage {
+  display:none; /* switched on while opening the dialog */
+}
+
+.foswikiAttachmentBulkMessage img {
+  margin:0em 0em 0em 1.5em;
+}
+
+#foswikiAttachmentConfirmBulk .jqSimpleModalCancel {
+  margin-right:0px;
+}
+
+/* forms */
+.foswikiDataForm {
+  margin:0px;
+}
+
+.foswikiDataForm a {
+  text-decoration:none;
+}
+.foswikiDataForm th a {
+  color:#444;
+}
+.foswikiDataForm th a:hover {
+  color:#fff;
+}
+
+.foswikiDataForm .foswikiLayoutTable {
+  width:100%;
+  border-bottom:1px solid #ddd;
+}
+.foswikiDataForm .foswikiLayoutTable .foswikiFormValue {
+  width:100%;
+}
+
+.foswikiDataForm .foswikiLayoutTable th,
+.foswikiDataForm .foswikiLayoutTable td {
+  border-top:1px solid #ddd;
+  padding:0.6538em 0.3846em 0.6538em 0em; /* 8.5px 5px 8.5px 0px */
+  vertical-align:top;
+}
+
+/* comments */
+.foswikiMetaData .cmtComments {
+  margin:0px;
+  padding:1.3846em 1em 0em 1em;
+}

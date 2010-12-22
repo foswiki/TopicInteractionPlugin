@@ -1,0 +1,84 @@
+# Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
+# 
+# Copyright (C) 2010 Michael Daum, http://michaeldaumconsulting.com
+# 
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. 
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details, published at
+# http://www.gnu.org/copyleft/gpl.html
+
+package Foswiki::Plugins::TopicInteractionPlugin::Action::CreateLinks;
+
+use strict;
+use warnings;
+use Error qw( :try );
+use Foswiki::Plugins::DBCachePlugin ();
+use Foswiki::Plugins::TopicInteractionPlugin::Core ();
+use constant DRY => 0; # toggle me
+
+sub handle {
+  my ($response, $params) = @_;
+
+  my @fileNames = split(/\s*,\s*/, $params->{filename});
+
+  my $web = $params->{web};
+  my $topic = $params->{topic};
+  my $id = $params->{id};
+
+  # disable dbcache handler during loop
+  Foswiki::Plugins::DBCachePlugin::disableRenameHandler();
+
+  my $error;
+  foreach my $fileName (@fileNames) {
+    ($fileName) = Foswiki::Sandbox::sanitizeAttachmentName($fileName);
+
+    if (!Foswiki::Func::attachmentExists($web, $topic, $fileName)) {
+      Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 104, "Attachment $fileName does not exist", $id);
+      last;
+    }
+
+    Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("createlink fileName=$fileName, web=$web, topic=$topic");
+
+    my ($meta, $text) = Foswiki::Func::readTopic($web, $topic);
+    my $prevAttachment = $meta->get('FILEATTACHMENT', $fileName);
+    my $prevHide = ($prevAttachment && $prevAttachment->{attr} =~ /h/)?1:0;
+
+    try {
+      unless (DRY) {
+        $error = Foswiki::Func::saveAttachment(
+          $web, $topic, $fileName, {
+            dontlog     => !$Foswiki::cfg{Log}{upload},
+            hide        => $prevHide, # SMELL: we need to ship the prev hide flag as it gets nulled otherwise
+            createlink  => 1,
+          });
+
+      }
+    } catch Error::Simple with {
+      $error = shift->{-text};
+      Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("ERROR: $error");
+    };
+
+    last if $error;
+  }
+
+  # enabling dbcache handlers again
+  Foswiki::Plugins::DBCachePlugin::enableRenameHandler();
+
+  # manually update this topic
+  Foswiki::Plugins::DBCachePlugin::loadTopic($web, $topic);
+
+  if ($error) {
+    Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 1, $error, $id);
+  } else {
+    Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 0, undef, $id)
+  }
+}
+
+1;
+

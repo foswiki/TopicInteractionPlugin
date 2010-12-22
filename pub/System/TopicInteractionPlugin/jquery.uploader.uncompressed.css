@@ -1,0 +1,120 @@
+#simplemodal-container .jqUploaderDialog {
+  width:600px;
+}
+.jqUploaderControls {
+  width:565px;
+}
+.jqUploaderFilesContainer {
+  height: 194px;
+  overflow-y: scroll;
+  border:1px solid #ddd;
+  position:relative;
+}
+
+.jqUploaderDropText  {
+  display:none; /* switched on if capability detected */
+  background: transparent;
+  color:#aaa;
+  position:absolute;
+  margin:0px auto;
+  text-align:center;
+  vertical-align:middle;
+  top:45%;
+  left:45%;
+}
+.jqUploaderFiles {
+  margin:0px;
+  table-layout:fixed;
+  width:100%;
+  border-collapse:separate;
+}
+
+.foswikiFormSteps .jqUploaderFiles td,
+.jqUploaderFiles td {
+  padding: 10px 0px 10px 8px;
+  border-bottom: 1px solid #ddd;
+  position:relative;
+}
+.jqUploaderFileProgress {
+  margin:-10px -8px;
+  padding: 10px 0px;
+  width:0px;
+  background-color:#aaa;
+  position:absolute;
+  opacity:0.3; 
+  -ms-filter:'alpha(opacity=30)'; 
+  filter:alpha(opacity=30)
+  text-align:right;
+}
+.jqUploaderQueued .jqUploaderFileProgress,
+.jqUploaderUploading .jqUploaderFileProgress {
+  display:block;
+}
+.jqUploaderDone .jqUploaderFileProgress {
+  display:none;
+}
+.jqUploaderUploading .jqUploaderFileAction a:hover,
+.jqUploaderUploading .jqUploaderFileAction a {
+  background-image: url('../JQueryPlugin/images/spinner.gif');
+}
+.jqUploaderDone {
+  color:#AAA
+}
+.jqUploaderDone a:hover,
+.jqUploaderDone a {
+  background-image: url('../FamFamFamSilkIcons/accept.png');
+}
+
+.jqUploaderDelete a:hover,
+.jqUploaderDelete a {
+  background-image: url('../FamFamFamSilkIcons/delete.png');
+}
+
+.jqUploaderStopped a,
+.jqUploaderStopped a:hover,
+.jqUploaderError a,
+.jqUploaderError a:hover,
+.jqUploaderFailed a:hover,
+.jqUploaderFailed a {
+  background-image: url('../FamFamFamSilkIcons/error.png');
+}
+
+.jqUploaderDisabled {
+  cursor: default;
+  opacity:0.3; 
+  -ms-filter:'alpha(opacity=30)'; 
+  filter:alpha(opacity=30)
+}
+
+
+.jqUploaderFileSize, 
+.jqUploaderFileStatus {
+  width: 80px;
+}
+
+.jqUploaderFiles .jqUploaderFileAction {
+  width: 32px;
+  padding-right: 15px;
+}
+.jqUploaderFileAction a {
+  width: 16px;
+  height: 16px;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  display:block;
+}
+
+.jqUploaderFileSize,
+.jqUploaderFileStatus,
+.jqUploaderFileAction {
+  text-align: right;
+}
+
+.jqUploaderFileStatus {
+  color: #777;
+}
+
+.jqUploaderStop,
+.jqUploaderMessage {
+  display:none;
+}

@@ -1,0 +1,4 @@
+Foswiki::Plugins::JQueryPlugin,>=3740,perl,Required.
+Foswiki::Plugins::FlexPaperPlugin,>=1.1,perl,Optional.
+ONLYIF ( $Foswiki::Plugins::VERSION < 2.1)
+Foswiki::Plugins::ZonePlugin,>=3.1,perl,Required. required for Foswiki < 1.1
