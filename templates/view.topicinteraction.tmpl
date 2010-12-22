@@ -1,0 +1,15 @@
+%TMPL:INCLUDE{"view"}%
+%TMPL:INCLUDE{"metadata"}%
+%TMPL:DEF{"attachments"}%%TMPL:END%
+%TMPL:DEF{"topicaction"}%<!-- -->
+%ADDTOZONE{"head"
+  id="METADATA::PATTERN:CSS"
+  text="<link rel='stylesheet' media='all' href='%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/metadata.pattern.css' />"
+}%<!-- -->
+%TMPL:P{"metadata"}%
+<a name="topic-actions"></a>
+<div class="patternTopicActions">
+  <div class="patternTopicAction">
+    <span class="patternActionButtons">%TMPL:P{"topicactionbuttons"}%</span>
+  </div>
+</div>%TMPL:END%

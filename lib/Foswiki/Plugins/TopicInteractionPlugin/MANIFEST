@@ -72,6 +72,8 @@ pub/System/TopicInteractionPlugin/plupload.silverlight.uncompressed.js 0644
 pub/System/TopicInteractionPlugin/plupload.silverlight.xap 0644
 pub/System/TopicInteractionPlugin/plupload.uncompressed.js 0644
 pub/System/TopicInteractionPlugin/Screenshot.png 0644
+templates/attach.topicinteraction.tmpl 0644
 templates/metadata.tmpl 0644
 templates/metadata.topicinteraction.tmpl 0644
 templates/uploadform.tmpl 0644
+templates/view.topicinteraction.tmpl 0644
