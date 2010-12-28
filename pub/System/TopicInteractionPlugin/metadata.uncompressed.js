@@ -139,7 +139,7 @@ jQuery(function($) {
       // adjust bucket height to clean up differences causing probs when floating
       if (opts.cols > 1) {
         var maxHeight = 0;
-        $attachments.each(function() {
+        $attachments.css('height', 'auto').each(function() {
           var height = $(this).height();
           if (height > maxHeight) {
             maxHeight = height;
@@ -812,9 +812,9 @@ jQuery(function($) {
       
       $this.click(function() {
         if($versionContainer.is(".foswikiVersionsContainerLoaded")) {
-          $versionContainer.slideDown("fast");
           $this.hide();
           $attachment.find(".foswikiHideVersions").show();
+          $versionContainer.slideDown("fast", dynCols);
         } else {
           $versionContainer.show();
           $versionContainer.load(thisUrl, function() {
@@ -822,6 +822,7 @@ jQuery(function($) {
             $attachment.effect("highlight");
             $this.hide();
             $attachment.find(".foswikiHideVersions").show();
+            dynCols();
           });
         }
         return false;
@@ -835,9 +836,9 @@ jQuery(function($) {
           $versionContainer = $attachment.find(".foswikiVersionsContainer");
       
       $this.click(function() {
-        $versionContainer.slideUp("fast");
         $this.hide();
         $attachment.find(".foswikiShowVersions").show();
+        $versionContainer.slideUp("fast", dynCols);
         return false;
       });
     });
