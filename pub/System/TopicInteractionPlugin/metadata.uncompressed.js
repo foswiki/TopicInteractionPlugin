@@ -2,7 +2,7 @@
 
 Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 
-(c)opyright 2010 Michael Daum http://michaeldaumconsulting.com
+(c)opyright 2010-2011 Michael Daum http://michaeldaumconsulting.com
 
 are listed in the AUTHORS file in the root of this distribution.
 NOTE: Please extend that file, not this notice.
@@ -239,6 +239,21 @@ jQuery(function($) {
       //$.log("METADATA: triggering refresh");
       $uploadContainer.find(".jqUploader").trigger("Refresh");
     }
+
+    /* *********************************************************************/
+    function loadDialog(id, template) {
+      if ($(id).length) {
+        return;
+      }
+      $.ajax({
+        url: foswiki.getPreference("SCRIPTURL")+"/rest/RenderPlugin/template?name=metadata;expand="+template+";topic="+foswiki.getPreference("WEB")+"."+foswiki.getPreference("TOPIC"),
+        dataType: 'html',
+        async: false,
+        success: function(data) {
+          $("body").append(data);
+        }
+      });
+    }
   
     // dynamic layout
     dynCols();
@@ -392,20 +407,40 @@ jQuery(function($) {
     $this.find(".foswikiAttachmentPreviewButton").click(function() {
       var $button = $(this),
           $attachment = $button.parents(".foswikiAttachment:first"),
-          $previewer = $("#foswikiAttachmentPreviewer"),
+          $previewer,
           attachmentOpts = $.extend({}, $attachment.metadata()),
-          height = parseInt($(window).height() * 0.6, 10),
-          width = parseInt($(window).width() * 0.6, 10),
-          previewUrl = foswiki.getPreference("SCRIPTURL")+
-            "/rest/RenderPlugin/tag" +
-            "?name=FLEXPAPER" +
-            ";topic="+opts.topic +
-            ";param="+attachmentOpts.filename +
-            ";width=100%;height="+height;
+          extension = attachmentOpts.filename.replace(/^.+\./, ''),
+          height, width, previewer, previewUrl;
 
-      if (width < 690) {
-        width = 690;
+      if (extension.match(/mp3/)) { // SMELL: add other common audio extensions playable using jwplayer
+        previewer = "audio";
+
+      } else if (extension.match(/flv|swf/)) { // SMELL: add other common video extensions viewable using jwplayer
+        previewer = "video";
+
+        // fixed height
+        height = 400;
+        width = 533;
+
+      } else {
+        previewer = extension;
+        
+        // adjust geometry to viewport
+        height = parseInt($(window).height() * 0.6, 10);
+        width = parseInt($(window).width() * 0.6, 10);
+
       }
+
+      
+      // pdf previewer
+      previewUrl = foswiki.getPreference("SCRIPTURL")+
+        "/rest/RenderPlugin/template" +
+        "?name=metadata" +
+        ";expand=attachments::previewer::"+previewer+
+        ";topic="+opts.topic +
+        ";filename="+attachmentOpts.filename +
+        ";width=100%"+
+        ";height="+Math.round(height);
 
       $.blockUI({
         message:"<h1>Loading preview ...</h1>",
@@ -413,19 +448,20 @@ jQuery(function($) {
         fadeOut: 0
       });
 
+      loadDialog("#foswikiAttachmentPreviewer", "attachments::previewer");
+      $previewer = $("#foswikiAttachmentPreviewer"),
       $previewer.find(".foswikiAttachmentName").text(unescape(attachmentOpts.filename));
       $previewer.find(".foswikiPreviewContainer").load(previewUrl, function() {
         setTimeout(function() {
           $.unblockUI();
           foswiki.openDialog($previewer, {
             persist:true,
-            close:false,
             containerCss: { 
-              width:width,
+              width:width
             }
           }); 
           $(window).trigger("resize.simplemodal");
-        }, 2000);
+        }, 500);
       });
 
       return false;
@@ -441,10 +477,9 @@ jQuery(function($) {
       $.log("METADATA: clicked edit attachment");
 
       $attachment.find(".foswikiErrorMessage").remove();
-
+      loadDialog("#foswikiAttachmentEditor", "attachments::editor");
       foswiki.openDialog('#foswikiAttachmentEditor', {
         persist:false,
-        close:false,
         containerCss: { width:485 },
         onShow: function(dialog) { 
           var $container = dialog.container,
@@ -521,16 +556,15 @@ jQuery(function($) {
           attachmentOpts = $.extend({}, $attachment.metadata()),
           thumbnail = $attachment.find(".foswikiThumbnail").clone(true),
           deleteUrl = foswiki.getPreference("SCRIPTURL")+
-            "/rest/TopicInteractionPlugin/handle?action=delete"+
-            ";id=delete"+
+            "/rest/TopicInteractionPlugin/delete"+
+            "?id=delete"+
             ";filename="+attachmentOpts.filename+
             ";topic="+opts.topic;
 
       $attachment.find(".foswikiErrorMessage").remove();
-
+      loadDialog("#foswikiAttachmentConfirmDelete", "attachments::confirmdelete");
       foswiki.openDialog('#foswikiAttachmentConfirmDelete', {
         persist:false,
-        close:false,
         containerCss: {
           width:300
         },
@@ -575,10 +609,9 @@ jQuery(function($) {
           thumbnail = $attachment.find(".foswikiThumbnail").clone(true);
 
       $attachment.find(".foswikiErrorMessage").remove();
-
+      loadDialog("#foswikiAttachmentMove", "attachments::moveattachment");
       foswiki.openDialog('#foswikiAttachmentMove', {
         persist:false,
-        close:false,
         containerCss: { width:485 },
         onShow: function(dialog) { 
           var $container = dialog.container;
@@ -630,24 +663,6 @@ jQuery(function($) {
       return false;
     });
 
-    // add autocompletion to web and topic fields
-    var $moveAttachmentNewWeb = $("#foswikiAttachmentMove").find("input[name=newweb]"),
-        $moveAttachmentNewTopic = $("#foswikiAttachmentMove").find("input[name=newtopic]");
-    $moveAttachmentNewWeb.autocomplete(
-      foswiki.getPreference("SCRIPTURLPATH")+"/view/"+foswiki.getPreference("SYSTEMWEB")+"/JQueryAjaxHelper?section=web&skin=text", {
-        "scrollHeight": 200
-      }
-    );
-    $moveAttachmentNewTopic.autocomplete(
-      foswiki.getPreference("SCRIPTURLPATH")+"/view/"+foswiki.getPreference("SYSTEMWEB")+"/JQueryAjaxHelper?section=topic&skin=text", {
-        "scrollHeight": 200,
-        "extraParams": {
-          "baseweb": function() { 
-            return $moveAttachmentNewWeb.val();
-          }
-        }
-    });
-
     // add bulk action behaviour
     $this.find(".foswikiAttachmentsBulkAction select").change(function() {
       var $select = $(this),
@@ -656,8 +671,8 @@ jQuery(function($) {
           msgText,
           filenames,
           bulkActionUrl = foswiki.getPreference("SCRIPTURL")+
-            "/rest/TopicInteractionPlugin/handle?action="+action+
-            ";id=bulkaction"+
+            "/rest/TopicInteractionPlugin/"+action+
+            "?id=bulkaction"+
             ";topic="+opts.topic,
           len = opts.selection?opts.selection.length:0;
       if (!len || !action) {
@@ -697,9 +712,9 @@ jQuery(function($) {
       $this.find(".foswikiErrorMessage").remove();
 
       if (action != "move") {
+        loadDialog("#foswikiAttachmentConfirmBulk", "attachments::confirmbulkaction");
         foswiki.openDialog('#foswikiAttachmentConfirmBulk', {
           persist:false,
-          close:false,
           containerCss: {width: 270},
           onShow: function(dialog) {
             dialog.container.find(msgClass).show().find("b").text(len);
@@ -750,9 +765,9 @@ jQuery(function($) {
         });
       } else {
         // move attachments 
+        loadDialog("#foswikiAttachmentMove", "attachments::moveattachment");
         foswiki.openDialog('#foswikiAttachmentMove', {
           persist:false,
-          close:false,
           containerCss: { width:485 },
           onShow: function(dialog) { 
             var $container = dialog.container;

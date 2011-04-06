@@ -1,7 +1,7 @@
 /**
  * jquery.uploader.js
  *
- * Copyright 2010, Michael Daum http://michaeldaumconsulting.com
+ * Copyright 2010-2011, Michael Daum http://michaeldaumconsulting.com
  *
  * based on jquery.plupload.queue.js  Copyright 2009, Moxiecode Systems AB
  *
@@ -523,7 +523,7 @@
       runtimes: foswiki.getPreference("TopicInteractionPlugin.Runtimes"),
       flash_swf_url: foswiki.getPreference("TopicInteractionPlugin.flashUrl"),
       silverlight_xap_url: foswiki.getPreference("TopicInteractionPlugin.silverlightUrl"),
-      url: foswiki.getPreference("SCRIPTURL")+"/rest/TopicInteractionPlugin/handle/",
+      url: foswiki.getPreference("SCRIPTURL")+"/rest/TopicInteractionPlugin/upload",
       fileList: ".jqUploaderFiles",
       browseButton:  ".jqUploaderBrowse",
       startButton:  ".jqUploaderStart",

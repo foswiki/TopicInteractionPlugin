@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2011 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -46,12 +46,13 @@ sub handle {
   $fileHide = 'off' unless defined $fileHide;
   $fileHide = $fileHide eq 'on' ? 1:0;
 
-  my $fileComment = $params->{filecomment} || '';
+  my $fileComment = $params->{filecomment};
+  $fileComment = '' unless defined $fileComment;
 
   Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("receiving file $fileName, chunk $chunk of $nrChunks, id=$id".($isMultiPart?' in multipart mode':' in normal mode'));
 
   # read application/octet-stream, can't use CGI.pm means
-  my $tmpDir = Foswiki::Func::getWorkArea("UploadPlugin");
+  my $tmpDir = Foswiki::Func::getWorkArea("TopicInteractionPlugin");
   my $tmpFileName = $tmpDir.'/'.$fileName.'_part_'.$id;
   my $data = '';
 

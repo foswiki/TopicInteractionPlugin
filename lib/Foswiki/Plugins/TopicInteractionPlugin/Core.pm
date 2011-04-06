@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2011 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,20 +18,9 @@ use strict;
 
 use Foswiki::Func ();
 use Foswiki::Sandbox ();
+use JSON ();
 
 use constant DEBUG => 0; # toggle me
-
-our $switchBoard = {
-  changeproperties => "Foswiki::Plugins::TopicInteractionPlugin::Action::ChangeProperties",
-  delete => "Foswiki::Plugins::TopicInteractionPlugin::Action::DeleteAttachment",
-  move => "Foswiki::Plugins::TopicInteractionPlugin::Action::MoveAttachment",
-  upload => "Foswiki::Plugins::TopicInteractionPlugin::Action::UploadAttachment",
-  createlink => "Foswiki::Plugins::TopicInteractionPlugin::Action::CreateLinks",
-  createimagegallery => "Foswiki::Plugins::TopicInteractionPlugin::Action::CreateImageGallery",
-  download => "Foswiki::Plugins::TopicInteractionPlugin::Action::DownloadAttachment",
-  hide => "Foswiki::Plugins::TopicInteractionPlugin::Action::HideAttachment",
-  unhide => "Foswiki::Plugins::TopicInteractionPlugin::Action::UnhideAttachment",
-};
 
 # Error codes for json-rpc response
 # -32601: unknown action
@@ -52,8 +41,129 @@ our $switchBoard = {
 # 111: zero-sized file upload
 
 ##############################################################################
-sub handleRest {
+sub restChangeProperties {
   my ($session, $subject, $verb, $response) = @_;
+  
+  my $params = prepareAction($session, $response);
+  return unless $params;
+
+  require Foswiki::Plugins::TopicInteractionPlugin::Action::ChangeProperties;
+  Foswiki::Plugins::TopicInteractionPlugin::Action::ChangeProperties::handle($response, $params);
+  deleteAttachmentArchives($params->{web}, $params->{topic});
+
+  return;
+}
+
+##############################################################################
+sub restDelete {
+  my ($session, $subject, $verb, $response) = @_;
+  
+  my $params = prepareAction($session, $response);
+  return unless $params;
+
+  require Foswiki::Plugins::TopicInteractionPlugin::Action::DeleteAttachment;
+  Foswiki::Plugins::TopicInteractionPlugin::Action::DeleteAttachment::handle($response, $params);
+  deleteAttachmentArchives($params->{web}, $params->{topic});
+
+  return;
+}
+
+##############################################################################
+sub restMove {
+  my ($session, $subject, $verb, $response) = @_;
+  
+  my $params = prepareAction($session, $response);
+  return unless $params;
+
+  require Foswiki::Plugins::TopicInteractionPlugin::Action::MoveAttachment;
+  Foswiki::Plugins::TopicInteractionPlugin::Action::MoveAttachment::handle($response, $params);
+  deleteAttachmentArchives($params->{web}, $params->{topic});
+
+  return;
+}
+
+##############################################################################
+sub restUpload {
+  my ($session, $subject, $verb, $response) = @_;
+  
+  my $params = prepareAction($session, $response);
+  return unless $params;
+
+  require Foswiki::Plugins::TopicInteractionPlugin::Action::UploadAttachment;
+  Foswiki::Plugins::TopicInteractionPlugin::Action::UploadAttachment::handle($response, $params);
+  deleteAttachmentArchives($params->{web}, $params->{topic});
+
+  return;
+}
+
+##############################################################################
+sub restCreateLink {
+  my ($session, $subject, $verb, $response) = @_;
+  
+  my $params = prepareAction($session, $response);
+  return unless $params;
+
+  require Foswiki::Plugins::TopicInteractionPlugin::Action::CreateLinks;
+  Foswiki::Plugins::TopicInteractionPlugin::Action::CreateLinks::handle($response, $params);
+
+  return;
+}
+
+##############################################################################
+sub restCreateImageGallery {
+  my ($session, $subject, $verb, $response) = @_;
+  
+  my $params = prepareAction($session, $response);
+  return unless $params;
+
+  require Foswiki::Plugins::TopicInteractionPlugin::Action::CreateImageGallery;
+  Foswiki::Plugins::TopicInteractionPlugin::Action::CreateImageGallery::handle($response, $params);
+
+  return;
+}
+
+##############################################################################
+sub restDownload {
+  my ($session, $subject, $verb, $response) = @_;
+  
+  my $params = prepareAction($session, $response);
+  return unless $params;
+
+  require Foswiki::Plugins::TopicInteractionPlugin::Action::DownloadAttachment;
+  Foswiki::Plugins::TopicInteractionPlugin::Action::DownloadAttachment::handle($response, $params);
+
+  return;
+}
+
+##############################################################################
+sub restHide {
+  my ($session, $subject, $verb, $response) = @_;
+  
+  my $params = prepareAction($session, $response);
+  return unless $params;
+
+  require Foswiki::Plugins::TopicInteractionPlugin::Action::HideAttachment;
+  Foswiki::Plugins::TopicInteractionPlugin::Action::HideAttachment::handle($response, $params);
+
+  return;
+}
+
+##############################################################################
+sub restUnhide {
+  my ($session, $subject, $verb, $response) = @_;
+  
+  my $params = prepareAction($session, $response);
+  return unless $params;
+
+  require Foswiki::Plugins::TopicInteractionPlugin::Action::UnhideAttachment;
+  Foswiki::Plugins::TopicInteractionPlugin::Action::UnhideAttachment::handle($response, $params);
+
+  return;
+}
+
+##############################################################################
+sub prepareAction {
+  my ($session, $response) = @_;
 
   writeDebug("*** called handleRest()");
 
@@ -85,7 +195,6 @@ sub handleRest {
   # read parameters 
   my $topic = $params->{topic} || $session->{webTopic};
   my $web = $session->{webName};
-  my $action = $params->{action} || 'upload';
 
   ($web, $topic) = Foswiki::Func::normalizeWebTopicName($web, $topic);
   unless (Foswiki::Func::topicExists($web, $topic)) {
@@ -94,8 +203,10 @@ sub handleRest {
   }
 
   # check permissions
+  my $wikiName = Foswiki::Func::getWikiName();
+  writeDebug("wikiName=$wikiName, web=$web, $topic=$topic");
   unless (Foswiki::Func::checkAccessPermission(
-    'CHANGE', Foswiki::Func::getWikiName(), undef, $topic, $web)) {
+    'CHANGE', $wikiName, undef, $topic, $web)) {
     printJSONRPC($response, 102, "Access denied", $id);
     return;
   }
@@ -112,29 +223,7 @@ sub handleRest {
   $params->{web} = $web;
   $params->{id} = $id;
 
-  # delegate action to the approriate handler
-  my $actionHandler = $switchBoard->{$action};
-
-  unless ($actionHandler) {
-    printJSONRPC($response, -32601, "unknown action $action", $id);
-    return;
-  }
-
-  writeDebug("actionHandler=$actionHandler");
-
-  eval "use $actionHandler;";
-  die "error reading action: $@" if $@;
-
-  my $sub = $actionHandler."::handle";
-  no strict 'refs';
-  &$sub($response, $params);
-  use strict 'refs';
-
-  if ($action =~ /^(upload|delete|move|changeproperties)$/) {
-    deleteAttachmentArchives($web, $topic);
-  }
-
-  return;
+  return $params;
 }
 
 ##############################################################################
@@ -194,18 +283,29 @@ sub printJSONRPC {
     -type    => 'text/plain',
   );
 
-  my $msg;
   $id = 'id' unless defined $id;
 
-  if($code) {
-    $msg = '{"jsonrpc" : "2.0", "error" : {"code": '.$code.', "message": "'.$text.'"}, "id" : "'.$id.'"}';
+  my $message;
+  
+  if ($code) {
+    $message = {
+      jsonrpc => "2.0",
+      error => {
+        code => $code,
+        message => $text,
+        id => $id,
+      }
+    };
   } else {
-    $msg = '{"jsonrpc" : "2.0", "result" : '.($text?'"'.$text.'"':'null').', "id" : "'.$id.'"}';
+    $message = {
+      jsonrpc => "2.0",
+      result => ($text?$text:'null'),
+      id => $id,
+    };
   }
 
-  $response->print($msg);
-
-  writeDebug("JSON-RPC: $msg");
+  $message = JSON::to_json($message, {pretty=>1});
+  $response->print($message);
 }
 
 ##############################################################################

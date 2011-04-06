@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# Copyright (C) 2005-2010 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2005-2011 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -268,7 +268,7 @@ sub getAttachmentInfo {
     size => $size,
     sizeK => sprintf("%.2f", $size / 1024),
     sizeM => sprintf("%.2f", $size / (1024 * 1024)),
-    comment => ($attachment->{comment} || ''),
+    comment => (defined $attachment->{comment}) ? $attachment->{comment} : '',
     path => ($attachment->{path} || ''),
     version => ($attachment->{version} || 1),
   );

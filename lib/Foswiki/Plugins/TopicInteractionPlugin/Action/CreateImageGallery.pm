@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2011 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ sub handle {
 
   my $error;
   try {
-    Foswiki::Func::saveTopic($web, $topic, undef, $text);
+    Foswiki::Func::saveTopic($web, $topic, $meta, $text);
   } catch Error::Simple with {
     $error = shift->{-text};
     Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("ERROR: $error");

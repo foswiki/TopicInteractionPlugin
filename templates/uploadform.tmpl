@@ -31,14 +31,6 @@
 
 %{***************************************************************************}%
 %TMPL:DEF{"optionsstep"}%<!-- -->
-%TWISTY{
-  showlink=" %MAKETEXT{"Show advanced options"}%" 
-  hidelink=" %MAKETEXT{"Hide advanced options"}%"
-  showimgleft="$percntICONURLPATH{\"toggleopen\"}$percnt"
-  hideimgleft="$percntICONURLPATH{\"toggleclose\"}$percnt"
-  mode="div"
-}%
-<hr />
 <div class="foswikiFormStep">
   <h3>%MAKETEXT{"Comment"}%:</h3>
   <input type="text" size="50" class="foswikiInputField jqUploaderComment" name="filecomment" />
@@ -59,13 +51,12 @@
     </label>
   </div>
 </div>
-%ENDTWISTY%
 <hr />
 <!-- -->%TMPL:END%
 
 %{***************************************************************************}%
 %TMPL:DEF{"buttonsstep"}%<!-- -->
-<div class="foswikiFormStep">
+<div class="foswikiFormStep foswikiFormLast" style="*zoom:1">
   %TMPL:P{"buttonsstep::addbutton"}%
   %TMPL:P{context="TopicInteractionPlugin_autostart" else="buttonsstep::startbutton"}%<!-- -->
   %TMPL:P{"buttonsstep::cancelbutton"}%<!-- -->

@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2011 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@ use Foswiki::Plugins::TopicInteractionPlugin::Core ();
 use constant DRY => 0; # toggle me
 use Archive::Zip qw(:ERROR_CODES :CONSTANTS);
 use Digest::MD5 ();
+use URI ();
 
 sub handle {
   my ($response, $params) = @_;
@@ -35,7 +36,7 @@ sub handle {
   my $pubDir  = $Foswiki::cfg{PubDir}.'/'.$web.'/'.$topic;
   my $archiveName = getArchiveName($web, $topic, \@fileNames);
   my $archivePath = $pubDir."/".$archiveName;
-  my $archiveUrl = Foswiki::Func::getUrlHost()."/".$Foswiki::cfg{PubUrlPath}."/".$web."/".$topic."/".$archiveName;
+  my $archiveUrl = URI->new_abs($Foswiki::cfg{PubUrlPath}."/".$web."/".$topic."/".$archiveName, Foswiki::Func::getUrlHost()."/")->as_string;
 
   unless (-e $archivePath) {
     my $zip = Archive::Zip->new();

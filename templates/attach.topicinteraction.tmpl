@@ -4,8 +4,7 @@
 %TMPL:DEF{"content"}%<!-- content -->
 <div class="foswikiMetaData %IF{"not '%WEB%.%TOPIC%' allows 'change'" then="foswikiMetaDataNotAllowed"}%">
 %BUTTON{
-  "%TMPL:P{"CLOSE"}%" 
-  title="%TMPL:P{"CLOSE_HELP"}%"
+  "%MAKETEXT{"Close"}%" 
   class="foswikiRight simple"
   target="%BASEWEB%.%BASETOPIC%" 
   icon="cross"
