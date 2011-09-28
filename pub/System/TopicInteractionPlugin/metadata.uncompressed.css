@@ -50,9 +50,11 @@
   padding:1.3864em 0.6923em; /* 18px 9px */
 
   /* SMELL: from foswikiFormSteps */
+  /*
   border-top:1px solid #EDE3CE;
   border-bottom:1px solid #EDE3CE;
   background:#FEF8EB;
+  */
 }
 .foswikiAttachmentsOptions a {
   text-decoration:none;
@@ -157,13 +159,13 @@ a.foswikiAttachmentsOptionsToggle {
   margin-top:0px;
 }
 .foswikiAttachmentSelected .foswikiAttachmentInfo {
-  color:#6D5657;
+  color:#764546;
 }
 .foswikiAttachmentSelected .foswikiAttachmentInfo .foswikiGrayText {
-  color:#A88486;
+  color:#764546;
 }
 .foswikiAttachmentSelected .foswikiAttachmentInfo a {
-  color:#EA5D65;
+  color:#764546;
 }
 .foswikiAttachmentSelected .foswikiAttachmentInfo a:hover {
   color:#fff;
@@ -218,7 +220,7 @@ a.foswikiAttachmentsOptionsToggle {
   display:none;
   float:left;
 }
-.foswikiAttachmentsUnselectAll {
+.foswikiAttachmentsClearAll {
   display:none;
 }
 .foswikiAttachmentsSelect {

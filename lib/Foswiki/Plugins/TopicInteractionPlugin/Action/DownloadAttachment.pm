@@ -72,6 +72,7 @@ sub handle {
 sub getArchiveName {
   my ($web, $topic, $fileNames) = @_;
 
+  $web =~ s/\//\./; # added for subweb support
   my ($meta, $text) = Foswiki::Func::readTopic( $web, $topic );
   my %attachments = map {$_->{name} => $_} $meta->find('FILEATTACHMENT');
 

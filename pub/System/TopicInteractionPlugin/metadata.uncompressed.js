@@ -166,13 +166,13 @@ jQuery(function($) {
           }
         }
         if (opts.selection.length) {
-          $this.find(".foswikiAttachmentsBulkAction, .foswikiAttachmentsUnselectAll").show();
+          $this.find(".foswikiAttachmentsBulkAction, .foswikiAttachmentsClearAll").show();
           $this.find(".foswikiAttachmentsSelected").text(opts.selection.length);
         } else {
-          $this.find(".foswikiAttachmentsBulkAction, .foswikiAttachmentsUnselectAll").hide();
+          $this.find(".foswikiAttachmentsBulkAction, .foswikiAttachmentsClearAll").hide();
         }
       } else {
-        $this.find(".foswikiAttachmentsBulkAction, .foswikiAttachmentsUnselectAll").hide();
+        $this.find(".foswikiAttachmentsBulkAction, .foswikiAttachmentsClearAll").hide();
       }
     }
 
@@ -193,7 +193,7 @@ jQuery(function($) {
     }
 
     /* remove an id from the selection *************************************/
-    function unselect(id) {
+    function clear(id) {
       if (opts.selection) {
         for (var i = 0; i < opts.selection.length; i++) {
           if (opts.selection[i] == id) {
@@ -365,7 +365,7 @@ jQuery(function($) {
           if ($attachment.hasClass("foswikiAttachmentSelected")) {
             select(id);
           } else {
-            unselect(id);
+            clear(id);
           }
         }
         e.stopPropagation();
@@ -396,8 +396,8 @@ jQuery(function($) {
       return false;
     });
 
-    // add unselect all behaviour
-    $this.find(".foswikiAttachmentsUnselectAll").click(function() {
+    // add clear all behaviour
+    $this.find(".foswikiAttachmentsClearAll").click(function() {
       clearSelection();
       $this.find(".foswikiAttachmentsSelectAll").show();
       return false;
@@ -428,10 +428,8 @@ jQuery(function($) {
         // adjust geometry to viewport
         height = parseInt($(window).height() * 0.6, 10);
         width = parseInt($(window).width() * 0.6, 10);
-
       }
 
-      
       // pdf previewer
       previewUrl = foswiki.getPreference("SCRIPTURL")+
         "/rest/RenderPlugin/template" +
@@ -590,7 +588,7 @@ jQuery(function($) {
             success: function(data, msg) {
               $.unblockUI();
               $attachment.slideUp(function() {
-                unselect(attachmentOpts.filename);
+                clear(attachmentOpts.filename);
                 loadAttachments();
               });
             }
@@ -652,7 +650,7 @@ jQuery(function($) {
             success: function(data, msg, xhr) {
               $.unblockUI();
               $attachment.slideUp(function() {
-                unselect(attachmentOpts.filename);
+                clear(attachmentOpts.filename);
                 loadAttachments();
               });
             }

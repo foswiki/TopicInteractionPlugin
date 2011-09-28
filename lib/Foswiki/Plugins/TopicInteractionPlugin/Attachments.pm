@@ -153,7 +153,7 @@ sub handle {
   $theSkip = 0 if $theSkip > $index;
   $index = 0;
   my $webDAVLinkPluginEnabled = Foswiki::Func::getContext()->{WebDAVLinkPluginEnabled};
-  my $webDAVFilter = $Foswiki::cfg{TopicInteractionPlugin}{WebDAVFilter} || qr/((xlt|ppt|pps|pot|doc|dot)(x|m)?)|odc|odb|odf|odg|otg|odi|odp|otp|ods|ots|odt|odm|ott|oth|mpp/;
+  my $webDAVFilter = $Foswiki::cfg{TopicInteractionPlugin}{WebDAVFilter} || qr/((xlt|xls|ppt|pps|pot|doc|dot)(x|m)?)|odc|odb|odf|odg|otg|odi|odp|otp|ods|ots|odt|odm|ott|oth|mpp/;
 
   foreach my $attachment (@selectedAttachments) {
 
@@ -167,7 +167,7 @@ sub handle {
     my $iconUrl = '%ICONURL{"' . $info->{name} . '" alt="else"}%';
     my $icon = '%ICON{"' . $info->{name} . '" alt="else"}%';
 
-    my $encName = Foswiki::urlEncode($info->{name});
+    my $encName = urlEncode($info->{name});
 
     # actions
     my $webDavUrl = '%WEBDAVFOLDERURL%/' . $thisWeb . '/' . $thisTopic . '_files/' . $encName;
@@ -233,7 +233,7 @@ sub handle {
     $text =~ s/\$oldversions\b/$oldVersions/g;
     $text =~ s/\$web\b/$thisWeb/g;
     $text =~ s/\$topic\b/$thisTopic/g;
-    $text =~ s/\$encode\((.*?)\)/Foswiki::urlEncode($1)/ges;
+    $text =~ s/\$encode\((.*?)\)/urlEncode($1)/ges;
 
     push @result, $text if $text;
   }
@@ -252,6 +252,16 @@ sub handle {
   $result =~ s/\$pager/renderPager($thisWeb, $thisTopic, $params)/ge;
 
   return Foswiki::Func::decodeFormatTokens($result);
+}
+
+##############################################################################
+# slightly different version as Foswiki::urlEncode: also encodes single quotes
+sub urlEncode {
+  my $text = shift;
+
+  $text =~ s/([^0-9a-zA-Z-_.:~!*\/])/'%'.sprintf('%02x',ord($1))/ge;
+
+  return $text;
 }
 
 ##############################################################################

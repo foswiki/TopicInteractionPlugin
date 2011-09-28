@@ -56,11 +56,11 @@
 %{ ################################################################################ }%
 %TMPL:DEF{"metadata::javascript"}%<!-- -->
 %TMPL:P{"metadata::lightbox"}%<!-- -->
-%JQREQUIRE{"tooltip, easing, ui, uploader, twisty, media"}%<!-- -->
+%JQREQUIRE{"tooltip, easing, ui, ui::autocomplete, uploader, twisty, media"}%<!-- -->
 %IF{"context FlexPaperPluginEnabled" then="$percntFLEXPAPERINIT$percnt"}%<!-- -->
 %ADDTOZONE{"script" 
   id="NATSKIN::METADATA::JS" 
-  requires="JQUERYPLUGIN::LIVEQUERY, JQUERYPLUGIN::AUTOCOMPLETE, JQUERYPLUGIN::UPLOAD" 
+  requires="JQUERYPLUGIN::LIVEQUERY, JQUERYPLUGIN::UI, JQUERYPLUGIN::UPLOAD" 
   text="<script src='%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/metadata.js'></script>"
 }%<!-- -->%TMPL:END%
 
@@ -86,7 +86,7 @@
 %TMPL:DEF{"comments::tab"}%<!-- -->
 %TAB{"%MAKETEXT{"Comments [_1]" args="<span class='foswikiCommentsCount'>%METACOMMENTS{limit="1" format="($count)" singular="$count" plural="$count"}%</span>"}%" 
   id="comments" 
-  url="%SCRIPTURL{"rest"}%/RenderPlugin/template?name=metacomments;expand=metacomments;topic=%WEB%.%TOPIC%;render=on"
+  url="%SCRIPTURL{"rest"}%/RenderPlugin/template?name=metacomments;expand=metacomments;topic=%WEB%.%TOPIC%;render=on;%GMTIME{"$epoch"}%"
 }%<div class='foswikiFormSteps foswikiAttachmentsProcess'>%ICON{"processing"}%</div>
 %ENDTAB%
 %TMPL:P{"metadata::css"}%%TMPL:P{"metadata::javascript"}%<!-- -->
@@ -136,7 +136,7 @@
   header="$percntTAB{
     \"%MAKETEXT{"Attachments [_1]" args="<span class='foswikiAttachmentsCount'>($count)</span>"}%\" 
     id=\"attachments\" 
-    url=\"%SCRIPTURL{"rest"}%/RenderPlugin/template?name=metadata;expand=attachments;topic=%WEB%.%TOPIC%;render=on\"
+    url=\"%SCRIPTURL{"rest"}%/RenderPlugin/template?name=metadata;expand=attachments;topic=%WEB%.%TOPIC%;render=on;%GMTIME{"$epoch"}%\"
   }$percnt
   <div class='foswikiFormSteps foswikiAttachmentsProcess'>$percntICON{\"processing\"}$percnt</div>
   $percntENDTAB$percnt"
@@ -324,7 +324,7 @@
   </table>
   <div class="foswikiAttachmentsSelect">
     %BUTTON{"%MAKETEXT{"Select all"}%" icon="add" class="simple foswikiRight foswikiAttachmentsSelectAll" title="%MAKETEXT{"select all attachments on this topic"}%"}%
-    %BUTTON{"%MAKETEXT{"Unselect all"}%" icon="delete" class="simple foswikiRight foswikiAttachmentsUnselectAll" title="%MAKETEXT{"unselect all previously select attachments"}%"}%
+    %BUTTON{"%MAKETEXT{"Clear all"}%" icon="delete" class="simple foswikiRight foswikiAttachmentsClearAll" title="%MAKETEXT{"unselect all previously select attachments"}%"}%
     %CLEAR%
   </div>
   %CLEAR%
@@ -361,7 +361,7 @@
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments::previewer"}%<!-- -->
 <div id="foswikiAttachmentPreviewer" class="foswikiDialog foswikiFormSteps" style="display:none">
-  <h2 class="foswikiDialogTitle foswikiAttachmentName"></h2>
+  <h2 class="foswikiDialogTitle jqSimpleModalDraggable foswikiAttachmentName"></h2>
   <div class="foswikiFormStep foswikiPreviewContainer">
     %ICON{"processing"}%
   </div>
@@ -393,34 +393,32 @@
 
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments::editor"}%<!-- -->
-<div id="foswikiAttachmentEditor" class="foswikiDialog" style="display:none">
+<div id="foswikiAttachmentEditor" class="foswikiDialog foswikiFormSteps" style="display:none">
 <form name="attach" action="%SCRIPTURL{"rest"}%/TopicInteractionPlugin/changeproperties" method="post">
 <input type="hidden" name="origfilename" value="" />
 <input type="hidden" name="topic" value="%WEB%.%TOPIC%" />
-<div class="foswikiFormSteps">
-  <h2 class="foswikiDialogTitle">%MAKETEXT{"Edit attachment"}%</h2>
-  <div class="foswikiFormStep">
-    <h3>%MAKETEXT{"File name"}%:</h3>
-    <div class="foswikiThumbnailContainer foswikiRight"></div>
-    <input type="text" class="foswikiInputField" size="50" name="filename" value="" />
-  </div>
-  <div class="foswikiFormStep">
-    <h3>%MAKETEXT{"Comment"}%:</h3>
-    <input type="text" class="foswikiInputField" size="50" name="filecomment" value="" />
-  </div>
-  <div class="foswikiFormStep foswikiFormOptions">
-    <h3>%MAKETEXT{"Options"}%:</h3>
-    <label>
-      <input type="checkbox" class="foswikiCheckbox" name="hidefile" />
-      %MAKETEXT{"Hide attachment in normal topic view."}%
-    </label>
-  </div>
-  <hr />
-  <div class="foswikiFormStep foswikiFormButtons foswikiFormLast">
-    %BUTTON{"%MAKETEXT{"Save"}%" icon="disk" class="jqSimpleModalOK"}%
-    %BUTTON{"%MAKETEXT{"Cancel"}%" icon="cross" class="jqSimpleModalCancel"}%
-    %CLEAR%
-  </div>
+<h2 class="foswikiDialogTitle jqSimpleModalDraggable">%MAKETEXT{"Edit attachment"}%</h2>
+<div class="foswikiFormStep">
+  <h3>%MAKETEXT{"File name"}%:</h3>
+  <div class="foswikiThumbnailContainer foswikiRight"></div>
+  <input type="text" class="foswikiInputField" size="50" name="filename" value="" />
+</div>
+<div class="foswikiFormStep">
+  <h3>%MAKETEXT{"Comment"}%:</h3>
+  <input type="text" class="foswikiInputField" size="50" name="filecomment" value="" />
+</div>
+<div class="foswikiFormStep foswikiFormOptions">
+  <h3>%MAKETEXT{"Options"}%:</h3>
+  <label>
+    <input type="checkbox" class="foswikiCheckbox" name="hidefile" />
+    %MAKETEXT{"Hide attachment in normal topic view."}%
+  </label>
+</div>
+<hr />
+<div class="foswikiFormStep foswikiFormButtons foswikiFormLast">
+  %BUTTON{"%MAKETEXT{"Save"}%" icon="disk" class="jqSimpleModalOK"}%
+  %BUTTON{"%MAKETEXT{"Cancel"}%" icon="cross" class="jqSimpleModalCancel"}%
+  %CLEAR%
 </div>
 </form>
 </div>
@@ -428,31 +426,29 @@
 
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments::moveattachment"}%<!-- -->
-<div id="foswikiAttachmentMove" class="foswikiDialog" style="display:none">
+<div id="foswikiAttachmentMove" class="foswikiDialog foswikiFormSteps" style="display:none">
 <form name="move" action="%SCRIPTURL{"rest"}%/TopicInteractionPlugin/move" method="post">
 <input type="hidden" name="filename" value="" />
 <input type="hidden" name="topic" value="%WEB%.%TOPIC%" />
-<div class="foswikiFormSteps">
-  <h2 class="foswikiDialogTitle foswikiMoveOne">%MAKETEXT{"Move this attachment to a different topic"}%</h2>
-  <h2 class="foswikiDialogTitle foswikiMoveMultiple">%MAKETEXT{"Move [_1] attachment(s) to a different topic" args="<span class='foswikiAttachmentsCount'></span>"}%</h2>
-  <div class="foswikiFormStep">
-    <h3>%MAKETEXT{"To web"}%</h3>
-    <div class="foswikiThumbnailContainer foswikiRight"></div>
-    <input type="text" class="foswikiInputField" name="newweb" size="50" value="%WEB%" autocomplete="%SCRIPTURL{"view"}%/%SYSTEMWEB%/JQueryAjaxHelper?section=web&skin=text" />
+<h2 class="foswikiDialogTitle foswikiMoveOne jqSimpleModalDraggable">%MAKETEXT{"Move this attachment to a different topic"}%</h2>
+<h2 class="foswikiDialogTitle foswikiMoveMultiple jqSimpleModalDraggable">%MAKETEXT{"Move [_1] attachment(s) to a different topic" args="<span class='foswikiAttachmentsCount'></span>"}%</h2>
+<div class="foswikiFormStep">
+  <h3>%MAKETEXT{"To web"}%</h3>
+  <div class="foswikiThumbnailContainer foswikiRight"></div>
+  <input type="text" class="foswikiInputField jqUIAutocomplete" name="newweb" size="50" value="%WEB%" autocomplete="%SCRIPTURL{"view"}%/%SYSTEMWEB%/JQueryAjaxHelper?section=web&skin=text" />
+</div>
+<div class="foswikiFormStep">
+  <h3>%MAKETEXT{"To topic:"}%</h3>
+  <input type="text" class="foswikiInputField jqUIAutocomplete {extraParams:{baseweb:function() {return jQuery('#foswikiAttachmentMove input[name=newweb]').val()}}}" name="newtopic" size="50" value="%TOPIC%" autocomplete="%SCRIPTURL{"view"}%/%SYSTEMWEB%/JQueryAjaxHelper?section=topic&skin=text" />
+  <div class="foswikiFormDescription">
+    %MAKETEXT{"The new topic chosen must already exist."}%
   </div>
-  <div class="foswikiFormStep">
-    <h3>%MAKETEXT{"To topic:"}%</h3>
-    <input type="text" class="foswikiInputField {extraParams:{baseweb:function() {return jQuery('#foswikiAttachmentMove input[name=newweb]').val()}}}" name="newtopic" size="50" value="%TOPIC%" autocomplete="%SCRIPTURL{"view"}%/%SYSTEMWEB%/JQueryAjaxHelper?section=topic&skin=text" />
-    <div class="foswikiFormDescription">
-      %MAKETEXT{"The new topic chosen must already exist."}%
-    </div>
-  </div>
-  <hr />
-  <div class="foswikiFormStep foswikiFormLast foswikiFormButtons">
-    %BUTTON{"%MAKETEXT{"Move"}%" icon="page_white_go" class="jqSimpleModalOK"}%
-    %BUTTON{"%MAKETEXT{"Cancel"}%" icon="cross" class="jqSimpleModalCancel"}%
-    %CLEAR%
-  </div>
+</div>
+<hr />
+<div class="foswikiFormStep foswikiFormLast foswikiFormButtons">
+  %BUTTON{"%MAKETEXT{"Move"}%" icon="page_white_go" class="jqSimpleModalOK"}%
+  %BUTTON{"%MAKETEXT{"Cancel"}%" icon="cross" class="jqSimpleModalCancel"}%
+  %CLEAR%
 </div>
 </form>
 </div>

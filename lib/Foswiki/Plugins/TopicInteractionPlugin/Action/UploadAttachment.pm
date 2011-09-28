@@ -119,6 +119,7 @@ sub handle {
     # check content length
     my $maxSize = Foswiki::Func::getPreferencesValue('ATTACHFILESIZELIMIT');
     $maxSize = 0 unless ($maxSize =~ /([0-9]+)/o);
+    $maxSize =~ s/[^\d]//g;
 
     Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("fileSize=$fileSize, maxSize=$maxSize, fileDate=$fileDate, fileComment=$fileComment, fileHide=$fileHide, fileCreateLink=$fileCreateLink");
 

@@ -62,7 +62,7 @@ sub handle {
           $web, $topic, $newFileName
         );
       }
-      $error = Foswiki::Func::saveAttachment(
+      Foswiki::Func::saveAttachment(
         $web, $topic, $newFileName, {
           name        => $newFileName,
           attachment  => $newFileName,
@@ -71,7 +71,6 @@ sub handle {
           hide        => $fileHide,
           createlink  => $fileCreateLink,
         });
-
     }
   } catch Error::Simple with {
     $error = shift->{-text};
