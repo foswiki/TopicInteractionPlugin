@@ -76,11 +76,11 @@ jQuery(function($) {
         thisUrl += ";attachments_reverse=" + opts.reverse;
       }
       if (typeof(opts.filter) !== 'undefined' && opts.filter != '') {
-        thisUrl += ";attachments_filter="+escape(opts.filter);
+        thisUrl += ";attachments_filter="+encodeURI(opts.filter);
       }
       if (typeof(opts.selection) !== 'undefined') {
         for (var i = 0; i < opts.selection.length; i++) {
-          thisUrl += ";attachments_selection="+escape(opts.selection[i].replace(/\\\./, '.'));
+          thisUrl += ";attachments_selection="+encodeURI(opts.selection[i].replace(/\\\./, '.'));
         }
       }
       if (typeof(opts.limit) !== 'undefined') {
@@ -448,7 +448,7 @@ jQuery(function($) {
 
       loadDialog("#foswikiAttachmentPreviewer", "attachments::previewer");
       $previewer = $("#foswikiAttachmentPreviewer"),
-      $previewer.find(".foswikiAttachmentName").text(unescape(attachmentOpts.filename));
+      $previewer.find(".foswikiAttachmentName").text(decodeURI(attachmentOpts.filename));
       $previewer.find(".foswikiPreviewContainer").load(previewUrl, function() {
         setTimeout(function() {
           $.unblockUI();
@@ -484,9 +484,9 @@ jQuery(function($) {
               $hideFile = $container.find("input[name=hidefile]");
 
           $.log("METADATA: show attachment editor");
-          $container.find("input[name=origfilename]").val(unescape(attachmentOpts.filename));
-          $container.find("input[name=filename]").val(unescape(attachmentOpts.filename));
-          $container.find("input[name=filecomment]").val(unescape(attachmentOpts.filecomment));
+          $container.find("input[name=origfilename]").val(decodeURI(attachmentOpts.filename));
+          $container.find("input[name=filename]").val(decodeURI(attachmentOpts.filename));
+          $container.find("input[name=filecomment]").val(decodeURI(attachmentOpts.filecomment));
           $container.find(".foswikiThumbnailContainer").empty();
 
           $container.find(".foswikiThumbnailContainer").append(thumbnail);
@@ -517,7 +517,7 @@ jQuery(function($) {
             } else {
               val = $this.val();
             }
-            params.push(key+"="+escape(val));
+            params.push(key+"="+encodeURI(val));
           });
           params.push("id=save");
 
@@ -567,12 +567,12 @@ jQuery(function($) {
           width:300
         },
         onShow: function(dialog) { 
-          dialog.container.find("#deleteAttachment").text(attachmentOpts.filename);
+          dialog.container.find("#deleteAttachment").text(decodeURI(attachmentOpts.filename));
           dialog.container.find(".foswikiThumbnailContainer").append(thumbnail);
         },
         onSubmit: function(dialog) {
           $.blockUI({
-            message:"<h1>Deleting "+attachmentOpts.filename+" ...</h1>",
+            message:"<h1>Deleting "+decodeURI(attachmentOpts.filename)+" ...</h1>",
             fadeIn: 0,
             fadeOut: 0
           });
@@ -616,7 +616,7 @@ jQuery(function($) {
 
           $container.find(".foswikiMoveOne").show();
           $container.find(".foswikiMoveMultiple").hide();
-          $container.find("input[name=filename]").val(unescape(attachmentOpts.filename));
+          $container.find("input[name=filename]").val(decodeURI(attachmentOpts.filename));
           $container.find(".foswikiThumbnailContainer").append(thumbnail);
         },
         onSubmit: function(dialog) {
@@ -628,7 +628,7 @@ jQuery(function($) {
           $form.find("input").each(function() {
             var $this = $(this), key = $this.attr('name'), val;
             val = $this.val();
-            params.push(key+"="+escape(val));
+            params.push(key+"="+encodeURI(val));
           });
           params.push("id=move");
 
@@ -679,7 +679,7 @@ jQuery(function($) {
 
       $select.val("");
 
-      filenames = escape(opts.selection.join(","));
+      filenames = encodeURI(opts.selection.join(","));
       bulkActionUrl += ";filename="+filenames;
       $.log("METADATA: bulkActionUrl="+bulkActionUrl);
 
@@ -785,7 +785,7 @@ jQuery(function($) {
             $form.find("input").each(function() {
               var $this = $(this), key = $this.attr('name'), val;
               val = $this.val();
-              params.push(key+"="+escape(val));
+              params.push(key+"="+encodeURI(val));
             });
             params.push("id=move");
 

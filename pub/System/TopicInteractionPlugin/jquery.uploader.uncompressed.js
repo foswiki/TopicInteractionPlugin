@@ -240,18 +240,18 @@
 
         if (uploader.features.multipart && uploader.settings.multipart) {
           uploader.settings.multipart_params = {
-            "topic": escape(foswiki.getPreference("WEB")) + "." + escape(foswiki.getPreference("TOPIC")),
+            "topic": encodeURI(foswiki.getPreference("WEB")) + "." + encodeURI(foswiki.getPreference("TOPIC")),
             "id": Date.now(),
-            "filecomment": escape(comment),
+            "filecomment": encodeURI(comment),
             "createlink": (createlink?"on":"off"),
             "hidefile": (hidefile?"on":"off")
           };
         } else {
           var now = new Date();
           uploader.settings.url = settings.url + "?"
-            + "topic=" + escape(foswiki.getPreference("WEB")) + "." + escape(foswiki.getPreference("TOPIC")) + "&"
+            + "topic=" + encodeURI(foswiki.getPreference("WEB")) + "." + encodeURI(foswiki.getPreference("TOPIC")) + "&"
             + "id=" + now.getTime()
-            + "&filecomment=" + escape(comment)
+            + "&filecomment=" + encodeURI(comment)
             + "&createlink=" + (createlink?"on":"off")
             + "&hidefile=" + (hidefile?"on":"off");
         }
