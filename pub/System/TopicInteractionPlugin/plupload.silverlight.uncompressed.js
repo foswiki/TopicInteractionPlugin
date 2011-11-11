@@ -9,13 +9,18 @@
  */
 
 // JSLint defined globals
-/*global plupload:false, ActiveXObject:false, window:false */
+/*global window:false, document:false, plupload:false, ActiveXObject:false */
 
-(function(plupload) {
-	var uploadInstances = {};
+(function(window, document, plupload, undef) {
+	var uploadInstances = {}, initialized = {};
 
 	function jsonSerialize(obj) {
-		var value, type = typeof obj, undef, isArray, i, key;
+		var value, type = typeof obj, isArray, i, key;
+
+		// Treat undefined as null
+		if (obj === undef || obj === null) {
+			return 'null';
+		}
 
 		// Encode strings
 		if (type === 'string') {
@@ -64,11 +69,6 @@
 			}
 
 			return value;
-		}
-
-		// Treat undefined as null
-		if (obj === undef) {
-			return 'null';
 		}
 
 		// Convert all other types to string
@@ -135,7 +135,7 @@
 	plupload.silverlight = {
 		trigger : function(id, name) {
 			var uploader = uploadInstances[id], i, args;
-
+			
 			if (uploader) {
 				args = plupload.toArray(arguments).slice(1);
 				args[0] = 'Silverlight:' + name;
@@ -167,7 +167,8 @@
 				pngresize: true,
 				chunks: true,
 				progress: true,
-				multipart: true
+				multipart: true,
+				multi_selection: true
 			};
 		},
 
@@ -186,7 +187,8 @@
 				callback({success : false});
 				return;
 			}
-
+			
+			initialized[uploader.id] = false;
 			uploadInstances[uploader.id] = uploader;
 
 			// Create silverlight container and insert it at an absolute position within the browse button
@@ -208,7 +210,9 @@
 
 			if (uploader.settings.container) {
 				container = document.getElementById(uploader.settings.container);
-				container.style.position = 'relative';
+				if (plupload.getStyle(container, 'position') === 'static') {
+					container.style.position = 'relative';
+				}
 			}
 
 			container.appendChild(silverlightContainer);
@@ -223,18 +227,22 @@
 				'<param name="background" value="Transparent"/>' +
 				'<param name="windowless" value="true"/>' +
 				'<param name="enablehtmlaccess" value="true"/>' +
-				'<param name="initParams" value="id=' + uploader.id + ',filter=' + filter + '"/>' +
+				'<param name="initParams" value="id=' + uploader.id + ',filter=' + filter + ',multiselect=' + uploader.settings.multi_selection + '"/>' +
 				'</object>';
 
 			function getSilverlightObj() {
-                                var elem = document.getElementById(uploader.id + '_silverlight');
-                                if (elem) {
-                                  return elem.content.Upload;
-                                }
+				return document.getElementById(uploader.id + '_silverlight').content.Upload;
 			}
 
 			uploader.bind("Silverlight:Init", function() {
 				var selectedFiles, lookup = {};
+				
+				// Prevent eventual reinitialization of the instance
+				if (initialized[uploader.id]) {
+					return;
+				}
+					
+				initialized[uploader.id] = true;
 
 				uploader.bind("Silverlight:StartSelectFiles", function(up) {
 					selectedFiles = [];
@@ -283,15 +291,17 @@
 					var browseButton, browsePos, browseSize;
 
 					browseButton = document.getElementById(up.settings.browse_button);
-					browsePos = plupload.getPos(browseButton, document.getElementById(up.settings.container));
-					browseSize = plupload.getSize(browseButton);
-
-					plupload.extend(document.getElementById(up.id + '_silverlight_container').style, {
-						top : browsePos.y + 'px',
-						left : browsePos.x + 'px',
-						width : browseSize.w + 'px',
-						height : browseSize.h + 'px'
-					});
+					if (browseButton) {
+						browsePos = plupload.getPos(browseButton, document.getElementById(up.settings.container));
+						browseSize = plupload.getSize(browseButton);
+	
+						plupload.extend(document.getElementById(up.id + '_silverlight_container').style, {
+							top : browsePos.y + 'px',
+							left : browsePos.x + 'px',
+							width : browseSize.w + 'px',
+							height : browseSize.h + 'px'
+						});
+					}
 				});
 
 				uploader.bind("Silverlight:UploadChunkSuccessful", function(up, sl_id, chunk, chunks, text) {
@@ -346,20 +356,85 @@
 						up.settings.url,
 						jsonSerialize({
 							name : file.target_name || file.name,
-							mime : plupload.mimeTypes[file.name.replace(/^.+\.([^.]+)/, '$1')] || 'application/octet-stream',
+							mime : plupload.mimeTypes[file.name.replace(/^.+\.([^.]+)/, '$1').toLowerCase()] || 'application/octet-stream',
 							chunk_size : settings.chunk_size,
 							image_width : resize.width,
 							image_height : resize.height,
 							image_quality : resize.quality || 90,
 							multipart : !!settings.multipart,
 							multipart_params : settings.multipart_params || {},
+							file_data_name : settings.file_data_name,
 							headers : settings.headers
 						})
 					);
+				});
+				
+				
+				uploader.bind('Silverlight:MouseEnter', function(up) {
+					var browseButton, hoverClass;
+						
+					browseButton = document.getElementById(uploader.settings.browse_button);
+					hoverClass = up.settings.browse_button_hover;
+					
+					if (browseButton && hoverClass) {
+						plupload.addClass(browseButton, hoverClass);
+					}
+				});
+				
+				uploader.bind('Silverlight:MouseLeave', function(up) {
+					var browseButton, hoverClass;
+						
+					browseButton = document.getElementById(uploader.settings.browse_button);
+					hoverClass = up.settings.browse_button_hover;
+					
+					if (browseButton && hoverClass) {
+						plupload.removeClass(browseButton, hoverClass);
+					}
+				});
+				
+				uploader.bind('Silverlight:MouseLeftButtonDown', function(up) {
+					var browseButton, activeClass;
+						
+					browseButton = document.getElementById(uploader.settings.browse_button);
+					activeClass = up.settings.browse_button_active;
+					
+					if (browseButton && activeClass) {
+						plupload.addClass(browseButton, activeClass);
+						
+						// Make sure that browse_button has active state removed from it
+						plupload.addEvent(document.body, 'mouseup', function() {
+							plupload.removeClass(browseButton, activeClass);	
+						});
+					}
+				});
+				
+				uploader.bind('Sliverlight:StartSelectFiles', function(up) {
+					var browseButton, activeClass;
+						
+					browseButton = document.getElementById(uploader.settings.browse_button);
+					activeClass = up.settings.browse_button_active;
+					
+					if (browseButton && activeClass) {
+						plupload.removeClass(browseButton, activeClass);
+					}
+				});
+				
+				uploader.bind("Destroy", function(up) {
+					var silverlightContainer;
+					
+					plupload.removeAllEvents(document.body, up.id);
+					
+					delete initialized[up.id];
+					delete uploadInstances[up.id];
+					
+					silverlightContainer = document.getElementById(up.id + '_silverlight_container');
+					if (silverlightContainer) {
+						container.removeChild(silverlightContainer);
+					}
 				});
 
 				callback({success : true});
 			});
 		}
 	});
-})(plupload);
+})(window, document, plupload);

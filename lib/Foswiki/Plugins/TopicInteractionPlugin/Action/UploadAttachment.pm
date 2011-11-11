@@ -27,10 +27,11 @@ sub handle {
 
   my $web = $params->{web};
   my $topic = $params->{topic};
-  my $fileName = $params->{filename};
   my $id = $params->{id};
+  my ($fileName, $origName) = Foswiki::Func::sanitizeAttachmentName($params->{filename});
 
-  ($fileName) = Foswiki::Func::sanitizeAttachmentName($fileName);
+  Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("'$origName' has been renamed to '$fileName'")
+    unless $fileName eq $origName;
   
   # read additional params
   my $request = Foswiki::Func::getCgiQuery();
@@ -160,7 +161,7 @@ sub handle {
     }
   }
 
-  Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 0, undef, $id);
+  Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 0, {$origName => $fileName}, $id);
 }
 
 sub appendFile {

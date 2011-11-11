@@ -9,10 +9,10 @@
  */
 
 // JSLint defined globals
-/*global plupload:false, ActiveXObject:false, escape:false */
+/*global window:false, document:false, plupload:false, ActiveXObject:false, escape:false */
 
-(function(plupload) {
-	var uploadInstances = {};
+(function(window, document, plupload, undef) {
+	var uploadInstances = {}, initialized = {};
 
 	function getFlashVersion() {
 		var version;
@@ -42,6 +42,7 @@
 		 * @param {Object} obj Parameters to be passed with event.
 		 */
 		trigger : function(id, name, obj) {
+								
 			// Detach the call so that error handling in the browser is presented correctly
 			setTimeout(function() {
 				var uploader = uploadInstances[id], i, args;
@@ -61,6 +62,7 @@
 	 * @extends plupload.Runtime
 	 */
 	plupload.runtimes.Flash = plupload.addRuntime("flash", {
+		
 		/**
 		 * Returns a list of supported features for the runtime.
 		 *
@@ -70,9 +72,12 @@
 			return {
 				jpgresize: true,
 				pngresize: true,
+				maxWidth: 8091,
+				maxHeight: 8091,
 				chunks: true,
 				progress: true,
-				multipart: true
+				multipart: true,
+				multi_selection: true
 			};
 		},
 
@@ -84,13 +89,14 @@
 		 * @param {function} callback Callback to execute when the runtime initializes or fails to initialize. If it succeeds an object with a parameter name success will be set to true.
 		 */
 		init : function(uploader, callback) {
-			var browseButton, flashContainer, flashVars, initialized, waitCount = 0, container = document.body;
+			var browseButton, flashContainer, waitCount = 0, container = document.body;
 
 			if (getFlashVersion() < 10) {
 				callback({success : false});
 				return;
 			}
 
+			initialized[uploader.id] = false;
 			uploadInstances[uploader.id] = uploader;
 
 			// Find browse button and set to to be relative
@@ -113,41 +119,53 @@
 
 			if (uploader.settings.container) {
 				container = document.getElementById(uploader.settings.container);
-				container.style.position = 'relative';
+				if (plupload.getStyle(container, 'position') === 'static') {
+					container.style.position = 'relative';
+				}
 			}
 
 			container.appendChild(flashContainer);
+			
+			// insert flash object
+			(function() {
+				var html, el;
+				
+				html = '<object id="' + uploader.id + '_flash" type="application/x-shockwave-flash" data="' + uploader.settings.flash_swf_url + '" ';
+				
+				if (plupload.ua.ie) {
+					html += 'classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" '
+				}
 
-			flashVars = 'id=' + escape(uploader.id);
-
-			// Insert the Flash inide the flash container
-                        if(1) {
-                          flashContainer.innerHTML = '<object id="' + uploader.id + '_flash" width="100%" height="100%" style="outline:0" type="application/x-shockwave-flash" data="' + uploader.settings.flash_swf_url + '">' +
-				'<param name="movie" value="' + uploader.settings.flash_swf_url + '" />' +
-				'<param name="flashvars" value="' + flashVars + '" />' +
-				'<param name="wmode" value="transparent" />' +
-                                '<param name="allownetworking" value="all" />' +
-				'<param name="allowscriptaccess" value="always" /></object>';
-                        } else {
-                          flashContainer.innerHTML = '<embed id="' + 
-                            uploader.id + 
-                            '_flash" width="100%" height="100%" style="outline:0" type="application/x-shockwave-flash" src="'+ 
-                            uploader.settings.flash_swf_url +'" menu="false" wmode="transparent" flashvars="'+ 
-                            flashVars+'" allownetworking="all" allowscriptaccess="always" />';
-                        }
+				html += 'width="100%" height="100%" style="outline:0">'  +
+					'<param name="movie" value="' + uploader.settings.flash_swf_url + '" />' +
+					'<param name="flashvars" value="id=' + escape(uploader.id) + '" />' +
+					'<param name="wmode" value="transparent" />' +
+					'<param name="allowscriptaccess" value="always" />' +
+				'</object>';
+					
+				if (plupload.ua.ie) {
+					el = document.createElement('div');
+					flashContainer.appendChild(el);
+					el.outerHTML = html;
+					el = null; // just in case
+				} else {
+					flashContainer.innerHTML = html;
+				}
+			}());
 
 			function getFlashObj() {
 				return document.getElementById(uploader.id + '_flash');
 			}
 
 			function waitLoad() {
+								
 				// Wait for 5 sec
 				if (waitCount++ > 5000) {
 					callback({success : false});
 					return;
 				}
 
-				if (!initialized) {
+				if (!initialized[uploader.id]) {
 					setTimeout(waitLoad, 1);
 				}
 			}
@@ -158,180 +176,246 @@
 			browseButton = flashContainer = null;
 
 			// Wait for Flash to send init event
-			uploader.bind("Flash:Init", function() {
-				var lookup = {}, i, resize = uploader.settings.resize || {};
+			uploader.bind("Flash:Init", function() {	
+				var lookup = {}, i, flash = getFlashObj();
 
-				initialized = true;
-				var fo = getFlashObj();
-                                if (!fo) {
-                                  return;
+                                if (flash) {
+                                        flash.setFileFilters(uploader.settings.filters, uploader.settings.multi_selection);
                                 }
 
-                                if (typeof(fo.setFileFilters) === 'function') { // isn't there yet sometimes
-                                  fo.setFileFilters(uploader.settings.filters, uploader.settings.multi_selection);
-                                }
+				// Prevent eventual reinitialization of the instance
+				if (initialized[uploader.id]) {
+					return;
+				}
+				initialized[uploader.id] = true;
 
-                                // don't create the same bindings again
-                                if (!uploader._isInited) {
-                                  uploader._isInited = true;
-                                  uploader.bind("UploadFile", function(up, file) {
-                                          var settings = up.settings;
+				uploader.bind("UploadFile", function(up, file) {
+					var settings = up.settings, resize = uploader.settings.resize || {};
 
-                                          var fo = getFlashObj();
-                                          if (!fo) {
-                                            return;
-                                          }
-                                          fo.uploadFile(lookup[file.id], settings.url, {
-                                                  name : file.target_name || file.name,
-                                                  mime : plupload.mimeTypes[file.name.replace(/^.+\.([^.]+)/, '$1')] || 'application/octet-stream',
-                                                  chunk_size : settings.chunk_size,
-                                                  width : resize.width,
-                                                  height : resize.height,
-                                                  quality : resize.quality || 90,
-                                                  multipart : settings.multipart,
-                                                  multipart_params : settings.multipart_params || {},
-                                                  file_data_name : settings.file_data_name,
-                                                  format : /\.(jpg|jpeg)$/i.test(file.name) ? 'jpg' : 'png',
-                                                  headers : settings.headers,
-                                                  urlstream_upload : settings.urlstream_upload
-                                          });
-                                  });
+					getFlashObj().uploadFile(lookup[file.id], settings.url, {
+						name : file.target_name || file.name,
+						mime : plupload.mimeTypes[file.name.replace(/^.+\.([^.]+)/, '$1').toLowerCase()] || 'application/octet-stream',
+						chunk_size : settings.chunk_size,
+						width : resize.width,
+						height : resize.height,
+						quality : resize.quality,
+						multipart : settings.multipart,
+						multipart_params : settings.multipart_params || {},
+						file_data_name : settings.file_data_name,
+						format : /\.(jpg|jpeg)$/i.test(file.name) ? 'jpg' : 'png',
+						headers : settings.headers,
+						urlstream_upload : settings.urlstream_upload
+					});
+				});
 
-                                  uploader.bind("Flash:UploadProcess", function(up, flash_file) {
-                                          var file = up.getFile(lookup[flash_file.id]);
 
-                                          if (file.status != plupload.FAILED) {
-                                                  file.loaded = flash_file.loaded;
-                                                  file.size = flash_file.size;
+				uploader.bind("Flash:UploadProcess", function(up, flash_file) {
+					var file = up.getFile(lookup[flash_file.id]);
 
-                                                  up.trigger('UploadProgress', file);
-                                          }
-                                  });
+					if (file.status != plupload.FAILED) {
+						file.loaded = flash_file.loaded;
+						file.size = flash_file.size;
 
-                                  uploader.bind("Flash:UploadChunkComplete", function(up, info) {
-                                          var chunkArgs, file = up.getFile(lookup[info.id]);
+						up.trigger('UploadProgress', file);
+					}
+				});
 
-                                          chunkArgs = {
-                                                  chunk : info.chunk,
-                                                  chunks : info.chunks,
-                                                  response : info.text
-                                          };
+				uploader.bind("Flash:UploadChunkComplete", function(up, info) {
+					var chunkArgs, file = up.getFile(lookup[info.id]);
 
-                                          up.trigger('ChunkUploaded', file, chunkArgs);
+					chunkArgs = {
+						chunk : info.chunk,
+						chunks : info.chunks,
+						response : info.text
+					};
 
-                                          // Stop upload if file is maked as failed
-                                          if (file.status != plupload.FAILED) {
-                                                  var fo = getFlashObj();
-                                                  if (fo) {
-                                                    fo.uploadNextChunk();
-                                                  }
-                                          }
+					up.trigger('ChunkUploaded', file, chunkArgs);
 
-                                          // Last chunk then dispatch FileUploaded event
-                                          if (info.chunk == info.chunks - 1) {
-                                                  file.status = plupload.DONE;
+					// Stop upload if file is maked as failed
+					if (file.status != plupload.FAILED) {
+						getFlashObj().uploadNextChunk();
+					}
 
-                                                  up.trigger('FileUploaded', file, {
-                                                          response : info.text
-                                                  });
-                                          }
-                                  });
+					// Last chunk then dispatch FileUploaded event
+					if (info.chunk == info.chunks - 1) {
+						file.status = plupload.DONE;
 
-                                  uploader.bind("Flash:SelectFiles", function(up, selected_files) {
-                                          var file, i, files = [], id;
+						up.trigger('FileUploaded', file, {
+							response : info.text
+						});
+					}
+				});
 
-                                          // Add the selected files to the file queue
-                                          for (i = 0; i < selected_files.length; i++) {
-                                                  file = selected_files[i];
+				uploader.bind("Flash:SelectFiles", function(up, selected_files) {
+					var file, i, files = [], id;
 
-                                                  // Store away flash ref internally
-                                                  id = plupload.guid();
-                                                  lookup[id] = file.id;
-                                                  lookup[file.id] = id;
-                                                  files.push(new plupload.File(id, file.name, file.size));
-                                          }
+					// Add the selected files to the file queue
+					for (i = 0; i < selected_files.length; i++) {
+						file = selected_files[i];
 
-                                          // Trigger FilesAdded event if we added any
-                                          if (files.length) {
-                                                  uploader.trigger("FilesAdded", files);
-                                          }
-                                  });
+						// Store away flash ref internally
+						id = plupload.guid();
+						lookup[id] = file.id;
+						lookup[file.id] = id;
 
-                                  uploader.bind("Flash:SecurityError", function(up, err) {
-                                          uploader.trigger('Error', {
-                                                  code : plupload.SECURITY_ERROR,
-                                                  message : 'Security error.',
-                                                  details : err.message,
-                                                  file : uploader.getFile(lookup[err.id])
-                                          });
-                                  });
+						files.push(new plupload.File(id, file.name, file.size));
+					}
 
-                                  uploader.bind("Flash:GenericError", function(up, err) {
-                                          uploader.trigger('Error', {
-                                                  code : plupload.GENERIC_ERROR,
-                                                  message : 'Generic error.',
-                                                  details : err.message,
-                                                  file : uploader.getFile(lookup[err.id])
-                                          });
-                                  });
+					// Trigger FilesAdded event if we added any
+					if (files.length) {
+						uploader.trigger("FilesAdded", files);
+					}
+				});
 
-                                  uploader.bind("Flash:IOError", function(up, err) {
-                                          uploader.trigger('Error', {
-                                                  code : plupload.IO_ERROR,
-                                                  message : 'IO error.',
-                                                  details : err.message,
-                                                  file : uploader.getFile(lookup[err.id])
-                                          });
-                                  });
+				uploader.bind("Flash:SecurityError", function(up, err) {
+					uploader.trigger('Error', {
+						code : plupload.SECURITY_ERROR,
+						message : plupload.translate('Security error.'),
+						details : err.message,
+						file : uploader.getFile(lookup[err.id])
+					});
+				});
 
-                                  uploader.bind("QueueChanged", function(up) {
-                                          uploader.refresh();
-                                  });
+				uploader.bind("Flash:GenericError", function(up, err) {
+					uploader.trigger('Error', {
+						code : plupload.GENERIC_ERROR,
+						message : plupload.translate('Generic error.'),
+						details : err.message,
+						file : uploader.getFile(lookup[err.id])
+					});
+				});
 
-                                  uploader.bind("FilesRemoved", function(up, files) {
-                                          var i;
+				uploader.bind("Flash:IOError", function(up, err) {
+					uploader.trigger('Error', {
+						code : plupload.IO_ERROR,
+						message : plupload.translate('IO error.'),
+						details : err.message,
+						file : uploader.getFile(lookup[err.id])
+					});
+				});
+				
+				uploader.bind("Flash:ImageError", function(up, err) {
+					uploader.trigger('Error', {
+						code : parseInt(err.code, 10),
+						message : plupload.translate('Image error.'),
+						file : uploader.getFile(lookup[err.id])
+					});
+				});
+				
+				uploader.bind('Flash:StageEvent:rollOver', function(up) {
+					var browseButton, hoverClass;
+						
+					browseButton = document.getElementById(uploader.settings.browse_button);
+					hoverClass = up.settings.browse_button_hover;
+					
+					if (browseButton && hoverClass) {
+						plupload.addClass(browseButton, hoverClass);
+					}
+				});
+				
+				uploader.bind('Flash:StageEvent:rollOut', function(up) {
+					var browseButton, hoverClass;
+						
+					browseButton = document.getElementById(uploader.settings.browse_button);
+					hoverClass = up.settings.browse_button_hover;
+					
+					if (browseButton && hoverClass) {
+						plupload.removeClass(browseButton, hoverClass);
+					}
+				});
+				
+				uploader.bind('Flash:StageEvent:mouseDown', function(up) {
+					var browseButton, activeClass;
+						
+					browseButton = document.getElementById(uploader.settings.browse_button);
+					activeClass = up.settings.browse_button_active;
+					
+					if (browseButton && activeClass) {
+						plupload.addClass(browseButton, activeClass);
+						
+						// Make sure that browse_button has active state removed from it
+						plupload.addEvent(document.body, 'mouseup', function() {
+							plupload.removeClass(browseButton, activeClass);	
+						}, up.id);
+					}
+				});
+				
+				uploader.bind('Flash:StageEvent:mouseUp', function(up) {
+					var browseButton, activeClass;
+						
+					browseButton = document.getElementById(uploader.settings.browse_button);
+					activeClass = up.settings.browse_button_active;
+					
+					if (browseButton && activeClass) {
+						plupload.removeClass(browseButton, activeClass);
+					}
+				});
+				
+				
+				uploader.bind('Flash:ExifData', function(up, obj) {
+					uploader.trigger('ExifData', uploader.getFile(lookup[obj.id]), obj.data);
+				});
+				
+				
+				uploader.bind('Flash:GpsData', function(up, obj) {
+					uploader.trigger('GpsData', uploader.getFile(lookup[obj.id]), obj.data);
+				});
+				
 
-                                          var fo = getFlashObj();
-                                          if (!fo) {
-                                            return;
-                                          }
-                                          for (i = 0; i < files.length; i++) {
-                                                  fo.removeFile(lookup[files[i].id]);
-                                          }
-                                  });
+				uploader.bind("QueueChanged", function(up) {
+					uploader.refresh();
+				});
 
-                                  uploader.bind("StateChanged", function(up) {
-                                          uploader.refresh();
-                                  });
+				uploader.bind("FilesRemoved", function(up, files) {
+					var i;
 
-                                  uploader.bind("Refresh", function(up) {
-                                          var browseButton, browsePos, browseSize;
+					for (i = 0; i < files.length; i++) {
+						getFlashObj().removeFile(lookup[files[i].id]);
+					}
+				});
 
-                                          // Set file filters incase it has been changed dynamically
-                                          var fo = getFlashObj();
-                                          if (!fo) {
-                                            return;
-                                          }
+				uploader.bind("StateChanged", function(up) {
+					uploader.refresh();
+				});
 
-                                          if (typeof(fo.setFileFilters) === 'function') { // isn't there yet sometimes
-                                            fo.setFileFilters(uploader.settings.filters, uploader.settings.multi_selection);
-                                          }
+				uploader.bind("Refresh", function(up) {
+					var browseButton, browsePos, browseSize, flash = getFlashObj;
 
-                                          browseButton = document.getElementById(up.settings.browse_button);
-                                          browsePos = plupload.getPos(browseButton, document.getElementById(up.settings.container));
-                                          browseSize = plupload.getSize(browseButton);
+					// Set file filters incase it has been changed dynamically
+                                        if (flash && flash.setFileFilters) {
+                                          flash.setFileFilters(uploader.settings.filters, uploader.settings.multi_selection);
+                                        }
 
-                                          plupload.extend(document.getElementById(up.id + '_flash_container').style, {
-                                                  top : browsePos.y + 'px',
-                                                  left : browsePos.x + 'px',
-                                                  width : browseSize.w + 'px',
-                                                  height : browseSize.h + 'px'
-                                          });
-                                  });
-                                }
-
+					browseButton = document.getElementById(up.settings.browse_button);
+					if (browseButton) {
+						browsePos = plupload.getPos(browseButton, document.getElementById(up.settings.container));
+						browseSize = plupload.getSize(browseButton);
+	
+						plupload.extend(document.getElementById(up.id + '_flash_container').style, {
+							top : browsePos.y + 'px',
+							left : browsePos.x + 'px',
+							width : browseSize.w + 'px',
+							height : browseSize.h + 'px'
+						});
+					}
+				});
+				
+				uploader.bind("Destroy", function(up) {
+					var flashContainer;
+					
+					plupload.removeAllEvents(document.body, up.id);
+					
+					delete initialized[up.id];
+					delete uploadInstances[up.id];
+					
+					flashContainer = document.getElementById(up.id + '_flash_container');
+					if (flashContainer) {
+						container.removeChild(flashContainer);
+					}
+				});
+							
 				callback({success : true});
 			});
 		}
 	});
-})(plupload);
+})(window, document, plupload);

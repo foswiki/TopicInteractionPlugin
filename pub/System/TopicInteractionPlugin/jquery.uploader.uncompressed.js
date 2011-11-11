@@ -241,22 +241,26 @@
         if (uploader.features.multipart && uploader.settings.multipart) {
           uploader.settings.multipart_params = {
             "topic": encodeURI(foswiki.getPreference("WEB")) + "." + encodeURI(foswiki.getPreference("TOPIC")),
-            "id": Date.now(),
+            "id": (new Date).getTime(),
             "filecomment": encodeURI(comment),
             "createlink": (createlink?"on":"off"),
             "hidefile": (hidefile?"on":"off")
           };
         } else {
-          var now = new Date();
           uploader.settings.url = settings.url + "?"
             + "topic=" + encodeURI(foswiki.getPreference("WEB")) + "." + encodeURI(foswiki.getPreference("TOPIC")) + "&"
-            + "id=" + now.getTime()
+            + "id=" + (new Date).getTime()
             + "&filecomment=" + encodeURI(comment)
             + "&createlink=" + (createlink?"on":"off")
             + "&hidefile=" + (hidefile?"on":"off");
         }
 
         $.log("UPLOADER: url="+uploader.settings.url);
+      });
+
+      /**********************************************************************/
+      uploader.bind("UploadComplete", function(up, files) {
+        $.log("UPLOADER: got UploadComplete event for files");
       });
 
       /**********************************************************************/
@@ -400,8 +404,28 @@
       });
 
       /*********************************************************************/
-      uploader.bind("FileUploaded", function(up, file) {
+      uploader.bind("FileUploaded", function(up, file, args) {
+        var response, parseError = false;
+
         $.log("UPLOADER: got FileUploaded event for file "+file.name);
+
+        // expect non-wellformed json
+        try {
+          response = $.parseJSON(args.response);
+        } catch (e) {
+          alert("can't parse json response from backend");
+          parseError = true;
+        }
+
+        // patch in renamed files
+        if (!parseError) {
+          $.each(uploader.files, function(i, file) {
+            if (typeof(response.result[file.name]) != 'undefined') {
+              file.name = response.result[file.name];
+            }
+          });
+        }
+
         updateFileProgress(file);
         updateMessage();
       });
@@ -428,8 +452,8 @@
       });
 
       /*********************************************************************/
-      uploader.bind("ChunkUploaded", function(up, file) {
-        //$.log("UPLOADER: got ChunkUploaded even for file "+file.name);
+      uploader.bind("ChunkUploaded", function(up, file, args) {
+        $.log("UPLOADER: got ChunkUploaded even for file "+file.name);
       });
 
       /*********************************************************************/
@@ -496,17 +520,14 @@
   /************************************************************************/
   $(document).ready(function() {
 
-    var attachFileSizeLimit = foswiki.getPreference("TopicInteractionPlugin.attachFileSizeLimit");
-    if (attachFileSizeLimit == undefined || attachFileSizeLimit == 0) {
-      /* SMELL: unfortunately plupload treats a max_file_size limit of 0 to always error */
-      attachFileSizeLimit = Number.MAX_VALUE;
-    }
+    var attachFileSizeLimit = foswiki.getPreference("TopicInteractionPlugin.attachFileSizeLimit") || 0;
 
     defaults = {
       dragdrop: true,
       /* chunk_size: "100KB", // 100KB: for debugging progress, 10MB for real world apps, or even undefine */
-      max_file_size: attachFileSizeLimit+"KB",
-      multipart: false,
+      max_file_size: attachFileSizeLimit,
+      multipart: true,
+      urlstream_upload: true, // SMELL: required by flash backend. you get a flash io error #2038 for some reasons otherwise
       file_data_name: "file",
       multi_selection: true,
       filters: [
@@ -541,10 +562,11 @@
 
     /* init */
     $(".jqUploader:not(.jqInitedUploader)").livequery(function() {
+      var $this = $(this),
+          settings = $.extend({}, defaults, $this.metadata());
+
       $.log("UPLOADER: found a jqUploader");
-      var $this = $(this);
       $this.addClass("jqInitedUploader");
-      var settings = $.extend({}, defaults, $this.metadata());
       $this.uploader(settings);
     });
   });

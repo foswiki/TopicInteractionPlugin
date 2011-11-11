@@ -42,6 +42,7 @@ sub new {
   my $class = shift;
 
   my $this = bless($class->SUPER::new( 
+    $Foswiki::Plugins::SESSION,
     name => 'Uploader',
     version => '1.0.0',
     author => 'Michael Daum',
@@ -50,7 +51,7 @@ sub new {
     documentation => "$Foswiki::cfg{SystemWebName}.TopicInteractionPlugin",
     javascript => ['jquery.uploader.js'],
     css => ['jquery.uploader.css'],
-    dependencies => ['blockui', 'scrollto', 'button', 'livequery', 'metadata', 'JavaScriptFiles/foswikiPref', 'JQUERYPLUGIN::UPLOADER::ENGINES'], 
+    dependencies => ['blockui', 'scrollto', 'button', 'livequery', 'metadata', 'simplemodal', 'JavaScriptFiles/foswikiPref', 'JQUERYPLUGIN::UPLOADER::ENGINES'], 
     @_
   ), $class);
 

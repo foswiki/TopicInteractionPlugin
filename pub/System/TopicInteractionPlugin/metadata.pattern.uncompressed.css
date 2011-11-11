@@ -8,6 +8,8 @@
 .foswikiLayoutTable td,
 .foswikiLayoutTable th {
   padding:0em 0.5769em 0em 0em;
+  text-align:left;
+  color:#444;
 }
 
 .foswikiFormSteps .foswikiNullTable,
@@ -32,4 +34,12 @@
 #patternScreen .foswikiFormSteps h2 {
   padding-left:0px;
   padding-right:0px;
+}
+
+.foswikiAttachments table {
+  width:auto;
+}
+
+th {
+  line-height:inherit; 
 }

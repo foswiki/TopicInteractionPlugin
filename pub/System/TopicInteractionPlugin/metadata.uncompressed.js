@@ -160,10 +160,9 @@ jQuery(function($) {
       $this.find(".foswikiAttachmentSelected").removeClass("foswikiAttachmentSelected");
       if (opts.selection) {
         for (var i = 0; i < opts.selection.length; i++) {
-          var id = opts.selection[i].replace(/\./g, '\\.');
-          if (id) {
-            $this.find("#"+id).addClass("foswikiAttachmentSelected");
-          }
+          var id = opts.selection[i];
+          // jQuery can't handle id's with umlauts in it
+          $(document.getElementById(id)).addClass("foswikiAttachmentSelected");
         }
         if (opts.selection.length) {
           $this.find(".foswikiAttachmentsBulkAction, .foswikiAttachmentsClearAll").show();
@@ -380,7 +379,7 @@ jQuery(function($) {
         //$.log("refreshing from files");
         clearSelection();
         $.each(files, function(i, file) {
-          select(file.name);
+          select(encodeURI(file.name));
         });
       }
       loadAttachments();
@@ -679,7 +678,7 @@ jQuery(function($) {
 
       $select.val("");
 
-      filenames = encodeURI(opts.selection.join(","));
+      filenames = opts.selection.join(",");
       bulkActionUrl += ";filename="+filenames;
       $.log("METADATA: bulkActionUrl="+bulkActionUrl);
 

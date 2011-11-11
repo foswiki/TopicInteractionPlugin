@@ -18,7 +18,7 @@ package Foswiki::Plugins::TopicInteractionPlugin;
 use strict;
 
 our $VERSION = '$Rev: 1340 $';
-our $RELEASE = '2.00';
+our $RELEASE = '2.10';
 our $SHORTDESCRIPTION = 'Improved interaction with attachments and !DataForms';
 our $NO_PREFS_IN_TOPIC = 1;
 
@@ -28,8 +28,8 @@ use Foswiki::Plugins::JQueryPlugin ();
 ##############################################################################
 sub initPlugin {
 
-  Foswiki::Func::registerTagHandler('UPLOADFORM', \&handleUPLOADFORM);
   Foswiki::Func::registerTagHandler('ATTACHMENTS', \&handleATTACHMENTS);
+
   Foswiki::Func::registerRESTHandler('changeproperties', \&restChangeProperties);
   Foswiki::Func::registerRESTHandler('delete', \&restDelete);
   Foswiki::Func::registerRESTHandler('move', \&restMove);
@@ -49,12 +49,6 @@ sub initPlugin {
 sub handleATTACHMENTS {
   require Foswiki::Plugins::TopicInteractionPlugin::Attachments;
   return Foswiki::Plugins::TopicInteractionPlugin::Attachments::handle(@_);
-}
-
-##############################################################################
-sub handleUPLOADFORM {
-  require Foswiki::Plugins::TopicInteractionPlugin::UploadForm;
-  return Foswiki::Plugins::TopicInteractionPlugin::UploadForm::handle(@_);
 }
 
 ##############################################################################

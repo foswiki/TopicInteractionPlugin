@@ -32,7 +32,8 @@
 				pngresize : true,
 				chunks : true,
 				progress: true,
-				multipart: true
+				multipart: true,
+				multi_selection: true
 			};
 		},
 
@@ -145,10 +146,15 @@
 						e.preventDefault();
 
 						// Convert extensions to mimetypes
+						no_type_restriction:
 						for (i = 0; i < filters.length; i++) {
 							ext = filters[i].extensions.split(',');
 
 							for (a = 0; a < ext.length; a++) {
+								if (ext[a] === '*') {
+									mimeTypes = [];
+									break no_type_restriction;
+								}
 								mimeTypes.push(plupload.mimeTypes[ext[a]]);
 							}
 						}
@@ -236,7 +242,7 @@
 									if (httpStatus >= 400) {
 										up.trigger('Error', {
 											code : plupload.HTTP_ERROR,
-											message : 'HTTP Error.',
+											message : plupload.translate('HTTP Error.'),
 											file : file,
 											status : httpStatus
 										});
@@ -245,7 +251,7 @@
 							} else {
 								up.trigger('Error', {
 									code : plupload.GENERIC_ERROR,
-									message : 'Generic Error.',
+									message : plupload.translate('Generic Error.'),
 									file : file,
 									details : res.error
 								});

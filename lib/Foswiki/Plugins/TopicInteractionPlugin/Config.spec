@@ -4,7 +4,8 @@
 # **STRING**
 # This is the preference list of engines to test.
 # Available engines: html5, flash, silverlight, gears, browserplus, html4
-$Foswiki::cfg{TopicInteractionPlugin}{UploadEngines} = 'html5, flash, silverlight, gears, browserplus, html4';
+# Note that silverlight, gears and browserplus are disabled by default as these browser extensions are mostly unsupported and/or untested.
+$Foswiki::cfg{TopicInteractionPlugin}{UploadEngines} = 'html5, flash, html4';
 
 # ---+++ WebDAV filter
 # **REGEX EXPERT**

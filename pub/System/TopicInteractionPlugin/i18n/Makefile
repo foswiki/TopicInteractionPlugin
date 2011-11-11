@@ -1,5 +1,18 @@
 FOSWIKI_ROOT?=~/foswiki/trunk/core
-TARGET=da.js sv.js
+TARGET=\
+  cs.js\
+  da.js\
+  de.js\
+  es.js\
+  fi.js\
+  fr.js\
+  it.js\
+  ja.js\
+  lv.js\
+  nl.js\
+  pt-br.js\
+  ru.js\
+  sv.js
 
 -include $(FOSWIKI_ROOT)/pub/System/JQueryPlugin/Makefile.include
 

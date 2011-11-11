@@ -280,7 +280,7 @@ sub printJSONRPC {
 
   $response->header(
     -status  => $code?500:200,
-    -type    => 'text/plain',
+    -type    => 'text/plain', # SMELL: should be 'application/json' but some browsers open a filesave dialog on that one (woops)
   );
 
   $id = 'id' unless defined $id;
@@ -327,7 +327,11 @@ sub deleteAttachmentArchives {
   }
 
   foreach my $zip (@zips) {
-    $zip = Foswiki::Sandbox::untaint($zip, \&Foswiki::Sandbox::validateAttachmentName);
+    if (defined(&Foswiki::Sandbox::validateAttachmentName)) {
+      $zip = Foswiki::Sandbox::untaint($zip, \&Foswiki::Sandbox::validateAttachmentName);
+    } else {
+      $zip = Foswiki::Sandbox::normalizeFileName($zip);
+    }
     my $zipFile = $dir . '/' . $zip;
     writeDebug("deleting zip archive $zipFile");
     unlink $zipFile if -e $zipFile;

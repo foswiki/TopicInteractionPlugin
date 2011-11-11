@@ -11,7 +11,7 @@
 %TMPL:DEF{"metadata::start"}%<!-- -->
 %CLEAR%
 <div class="foswikiMetaData %IF{"not '%WEB%.%TOPIC%' allows 'change'" then="foswikiMetaDataNotAllowed"}%">
-%TABPANE{select="%URLPARAM{"tab"}%" animate="on" class="simple"}%
+%TABPANE{select="%URLPARAM{"metadata_tab"}%" animate="on" class="simple"}%
 <!-- -->%TMPL:END%
 
 %{ ################################################################################ }%
@@ -56,7 +56,7 @@
 %{ ################################################################################ }%
 %TMPL:DEF{"metadata::javascript"}%<!-- -->
 %TMPL:P{"metadata::lightbox"}%<!-- -->
-%JQREQUIRE{"tooltip, easing, ui, ui::autocomplete, uploader, twisty, media"}%<!-- -->
+%JQREQUIRE{"tooltip, easing, ui, uploader, twisty, media"}%<!-- -->
 %IF{"context FlexPaperPluginEnabled" then="$percntFLEXPAPERINIT$percnt"}%<!-- -->
 %ADDTOZONE{"script" 
   id="NATSKIN::METADATA::JS" 
@@ -104,7 +104,7 @@
             class=\"simple foswikiRight foswikiMetaDataHelp\" 
             target=\"%SYSTEMWEB%.DataForms\"
           }$percnt
-          <div class='foswikiFormStep foswikiMetaDataEdit'>
+          <div class='foswikiFormStep foswikiFormFirst foswikiMetaDataEdit'>
             $percntBUTTON{\"%MAKETEXT{"Edit form"}%\" 
               title=\"%MAKETEXT{"Edit this !DataForm"}%\"
               icon=\"application_form_edit\" 
@@ -114,7 +114,7 @@
             }$percnt
             %CLEAR%
           </div>
-          <div class='foswikiFormStep'>
+          <div class='foswikiFormStep foswikiFormLast'>
           <h2> $title </h2>
           %CLEAR%
           <table class='foswikiLayoutTable'>"
@@ -197,14 +197,10 @@
 }%
 %CLEAR%
 <div class="foswikiAttachmentsUploadToggleContainer" %IF{"'%TMPL:P{"attachments::showuploader"}%'='on'" then="style='display:block'"}%>
-%UPLOADFORM{
-  success="function(uploader, files) {
-    uploader.parents('.foswikiAttachments:first').trigger('Refresh', [files]);
-  }"
-}%
+%TMPL:P{"uploadform"}%
 </div>
 <div class="foswikiAttachmentsOptionsToggleContainer" %IF{"'%TMPL:P{"attachments::showoptions"}%'='on'" then="style='display:block'"}%>
-  <div class="foswikiAttachmentsOptions">
+  <div class="foswikiFormSteps foswikiAttachmentsOptions">
     <span class='foswikiFilter'>
       <b>%MAKETEXT{"Search"}%:</b>
       <input title='%MAKETEXT{"Enter a search pattern to filter the list of attachments"}%' type='text' value='%TMPL:P{"attachments::filter"}%' class='foswikiInputField' size='15'/>
@@ -525,4 +521,95 @@
     %CLEAR%
   </div>
 </div>
+<!-- -->%TMPL:END%
+
+%{ ################################################################################ }%
+%TMPL:DEF{"uploadform"}%<!-- -->
+%TMPL:P{"uploadform::formstart"}%<!-- -->
+%TMPL:P{"uploadform::filesstep"}%<!-- -->
+%TMPL:P{"uploadform::messagestep"}%<!-- -->
+%TMPL:P{"uploadform::optionsstep"}%<!-- -->
+%TMPL:P{"uploadform::buttonsstep"}%<!-- -->
+%TMPL:P{"uploadform::formend"}%<!-- -->
+<!-- -->%TMPL:END%
+
+%{ ################################################################################ }%
+%TMPL:DEF{"uploadform::formstart"}%<!-- -->
+<form class="jqUploader {success: function(uploader, files) {uploader.parents('.foswikiAttachments:first').trigger('Refresh', [files]);}}">
+  <div class="foswikiFormSteps">
+<!-- -->%TMPL:END%
+
+%{ ################################################################################ }%
+%TMPL:DEF{"uploadform::filesstep"}%<!-- -->
+<div class="foswikiFormStep">
+  <div class="jqUploaderFilesContainer">
+    <div class="jqUploaderDropText">%MAKETEXT{"Drag files here"}%</div>
+    <table class="jqUploaderFiles"></table>
+  </div>
+</div>
+<!-- -->%TMPL:END%
+
+%{ ################################################################################ }%
+%TMPL:DEF{"uploadform::messagestep"}%<!-- -->
+    <div class="jqUploaderMessage foswikiFormStep"></div>
+<!-- -->%TMPL:END%
+
+%{ ################################################################################ }%
+%TMPL:DEF{"uploadform::optionsstep"}%<!-- -->
+<div class="foswikiFormStep">
+  <h3>%MAKETEXT{"Comment"}%:</h3>
+  <input type="text" size="50" class="foswikiInputField jqUploaderComment" name="filecomment" />
+  <div class="foswikiFormDescription">
+    %MAKETEXT{"This comment will be added to every uploaded file."}%
+  </div>
+</div>
+<div class="foswikiFormStep">
+  <h3>%MAKETEXT{"Options"}%:</h3>
+  <div class="foswikiFormOptions">
+    <label>
+      <input type="checkbox" class="foswikiCheckbox jqUploaderCreateLink" name="createlink" /> 
+      %MAKETEXT{"Create a <b>link</b> to the attached files at the end of the topic."}%
+    </label> %BR%
+    <label>
+      <input type="checkbox" class="foswikiCheckbox jqUploaderHideFile" name="hidefile" /> 
+      %MAKETEXT{"<b>Hide</b> the files in the attachment list."}%
+    </label>
+  </div>
+</div>
+<hr />
+<!-- -->%TMPL:END%
+
+%{ ################################################################################ }%
+%TMPL:DEF{"uploadform::buttonsstep"}%<!-- -->
+<div class="foswikiFormStep foswikiFormLast" style="*zoom:1">
+  %TMPL:P{"uploadform::buttonsstep::addbutton"}%
+  %TMPL:P{context="TopicInteractionPlugin_autostart" else="uploadform::buttonsstep::startbutton"}%<!-- -->
+  %TMPL:P{"uploadform::buttonsstep::cancelbutton"}%<!-- -->
+  %TMPL:P{context="TopicInteractionPlugin_autostart" then="uploadform::buttonsstep::autostart"}%<!-- -->
+  %TMPL:P{context="TopicInteractionPlugin_autostart" else="uploadform::buttonsstep::manualstart"}%<!-- -->
+  %CLEAR%
+</div>
+<!-- -->%TMPL:END%
+
+%TMPL:DEF{"uploadform::buttonsstep::startbutton"}%%BUTTON{"%MAKETEXT{"Start upload"}%" icon="tick" class="jqUploaderStart"}%%TMPL:END%
+%TMPL:DEF{"uploadform::buttonsstep::addbutton"}%%BUTTON{"%MAKETEXT{"Add files"}%" icon="add" class="jqUploaderBrowse"}%%TMPL:END%
+%TMPL:DEF{"uploadform::buttonsstep::cancelbutton"}%%BUTTON{"%MAKETEXT{"Cancel upload"}%" icon="cross" class="jqUploaderStop"}%%TMPL:END%
+
+%TMPL:DEF{"uploadform::buttonsstep::autostart"}%<!-- -->
+<input type="checkbox" class="foswikiCheckbox jqUploaderAutoStart foswikiHidden" checked name="autostart" /> 
+<!-- -->%TMPL:END%
+
+%TMPL:DEF{"uploadform::buttonsstep::manualstart"}%%TMPL:P{context="TopicInteractionPlugin_noautostart" else="uploadform::buttonsstep::autostartcheckbox"}%<!-- -->%TMPL:END%
+
+%TMPL:DEF{"uploadform::buttonsstep::autostartcheckbox"}%<!-- -->
+<label class="foswikiLeft" style="line-height:23px">
+  <input type="checkbox" class="foswikiCheckbox jqUploaderAutoStart" name="autostart" /> 
+  %MAKETEXT{"Start upload immediately."}%
+</label>
+<!-- -->%TMPL:END%
+
+%{ ################################################################################ }%
+%TMPL:DEF{"uploadform::formend"}%<!-- -->
+  </div>
+</form>
 <!-- -->%TMPL:END%
