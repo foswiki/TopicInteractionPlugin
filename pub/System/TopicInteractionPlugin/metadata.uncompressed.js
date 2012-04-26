@@ -447,7 +447,7 @@ jQuery(function($) {
 
       loadDialog("#foswikiAttachmentPreviewer", "attachments::previewer");
       $previewer = $("#foswikiAttachmentPreviewer"),
-      $previewer.find(".foswikiAttachmentName").text(decodeURI(attachmentOpts.filename));
+      $previewer.find(".foswikiAttachmentName").text(decodeURIComponent(attachmentOpts.filename));
       $previewer.find(".foswikiPreviewContainer").load(previewUrl, function() {
         setTimeout(function() {
           $.unblockUI();
@@ -483,9 +483,9 @@ jQuery(function($) {
               $hideFile = $container.find("input[name=hidefile]");
 
           $.log("METADATA: show attachment editor");
-          $container.find("input[name=origfilename]").val(decodeURI(attachmentOpts.filename));
-          $container.find("input[name=filename]").val(decodeURI(attachmentOpts.filename));
-          $container.find("input[name=filecomment]").val(decodeURI(attachmentOpts.filecomment));
+          $container.find("input[name=origfilename]").val(decodeURIComponent(attachmentOpts.filename));
+          $container.find("input[name=filename]").val(decodeURIComponent(attachmentOpts.filename));
+          $container.find("input[name=filecomment]").val(decodeURIComponent(attachmentOpts.filecomment));
           $container.find(".foswikiThumbnailContainer").empty();
 
           $container.find(".foswikiThumbnailContainer").append(thumbnail);
@@ -566,12 +566,12 @@ jQuery(function($) {
           width:300
         },
         onShow: function(dialog) { 
-          dialog.container.find("#deleteAttachment").text(decodeURI(attachmentOpts.filename));
+          dialog.container.find("#deleteAttachment").text(decodeURIComponent(attachmentOpts.filename));
           dialog.container.find(".foswikiThumbnailContainer").append(thumbnail);
         },
         onSubmit: function(dialog) {
           $.blockUI({
-            message:"<h1>Deleting "+decodeURI(attachmentOpts.filename)+" ...</h1>",
+            message:"<h1>Deleting "+decodeURIComponent(attachmentOpts.filename)+" ...</h1>",
             fadeIn: 0,
             fadeOut: 0
           });
@@ -615,7 +615,7 @@ jQuery(function($) {
 
           $container.find(".foswikiMoveOne").show();
           $container.find(".foswikiMoveMultiple").hide();
-          $container.find("input[name=filename]").val(decodeURI(attachmentOpts.filename));
+          $container.find("input[name=filename]").val(decodeURIComponent(attachmentOpts.filename));
           $container.find(".foswikiThumbnailContainer").append(thumbnail);
         },
         onSubmit: function(dialog) {
