@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="micha" comment="reprev" date="1335457249" format="1.1" reprev="2" version="2"}%
+%META:TOPICINFO{author="ProjectContributor" comment="reprev" date="1335457249" format="1.1" reprev="2" version="2"}%
 ---+!! %TOPIC%
 %SHORTDESCRIPTION%
 
@@ -154,8 +154,8 @@ generates:
 |  Home page: | Foswiki:Extensions/%TOPIC% |
 |  Support: | Foswiki:Support/%TOPIC% |
 
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap5.png" attachment="TopicInteractionPluginSnap5.png" attr="" comment="" date="1335456088" size="36218" user="micha" version="1"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap4.png" attachment="TopicInteractionPluginSnap4.png" attr="" comment="" date="1335456089" size="45039" user="micha" version="1"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap3.png" attachment="TopicInteractionPluginSnap3.png" attr="" comment="" date="1335456090" size="99574" user="micha" version="1"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap2.png" attachment="TopicInteractionPluginSnap2.png" attr="" comment="" date="1335456091" size="111026" user="micha" version="1"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap1.png" attachment="TopicInteractionPluginSnap1.png" attr="" comment="" date="1335456092" size="16199" user="micha" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap5.png" attachment="TopicInteractionPluginSnap5.png" attr="" comment="" date="1335456088" size="36218" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap4.png" attachment="TopicInteractionPluginSnap4.png" attr="" comment="" date="1335456089" size="45039" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap3.png" attachment="TopicInteractionPluginSnap3.png" attr="" comment="" date="1335456090" size="99574" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap2.png" attachment="TopicInteractionPluginSnap2.png" attr="" comment="" date="1335456091" size="111026" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap1.png" attachment="TopicInteractionPluginSnap1.png" attr="" comment="" date="1335456092" size="16199" user="ProjectContributor" version="1"}%
