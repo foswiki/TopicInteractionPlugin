@@ -27,14 +27,15 @@ To activate you'll need to add =topicinteraction= to your SKIN path setting in y
     * Set SKIN = topicinteraction, pattern
 </verbatim>
 
-Note you won't need using Foswiki:Extensions/NatSkin as that's integrated automatically.
-
 Use the =insidetab= setting of !MetaCommentPlugin to render comments inside a tab at the bottom of the page:
 
 <verbatim>
+    * Set SKIN = topicinteraction, metacomment, pattern
     * Set DISPLAYCOMMENTS = on
     * Set COMMENTFORMAT = insidetab
 </verbatim>
+
+Note you won't need using Foswiki:Extensions/NatSkin as that's integrated automatically.
 
 ---++ Screenshots
 
@@ -149,6 +150,10 @@ generates:
 |  Release: | %$RELEASE% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  08 May 2012: | fixed silent dependency on !DBCachePlugin; \
+                  fixed integration with !PatternSkin; \
+                  fixed dependency on Foswiki:Extensions/RenderPlugin; 
+                  fixed interaction with Foswiki:Extensions/MetaCommentPlugin |
 |  26 Apr 2012: | initial release |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Home page: | Foswiki:Extensions/%TOPIC% |

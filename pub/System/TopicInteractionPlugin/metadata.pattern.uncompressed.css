@@ -28,7 +28,7 @@
   border-collapse:separate;
 }
 
-.foswikiAttachments, .foswikiFormStep,
+.foswikiAttachments .foswikiFormStep,
 .foswikiMetaData .foswikiFormStep {
   padding:0px;
   border:0px;
@@ -42,7 +42,6 @@
   padding-left:0px;
   padding-right:0px;
 }
-
 
 th {
   line-height:inherit; 
