@@ -54,3 +54,12 @@ th {
   padding:12px 20px;
   border-width:1px;
 }
+
+.ui-dialog .foswikiFormSteps {
+  padding:0;
+}
+
+.ui-dialog .foswikiFormStep {
+  margin:0;
+  border:0;
+}
