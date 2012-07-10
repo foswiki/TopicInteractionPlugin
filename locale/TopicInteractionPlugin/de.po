@@ -58,7 +58,7 @@ msgstr "Hochladen abbrechen"
 
 #: templates/metadata.tmpl:601
 msgid "Choose files"
-msgstr ""
+msgstr "Wähle Dateien aus"
 
 #: templates/metadata.tmpl:331
 msgid "Clear all"
@@ -206,7 +206,7 @@ msgstr "Optionen verbergen"
 
 #: templates/metadata.tmpl:511
 msgid "Hiding"
-msgstr ""
+msgstr "Verstecke Dateien"
 
 #: templates/metadata.tmpl:312
 msgid "Insert links"
@@ -238,7 +238,7 @@ msgstr "Optionen"
 
 #: templates/metadata.tmpl:367
 msgid "Preview"
-msgstr ""
+msgstr "Vorschau"
 
 #: templates/metadata.tmpl:275
 msgid "Preview this attachment"
