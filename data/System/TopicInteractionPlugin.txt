@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ProjectContributor" comment="reprev" date="1335457249" format="1.1" reprev="2" version="2"}%
+%META:TOPICINFO{author="ProjectContributor" comment="reprev" date="1336576843" format="1.1" reprev="2" version="4"}%
 ---+!! %TOPIC%
 %SHORTDESCRIPTION%
 
@@ -77,6 +77,9 @@ limit the number of attachments to be listed.
 | =separator="..."= | format string put between each formatted attachment  |
 | =hidenull="on,off"= | hide/display the empty result; only the header and the footer are included \
                 if set to "off" and there's no attachment at the given topic |
+| =nullformat="..."= | format string to be used when no attachments have been found and =hidenull= is switched off | |
+| =nullheader="..."= | header string to be used when no attachments have been found and =hidenull= is switched off | |
+| =nullfooter="..."= | footer string to be used when no attachments have been found and =hidenull= is switched off | |
 | =sort="name,date,size,user,comment,comment:name"= | sort results by specified field |
 | =reverse="on/off"= | enable reverse sorting |
 | =limit="..."= | limit the number of attachments to the given number; by default show all |
@@ -150,9 +153,12 @@ generates:
 |  Release: | %$RELEASE% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  10 Jul 2012: | replaced all simplemodals with jquery-ui dialogs; \
+                  added nullformat,nullheader,nullfooter to %ATTACHMENTS macro; \
+                  removed dependency on !WebDAVLinkPlugin to render webdav-enabled urls |
 |  08 May 2012: | fixed silent dependency on !DBCachePlugin; \
                   fixed integration with !PatternSkin; \
-                  fixed dependency on Foswiki:Extensions/RenderPlugin; 
+                  fixed dependency on Foswiki:Extensions/RenderPlugin; \
                   fixed interaction with Foswiki:Extensions/MetaCommentPlugin |
 |  26 Apr 2012: | initial release |
 |  Dependencies: | %$DEPENDENCIES% |

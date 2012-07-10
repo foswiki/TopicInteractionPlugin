@@ -271,7 +271,7 @@
         </div>
         <div class=\"foswikiAttachmentControl foswikiRight \">
           <a href='#' class='foswikiAttachmentEditButton' title='%MAKETEXT{"Edit properties of this attachment"}%' rel='nofollow'>%JQICON{"pencil"}%</a>
-          $percntIF{\"(context FlexPaperPluginEnabled and '$name'=~'\.pdf$') or '$name'=~'flv|swf'\" 
+          $percntIF{\"(context FlexPaperPluginEnabled and '$name'=~'\.pdf$') or '$name'=~'flv|swf|mp3'\" 
             then=\"<a href='#' class='foswikiAttachmentPreviewButton' title='%MAKETEXT{"Preview this attachment"}%' rel='nofollow'>%JQICON{"eye"}%</a>\"
             else=\"<!-- -->\"
           }$percnt
@@ -301,7 +301,6 @@
         %CLEAR%
       </div>
     </div>"
-  nullformat="<div class='foswikiAlert'>%MAKETEXT{"nothing found"}%</div>"
 }%
 </div>
 <div class="foswikiFormStep foswikiAttachmentsBottomActions">
@@ -364,163 +363,169 @@
 </noautolink>%TMPL:END%
 
 %{ ################################################################################ }%
-%TMPL:DEF{"attachments::previewer"}%<!-- -->
-<div id="foswikiAttachmentPreviewer" class="foswikiDialog foswikiFormSteps" style="display:none">
-  <h2 class="foswikiDialogTitle jqSimpleModalDraggable foswikiAttachmentName"></h2>
+%TMPL:DEF{"attachments::previewer::start"}%<!-- -->
+<div class="jqUIDialog foswikiFormSteps {modal:true, resizable:false, width:'auto', draggable:true}" title="%MAKETEXT{"Preview"}%" style="display:none">
   <div class="foswikiFormStep foswikiPreviewContainer">
-    %ICON{"processing"}%
+<!-- -->%TMPL:END%
+
+%{ ################################################################################ }%
+%TMPL:DEF{"attachments::previewer::end"}%<!-- -->
   </div>
-  <div class="foswikiFormStep foswikiFormButtons foswikiFormLast">
-    %BUTTON{"%MAKETEXT{"Close"}%" icon="cross" class="jqSimpleModalCancel"}%
-    %CLEAR%
-  </div>
+  <a class="jqUIDialogButton jqUIDialogClose {icon:'ui-icon-cancel'}">%MAKETEXT{"Close"}%</a> 
 </div>
 <!-- -->%TMPL:END%
 
 %{ ################################################################################ }%
-%TMPL:DEF{"attachments::previewer::pdf"}%%FLEXPAPER{
+%TMPL:DEF{"attachments::previewer::pdf"}%<!-- -->
+%TMPL:P{"attachments::previewer::start"}%
+%FLEXPAPER{
   "%URLPARAM{"filename"}%"
   topic="%BASEWEB%.%BASETOPIC%"
-  width="%URLPARAM{"width" default="100%"}%"
-  height="%URLPARAM{"height" default="480"}%"
-}%%TMPL:END%
+  width="600"
+  height="400"
+}%
+%TMPL:P{"attachments::previewer::end"}%
+%TMPL:END%
 
 %{ ################################################################################ }%
-%TMPL:DEF{"attachments::previewer::video"}%<div class="jqMedia {width:'%URLPARAM{"width" default="100%"}%', height:'%URLPARAM{"height" default="480"}%', autoplay:true, bgColor:'#000'}">
+%TMPL:DEF{"attachments::previewer::video"}%<!-- -->
+%TMPL:P{"attachments::previewer::start"}%
+<div class="jqMedia {width:600, height:400, autoplay:true, bgColor:'#000'}">
   <a href="%PUBURLPATH%/%BASEWEB%/%BASETOPIC%/%URLPARAM{"filename"}%">%URLPARAM{"filename"}%</a>
-</div>%TMPL:END%
+</div>
+%TMPL:P{"attachments::previewer::end"}%
+<!-- -->%TMPL:END%
 
 %{ ################################################################################ }%
-%TMPL:DEF{"attachments::previewer::audio"}%<div class="jqMedia {width:'%URLPARAM{"width" default="100%"}%', height:'24px', autoplay:true, bgColor:'#fff'}">
+%TMPL:DEF{"attachments::previewer::audio"}%<!-- -->
+%TMPL:P{"attachments::previewer::start"}%
+<div class="jqMedia {width:600, height:24, autoplay:true, bgColor:'#fff'}">
   <a href="%PUBURLPATH%/%BASEWEB%/%BASETOPIC%/%URLPARAM{"filename"}%">%URLPARAM{"filename"}%</a>
-</div>%TMPL:END%
-
+</div>
+%TMPL:P{"attachments::previewer::end"}%
+<!-- -->%TMPL:END%
 
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments::editor"}%<!-- -->
-<div id="foswikiAttachmentEditor" class="foswikiDialog foswikiFormSteps" style="display:none">
-<form name="attach" action="%SCRIPTURL{"rest"}%/TopicInteractionPlugin/changeproperties" method="post">
-<input type="hidden" name="origfilename" value="" />
-<input type="hidden" name="topic" value="%WEB%.%TOPIC%" />
-<h2 class="foswikiDialogTitle jqSimpleModalDraggable">%MAKETEXT{"Edit attachment"}%</h2>
-<div class="foswikiFormStep">
-  <h3>%MAKETEXT{"File name"}%:</h3>
-  <div class="foswikiThumbnailContainer foswikiRight"></div>
-  <input type="text" class="foswikiInputField" size="50" name="filename" value="" />
-</div>
-<div class="foswikiFormStep">
-  <h3>%MAKETEXT{"Comment"}%:</h3>
-  <input type="text" class="foswikiInputField" size="50" name="filecomment" value="" />
-</div>
-<div class="foswikiFormStep foswikiFormOptions">
-  <h3>%MAKETEXT{"Options"}%:</h3>
-  <label>
-    <input type="checkbox" class="foswikiCheckbox" name="hidefile" />
-    %MAKETEXT{"Hide attachment in normal topic view."}%
-  </label>
-</div>
-<hr />
-<div class="foswikiFormStep foswikiFormButtons foswikiFormLast">
-  %BUTTON{"%MAKETEXT{"Save"}%" icon="disk" class="jqSimpleModalOK"}%
-  %BUTTON{"%MAKETEXT{"Cancel"}%" icon="cross" class="jqSimpleModalCancel"}%
-  %CLEAR%
-</div>
-</form>
+<div id="foswikiAttachmentEditor" class="jqUIDialog foswikiFormSteps {width:485, modal:true, resizable:false, draggable:true}" title="%MAKETEXT{"Edit attachment"}%" style="display:none">
+  <form id="foswikiAttachmentEditorForm" name="attach" action="%SCRIPTURL{"rest"}%/TopicInteractionPlugin/changeproperties" method="post">
+    <input type="hidden" name="id" value="save" />
+    <input type="hidden" name="origfilename" value="" />
+    <input type="hidden" name="topic" value="%WEB%.%TOPIC%" />
+    <div class="foswikiFormStep">
+      <h3>%MAKETEXT{"File name"}%:</h3>
+      <div class="foswikiThumbnailContainer foswikiRight"></div>
+      <input type="text" class="foswikiInputField" size="50" name="filename" value="" />
+    </div>
+    <div class="foswikiFormStep">
+      <h3>%MAKETEXT{"Comment"}%:</h3>
+      <input type="text" class="foswikiInputField" size="50" name="filecomment" value="" />
+    </div>
+    <div class="foswikiFormStep foswikiFormOptions foswikiFormLast">
+      <h3>%MAKETEXT{"Options"}%:</h3>
+      <label>
+        <input type="checkbox" class="foswikiCheckbox" name="hidefile" />
+        %MAKETEXT{"Hide attachment in normal topic view."}%
+      </label>
+    </div>
+    <a class="jqUIDialogButton jqUIDialogSubmit {icon:'ui-icon-disk'}">%MAKETEXT{"Save"}%</a> 
+    <a class="jqUIDialogButton jqUIDialogClose {icon:'ui-icon-cancel'}">%MAKETEXT{"Cancel"}%</a> 
+  </form>
 </div>
 <!-- -->%TMPL:END%
 
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments::moveattachment"}%<!-- -->
-<div id="foswikiAttachmentMove" class="foswikiDialog foswikiFormSteps" style="display:none">
-<form name="move" action="%SCRIPTURL{"rest"}%/TopicInteractionPlugin/move" method="post">
-<input type="hidden" name="filename" value="" />
-<input type="hidden" name="topic" value="%WEB%.%TOPIC%" />
-<h2 class="foswikiDialogTitle foswikiMoveOne jqSimpleModalDraggable">%MAKETEXT{"Move this attachment to a different topic"}%</h2>
-<h2 class="foswikiDialogTitle foswikiMoveMultiple jqSimpleModalDraggable">%MAKETEXT{"Move [_1] attachment(s) to a different topic" args="<span class='foswikiAttachmentsCount'></span>"}%</h2>
-<div class="foswikiFormStep">
-  <h3>%MAKETEXT{"To web"}%</h3>
-  <div class="foswikiThumbnailContainer foswikiRight"></div>
-  <input type="text" class="foswikiInputField jqUIAutocomplete" name="newweb" size="50" value="%WEB%" autocomplete="%SCRIPTURL{"view"}%/%SYSTEMWEB%/JQueryAjaxHelper?section=web&skin=text" />
-</div>
-<div class="foswikiFormStep">
-  <h3>%MAKETEXT{"To topic"}%:</h3>
-  <input type="text" class="foswikiInputField jqUIAutocomplete {extraParams:{baseweb:function() {return jQuery('#foswikiAttachmentMove input[name=newweb]').val()}}}" name="newtopic" size="50" value="%TOPIC%" autocomplete="%SCRIPTURL{"view"}%/%SYSTEMWEB%/JQueryAjaxHelper?section=topic&skin=text" />
-  <div class="foswikiFormDescription">
-    %MAKETEXT{"The new topic chosen must already exist."}%
-  </div>
-</div>
-<hr />
-<div class="foswikiFormStep foswikiFormLast foswikiFormButtons">
-  %BUTTON{"%MAKETEXT{"Move"}%" icon="page_white_go" class="jqSimpleModalOK"}%
-  %BUTTON{"%MAKETEXT{"Cancel"}%" icon="cross" class="jqSimpleModalCancel"}%
-  %CLEAR%
-</div>
-</form>
+<div id="foswikiAttachmentMove" class="jqUIDialog foswikiFormSteps {modal:true, resizable:false, draggable:true, width:485}" title="%MAKETEXT{"Move attachment(s) to a different topic"}%" style="display:none">
+  <form id="foswikiAttachmentMoveForm" name="move" action="%SCRIPTURL{"rest"}%/TopicInteractionPlugin/move" method="post">
+    <input type="hidden" name="id" value="move" />
+    <input type="hidden" name="filename" value="" />
+    <input type="hidden" name="topic" value="%WEB%.%TOPIC%" />
+    <div class="foswikiFormStep">
+      <h3>%MAKETEXT{"To web"}%</h3>
+      <div class="foswikiThumbnailContainer foswikiRight"></div>
+      <input type="text" class="foswikiInputField jqUIAutocomplete" name="newweb" size="50" value="%WEB%" autocomplete="%SCRIPTURL{"view"}%/%SYSTEMWEB%/JQueryAjaxHelper?section=web&skin=text" />
+    </div>
+    <div class="foswikiFormStep">
+      <h3>%MAKETEXT{"To topic"}%:</h3>
+      <input type="text" class="foswikiInputField jqUIAutocomplete {extraParams:{baseweb:function() {return jQuery('#foswikiAttachmentMove input[name=newweb]').val()}}}" name="newtopic" size="50" value="%TOPIC%" autocomplete="%SCRIPTURL{"view"}%/%SYSTEMWEB%/JQueryAjaxHelper?section=topic&skin=text" />
+      <div class="foswikiFormDescription">
+        %MAKETEXT{"The new topic chosen must already exist."}%
+      </div>
+    </div>
+    <a class="jqUIDialogButton jqUIDialogSubmit {icon:'ui-icon-copy'}">%MAKETEXT{"Move"}%</a> 
+    <a class="jqUIDialogButton jqUIDialogClose {icon:'ui-icon-cancel'}">%MAKETEXT{"Cancel"}%</a> 
+  </form>
 </div>
 <!-- -->%TMPL:END%
 
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments::confirmdelete"}%<!-- -->
-<div id="foswikiAttachmentConfirmDelete" class="foswikiDialog foswikiFormSteps" style="display:none">
-  <div class="foswikiFormStep">
-    <h2 class="foswikiDialogTitle">%MAKETEXT{"Delete attachment?"}%</h2>
-    <div class="foswikiThumbnailContainer foswikiRight"></div>
-    %MAKETEXT{"Are you sure that you want to delete [_1]?" args="<b id='deleteAttachment'></b>"}%
-    %CLEAR%
-  </div>
-  <hr />
-  <div class="foswikiFormStep foswikiFormLast foswikiFormButtons">
-    %BUTTON{"%MAKETEXT{"Yes, delete"}%" icon="bin" class="jqSimpleModalOK"}%
-    %BUTTON{"%MAKETEXT{"No, thanks"}%" icon="cross" class="jqSimpleModalCancel"}%
-    %CLEAR%
-  </div>
+<div id="foswikiAttachmentConfirmDelete" class="jqUIDialog foswikiFormSteps {modal:true, draggable:true}" title="%MAKETEXT{"Delete attachment?"}%" style="display:none">
+  <form id="foswikiAttachmentConfirmDeleteForm" action="%SCRIPTURLPATH{"rest"}%/TopicInteractionPlugin/delete" method="post">
+    <input type="hidden" name="id" value="delete" />
+    <input type="hidden" name="filename" value="" />
+    <input type="hidden" name="topic" value="%WEB%.%TOPIC%" />
+    <div class="foswikiFormStep">
+      <div class="foswikiThumbnailContainer foswikiRight"></div>
+      %MAKETEXT{"Are you sure that you want to delete [_1]?" args="<b id='deleteAttachment'></b>"}%
+      %CLEAR%
+    </div>
+    <a class="jqUIDialogButton jqUIDialogSubmit {icon:'ui-icon-trash'}">%MAKETEXT{"Yes, delete"}%</a> 
+    <a class="jqUIDialogButton jqUIDialogClose {icon:'ui-icon-cancel'}">%MAKETEXT{"No, thanks"}%</a> 
+  </form>
 </div>
 <!-- -->%TMPL:END%
 
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments::confirmbulkaction"}%<!-- -->
-<div id="foswikiAttachmentConfirmBulk" class="foswikiDialog foswikiFormSteps" style="display:none">
-  <div class="foswikiFormStep">
-    <h2 class="foswikiDialogTitle">
-      %MAKETEXT{"Confirmation required"}%
-    </h2>
-    <div class="foswikiAttachmentBulkMessage foswikiAttachmentBulkCreateLinks">
-      <img src="%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/icons/insert-link.png" alt="insert-link" width="48" height="48" align="right" />
-      %MAKETEXT{"Do you really want to create links to [_1] attachment(s)?" args="<b></b>"}%
-      %CLEAR%
+<div id="foswikiAttachmentConfirmBulk" class="jqUIDialog foswikiFormSteps {modal:true, draggable:true, width:270}" title="%MAKETEXT{"Confirmation required"}%" style="display:none">
+  <form id="foswikiAttachmentConfirmBulkForm" method="post">
+    <input type="hidden" name="id" value="bulkaction" />
+    <input type="hidden" name="filename" value="" />
+    <input type="hidden" name="action" value="" />
+    <input type="hidden" name="topic" value="%WEB%.%TOPIC%" />
+    <div class="foswikiFormStep">
+      <div class="foswikiAttachmentBulkMessage foswikiAttachmentBulkCreateLinks">
+        <img src="%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/icons/insert-link.png" alt="insert-link" width="48" height="48" align="right" />
+        %MAKETEXT{"Do you really want to create links to [_1] attachment(s)?" args="<b></b>"}%
+        %CLEAR%
+        <div class="foswikiAttachmentBulkProgressMessage">%MAKETEXT{"Creating links"}%</div>
+      </div>
+      <div class="foswikiAttachmentBulkMessage foswikiAttachmentBulkCreateImageGallery">
+        <img src="%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/icons/insert-image.png" alt="insert-image-gallery" width="48" height="48" align="right" />
+        %MAKETEXT{"Do you really want to create an image gallery for [_1] attachment(s)?" args="<b></b>"}%
+        %CLEAR%
+        <div class="foswikiAttachmentBulkProgressMessage">%MAKETEXT{"Creating image gallery"}%</div>
+      </div>
+      <div class="foswikiAttachmentBulkMessage foswikiAttachmentBulkDownload">
+        <img src="%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/icons/download.png" alt="download" width="48" height="48" align="right" />
+        %MAKETEXT{"Do you really want to download [_1] attachment(s)?" args="<b></b>"}%
+        %CLEAR%
+        <div class="foswikiAttachmentBulkProgressMessage">%MAKETEXT{"Downloading"}%</div>
+      </div>
+      <div class="foswikiAttachmentBulkMessage foswikiAttachmentBulkHide">
+        <img src="%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/icons/white-bulb.png" alt="hide" width="48" height="48" align="right" />
+        %MAKETEXT{"Do you really want to hide [_1] attachment(s)?" args="<b></b>"}%
+        %CLEAR%
+        <div class="foswikiAttachmentBulkProgressMessage">%MAKETEXT{"Hiding"}%</div>
+      </div>
+      <div class="foswikiAttachmentBulkMessage foswikiAttachmentBulkUnHide">
+        <img src="%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/icons/yellow-bulb.png" alt="show" width="48" height="48" align="right" />
+        %MAKETEXT{"Do you really want to unhide [_1] attachment(s)?" args="<b></b>"}%
+        %CLEAR%
+        <div class="foswikiAttachmentBulkProgressMessage">%MAKETEXT{"Unhiding"}%</div>
+      </div>
+      <div class="foswikiAttachmentBulkMessage foswikiAttachmentBulkDelete">
+        <img src="%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/icons/trash-full.png" alt="trash" width="48" height="48" align="right" />
+        %MAKETEXT{"Do you really want to delete [_1] attachment(s)?" args="<b></b>"}%
+        %CLEAR%
+        <div class="foswikiAttachmentBulkProgressMessage">%MAKETEXT{"Deleting"}%</div>
+      </div>
     </div>
-    <div class="foswikiAttachmentBulkMessage foswikiAttachmentBulkCreateImageGallery">
-      <img src="%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/icons/insert-image.png" alt="insert-image-gallery" width="48" height="48" align="right" />
-      %MAKETEXT{"Do you really want to create an image gallery for [_1] attachment(s)?" args="<b></b>"}%
-      %CLEAR%
-    </div>
-    <div class="foswikiAttachmentBulkMessage foswikiAttachmentBulkDownload">
-      <img src="%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/icons/download.png" alt="download" width="48" height="48" align="right" />
-      %MAKETEXT{"Do you really want to download [_1] attachment(s)?" args="<b></b>"}%
-      %CLEAR%
-    </div>
-    <div class="foswikiAttachmentBulkMessage foswikiAttachmentBulkHide">
-      <img src="%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/icons/white-bulb.png" alt="hide" width="48" height="48" align="right" />
-      %MAKETEXT{"Do you really want to hide [_1] attachment(s)?" args="<b></b>"}%
-      %CLEAR%
-    </div>
-    <div class="foswikiAttachmentBulkMessage foswikiAttachmentBulkUnHide">
-      <img src="%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/icons/yellow-bulb.png" alt="show" width="48" height="48" align="right" />
-      %MAKETEXT{"Do you really want to unhide [_1] attachment(s)?" args="<b></b>"}%
-      %CLEAR%
-    </div>
-    <div class="foswikiAttachmentBulkMessage foswikiAttachmentBulkDelete">
-      <img src="%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/icons/trash-full.png" alt="trash" width="48" height="48" align="right" />
-      %MAKETEXT{"Do you really want to delete [_1] attachment(s)?" args="<b></b>"}%
-      %CLEAR%
-    </div>
-  </div>
-  <hr />
-  <div class="foswikiFormStep foswikiFormLast foswikiFormButtons">
-    %BUTTON{"%MAKETEXT{"Yes, please"}%" icon="tick" class="jqSimpleModalOK"}%
-    %BUTTON{"%MAKETEXT{"No, thanks"}%" icon="cross" class="jqSimpleModalCancel"}%
-    %CLEAR%
-  </div>
+    <a class="jqUIDialogButton jqUIDialogSubmit {icon:'ui-icon-circle-check'}">%MAKETEXT{"Yes, please"}%</a> 
+    <a class="jqUIDialogButton jqUIDialogClose {icon:'ui-icon-cancel'}">%MAKETEXT{"No, thanks"}%</a> 
+  </form>
 </div>
 <!-- -->%TMPL:END%
 
@@ -593,7 +598,7 @@
 <!-- -->%TMPL:END%
 
 %TMPL:DEF{"uploadform::buttonsstep::startbutton"}%%BUTTON{"%MAKETEXT{"Start upload"}%" icon="tick" class="jqUploaderStart"}%%TMPL:END%
-%TMPL:DEF{"uploadform::buttonsstep::addbutton"}%%BUTTON{"%MAKETEXT{"Add files"}%" icon="add" class="jqUploaderBrowse"}%%TMPL:END%
+%TMPL:DEF{"uploadform::buttonsstep::addbutton"}%%BUTTON{"%MAKETEXT{"Choose files"}%" icon="add" class="jqUploaderBrowse"}%%TMPL:END%
 %TMPL:DEF{"uploadform::buttonsstep::cancelbutton"}%%BUTTON{"%MAKETEXT{"Cancel upload"}%" icon="cross" class="jqUploaderStop"}%%TMPL:END%
 
 %TMPL:DEF{"uploadform::buttonsstep::autostart"}%<!-- -->

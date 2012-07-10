@@ -106,10 +106,7 @@ a.foswikiAttachmentsOptionsToggle {
   max-width:4.1538em; /* 54px */
   max-height:4.1538em; /* 54px */
 }
-#simplemodal-container .foswikiThumbnail a {
-  width:auto;
-  margin:0px 0px 1em 1em;
-}
+
 .foswikiAttachments .foswikiAttachmentEditor .foswikiFormSteps {
   padding:0.6923em 0.3846em 0.6923em 5.1538em; /* 9px 5px 9px 67px */
   margin:-0.6923em -0.3846em;
@@ -231,16 +228,13 @@ a.foswikiAttachmentsOptionsToggle {
   margin-top:-2px;
 }
 
+.foswikiAttachmentBulkProgressMessage,
 .foswikiAttachmentBulkMessage {
   display:none; /* switched on while opening the dialog */
 }
 
 .foswikiAttachmentBulkMessage img {
   margin:0em 0em 0em 1.5em;
-}
-
-#foswikiAttachmentConfirmBulk .jqSimpleModalCancel {
-  margin-right:0px;
 }
 
 /* forms */

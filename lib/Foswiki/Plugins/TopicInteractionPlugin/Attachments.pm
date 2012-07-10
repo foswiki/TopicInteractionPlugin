@@ -49,15 +49,17 @@ sub handle {
   my $theFormat = $params->{format};
   my $theSeparator = $params->{separator};
   my $theSort = $params->{sort} || $params->{order} || 'name';
-  my $theReverse = $params->{reverse} || 'off';
-  my $theHideNull = $params->{hidenull} || 'off';
+  my $theReverse = Foswiki::Func::isTrue($params->{reverse}, 0);
+  my $theHideNull = Foswiki::Func::isTrue($params->{hidenull}, 0);
+  my $theNullHeader = $params->{nullheader} || '';
   my $theNullFormat = $params->{nullformat} || '';
+  my $theNullFooter = $params->{nullfooter} || '';
   my $theComment = $params->{comment} || '.*';
   my $theLimit = $params->{limit} || 0;
   my $theSkip = $params->{skip} || 0;
-  my $theWarn = $params->{warn} || 'on';
+  #my $theWarn = Foswiki::Func::isTrue($params->{warn}, 1); 
   my $theInclude = $params->{include};
-  my $theCase = $params->{casesensitive} || 'on';
+  my $theCase = Foswiki::Func::isTrue($params->{casesensitive}, 1);
 
   $theLimit =~ s/[^\d]//go;
   $theLimit = 0 unless $theLimit;
@@ -75,7 +77,10 @@ sub handle {
   # sort attachments
   my ($meta) = Foswiki::Func::readTopic($thisWeb, $thisTopic );
   my @attachments = $meta->find("FILEATTACHMENT");
-  return '' unless @attachments;
+  unless (@attachments) {
+    return '' if $theHideNull;
+    return Foswiki::Func::decodeFormatTokens($theNullHeader.$theNullFormat.$theNullFooter);
+  }
 
   #%META:FILEATTACHMENT{name="cross06.jpg" attachment="cross06.jpg" attr="" comment="" date="1287484667" size="30247" user="micha" version="1"}%
 
@@ -107,7 +112,7 @@ sub handle {
       @attachments = sort { $sorting{$a} cmp $sorting{$b} } @attachments;
     }
   }
-  @attachments = reverse @attachments if $theReverse eq 'on';
+  @attachments = reverse @attachments if $theReverse;
 
   # collect result
   my @result;
@@ -129,7 +134,7 @@ sub handle {
     next unless $info->{comment} =~ /^($theComment)$/;
 
     if ($theInclude) {
-      if ($theCase eq 'on') {
+      if ($theCase) {
         next unless
           $info->{name} =~ /^($theInclude)$/ ||
           $info->{user} =~ /^($theInclude)$/ ||
@@ -149,11 +154,16 @@ sub handle {
   }
 
   $params->{_count} = $index;
-  return '' if $theHideNull eq 'on' && $index == 0;
+  return '' if $theHideNull && $index == 0;
   $theSkip = 0 if $theSkip > $index;
   $index = 0;
-  my $webDAVLinkPluginEnabled = Foswiki::Func::getContext()->{WebDAVLinkPluginEnabled};
-  my $webDAVFilter = $Foswiki::cfg{TopicInteractionPlugin}{WebDAVFilter} || qr/((xlt|xls|ppt|pps|pot|doc|dot)(x|m)?)|odc|odb|odf|odg|otg|odi|odp|otp|ods|ots|odt|odm|ott|oth|mpp/;
+  my $webDAVFilter = $Foswiki::cfg{TopicInteractionPlugin}{WebDAVFilter};
+  my $webDavUrl = $Foswiki::cfg{TopicInteractionPlugin}{WebDAVUrl} || 'webdav://$host/dav/$web/$topic_files/$attachment';
+  my $host = $Foswiki::cfg{DefaultUrlHost};
+  $host =~ s/^https?:\/+//;
+  $webDavUrl =~ s/\$host/$host/g;
+  $webDavUrl =~ s/\$web/$thisWeb/g;
+  $webDavUrl =~ s/\$topic/$thisTopic/g;
 
   foreach my $attachment (@selectedAttachments) {
 
@@ -170,8 +180,10 @@ sub handle {
     my $encName = urlEncode($info->{name});
 
     # actions
-    my $webDavUrl = '%WEBDAVFOLDERURL%/' . $thisWeb . '/' . $thisTopic . '_files/' . $encName;
-    my $webDavAction = '<a rel="nofollow" href="' . $webDavUrl . '" ' . 'title="%MATETEXT{"edit this attachment" args="<nop>' . $info->{name} . '"}%">' . '%MAKETEXT{"edit"}%</a>';
+    my $thisWebDavUrl = $webDavUrl;
+    $thisWebDavUrl =~ s/\$attachment/$encName/g;
+
+    my $webDavAction = '<a rel="nofollow" href="' . $thisWebDavUrl . '" ' . 'title="%MATETEXT{"edit this attachment" args="<nop>' . $info->{name} . '"}%">' . '%MAKETEXT{"edit"}%</a>';
 
     my $propsUrl = '%SCRIPTURLPATH{"attach"}%/' . $thisWeb . '/' . $thisTopic . '?filename=' . $encName . '&revInfo=1';
     my $propsAction = '<a rel="nofollow" href="' . $propsUrl . '" ' . 'title="%MAKETEXT{"manage properties of [_1]" args="<nop>' . $info->{name} . '"}%">' . '%MAKETEXT{"props"}%</a>';
@@ -197,15 +209,15 @@ sub handle {
     }
 
     # use webdav urls for document types that are webdav-enabled via WebDAVLinkPlugin
-    if ($webDAVLinkPluginEnabled && $info->{name} =~ /\.($webDAVFilter)$/i) {
+    if (defined($webDAVFilter) && $info->{name} =~ /\.($webDAVFilter)$/i) {
       # switch normal pubUrls to webdavUrls
-      $url = $webDavUrl;
+      $url = $thisWebDavUrl;
     }
 
     my $text = $theFormat;
     $text =~ s/\$date\(([^\)]+)\)/_formatTile($info->{date}, $1)/ge;
     $text =~ s/\$webdav\b/$webDavAction/g;
-    $text =~ s/\$webdavUrl\b/$webDavUrl/g;
+    $text =~ s/\$webdavUrl\b/$thisWebDavUrl/g;
     $text =~ s/\$propsUrl/$propsUrl/g;
     $text =~ s/\$props\b/$propsAction/g;
     $text =~ s/\$moveUrl\b/$moveUrl/g;
