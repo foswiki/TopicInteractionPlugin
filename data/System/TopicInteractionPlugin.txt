@@ -153,6 +153,8 @@ generates:
 |  Release: | %$RELEASE% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  24 Sep 2012: | updated to latest plupload version; \
+                  allow to add arbitary properties, not only comments, createlink, hide-file flags |
 |  10 Jul 2012: | replaced all simplemodals with jquery-ui dialogs; \
                   added nullformat,nullheader,nullfooter to %ATTACHMENTS macro; \
                   removed dependency on !WebDAVLinkPlugin to render webdav-enabled urls |

@@ -79,7 +79,10 @@ sub handle {
   my @attachments = $meta->find("FILEATTACHMENT");
   unless (@attachments) {
     return '' if $theHideNull;
-    return Foswiki::Func::decodeFormatTokens($theNullHeader.$theNullFormat.$theNullFooter);
+    my $text = $theNullHeader.$theNullFormat.$theNullFooter;
+    $text =~ s/\$web\b/$thisWeb/g;
+    $text =~ s/\$topic\b/$thisTopic/g;
+    return Foswiki::Func::decodeFormatTokens($text);
   }
 
   #%META:FILEATTACHMENT{name="cross06.jpg" attachment="cross06.jpg" attr="" comment="" date="1287484667" size="30247" user="micha" version="1"}%

@@ -493,7 +493,7 @@ jQuery(function($) {
       var $button = $(this),
           $attachment = $button.parents(".foswikiAttachment:first"),
           attachmentOpts = $.extend({}, $attachment.metadata()),
-          thumbnail = $attachment.find(".foswikiThumbnail").clone(true);
+          thumbnail = $attachment.find(".foswikiThumbnail").clone(true).removeClass("foswikiLeft");
 
       $.log("METADATA: clicked edit attachment");
 
@@ -511,8 +511,7 @@ jQuery(function($) {
             $this.find("input[name=origfilename]").val(decodeURIComponent(attachmentOpts.filename));
             $this.find("input[name=filename]").val(decodeURIComponent(attachmentOpts.filename));
             $this.find("input[name=filecomment]").val(decodeURIComponent(attachmentOpts.filecomment));
-            $this.find(".foswikiThumbnailContainer").empty();
-            $this.find(".foswikiThumbnailContainer").append(thumbnail);
+            $this.find(".foswikiThumbnailContainer").html(thumbnail);
 
             if (attachmentOpts.fileattr == 'h') {
               $hideFile.attr("checked", "checked");
@@ -560,7 +559,7 @@ jQuery(function($) {
       var $button = $(this),
           $attachment = $button.parents(".foswikiAttachment:first"),
           attachmentOpts = $.extend({}, $attachment.metadata()),
-          thumbnail = $attachment.find(".foswikiThumbnail").clone(true);
+          thumbnail = $attachment.find(".foswikiThumbnail").clone(true).removeClass("foswikiLeft");
 
       $attachment.find(".foswikiErrorMessage").remove();
       loadDialog({
@@ -612,7 +611,7 @@ jQuery(function($) {
       var $button = $(this),
           $attachment = $button.parents(".foswikiAttachment:first"),
           attachmentOpts = $.extend({}, $attachment.metadata()),
-          thumbnail = $attachment.find(".foswikiThumbnail").clone(true);
+          thumbnail = $attachment.find(".foswikiThumbnail").clone(true).removeClass("foswikiLeft");
 
       $attachment.find(".foswikiErrorMessage").remove();
 
@@ -625,6 +624,7 @@ jQuery(function($) {
           $this.dialog("option", "open", function() {
             $this.find("input[name=filename]").val(decodeURIComponent(attachmentOpts.filename));
             $this.find(".foswikiThumbnailContainer").html(thumbnail);
+            $this.find(".foswikiGenericThumbnail").hide();
           }).dialog("open");
         }
       });
@@ -744,7 +744,8 @@ jQuery(function($) {
             $this.dialog("option", "open", function() {
               $this.find(".foswikiAttachmentsCount").text(opts.selection.length);
               $this.find("input[name=filename]").val(opts.selection.join(","));
-              $this.find(".foswikiThumbnailContainer").empty(); // TODO: insert generic attachment icon
+              $this.find(".foswikiThumbnailContainer").empty();
+              $this.find(".foswikiGenericThumbnail").show();
             }).dialog("option", "position", "center").dialog("open");
           }
         });

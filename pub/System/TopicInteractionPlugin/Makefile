@@ -31,7 +31,7 @@ to-git:
 
 from-git:
 	cp git/src/javascript/plupload.browserplus.js plupload.browserplus.uncompressed.js 
-	cp git/bin/plupload.flash.swf plupload.flash.swf 
+	#cp git/bin/plupload.flash.swf plupload.flash.swf 
 	cp git/src/javascript/plupload.flash.js plupload.flash.uncompressed.js 
 	cp git/src/javascript/plupload.gears.js plupload.gears.uncompressed.js 
 	cp git/src/javascript/plupload.html4.js plupload.html4.uncompressed.js 

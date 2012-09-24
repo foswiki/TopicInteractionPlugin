@@ -96,7 +96,6 @@ a.foswikiAttachmentsOptionsToggle {
 }
 .foswikiThumbnail a {
   overflow:hidden;
-  width:4.7693em; /* 62px */
   display:block;
 }
 .foswikiThumbnail a:hover {
@@ -235,6 +234,17 @@ a.foswikiAttachmentsOptionsToggle {
 
 .foswikiAttachmentBulkMessage img {
   margin:0em 0em 0em 1.5em;
+}
+
+/* dialogs */
+#foswikiAttachmentConfirmDelete .foswikiFormStep {
+  overflow:hidden;
+}
+#foswikiAttachmentConfirmDelete .foswikiThumbnail {
+  margin:0px;
+}
+#foswikiAttachmentConfirmDelete .foswikiThumbnailContainer {
+  margin:0 0 1em 1em;
 }
 
 /* forms */

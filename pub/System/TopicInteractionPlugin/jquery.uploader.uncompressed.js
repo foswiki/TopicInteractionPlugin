@@ -20,9 +20,6 @@
           startButton = $this.find(settings.startButton),
           stopButton = $this.find(settings.stopButton),
           messageContainer = $this.find(settings.messageContainer),
-          commentField = $this.find(settings.commentField),
-          createLinkBox = $this.find(settings.createLinkBox),
-          hideFileBox = $this.find(settings.hideFileBox),
           autoStartBox = $this.find(settings.autoStartBox),
           stopClicked = false,
           isInited = false;
@@ -42,22 +39,12 @@
         browseButton.parent().attr("id", containerId);
       }
       settings.container = containerId;
-      
 
       var uploader = new plupload.Uploader(settings);
 
-      // bind events
-      commentField.keypress(function(e) {
-        if (e.keyCode == "13") {
-          $this.trigger("Start");
-          e.preventDefault();
-          return false;
-        }
-      });
-
       // init autoStartBox
       if (!autoStartBox.is(".foswikiHidden")) {
-        if (foswiki.Pref.getPref("UPLOADER::AUTOSTART")== "true") {
+        if (typeof(foswiki.Pref) !== 'undefined' && foswiki.Pref.getPref("UPLOADER::AUTOSTART")== "true") {
           autoStartBox.attr("checked", "checked");
           startButton.hide();
         } else {
@@ -234,25 +221,35 @@
       /**********************************************************************/
       uploader.bind("BeforeUpload", function(up, file) {
         $.log("UPLOADER: got BeforeUpload event for file "+file.name);
-        var comment = commentField.val(),
-            createlink = createLinkBox.is(":checked"),
-            hidefile = hideFileBox.is(":checked");
+        var params = {}, isFirst = true;
+        $this.find("input").each(function() {
+          var $input = $(this), 
+              name = $input.attr("name"),
+              type = $input.attr("type"),
+              val;
+
+          if (type == 'checkbox') {
+            val = $input.is(":checked")?"on":"off";
+          } else {
+            val = $input.val();
+          }
+
+          if (typeof(name) !== 'undefined' && typeof(val) !== 'undefined') {
+            params[name] = encodeURI(val);
+          }
+        });
+
+        params["topic"] = encodeURI(foswiki.getPreference("WEB")) + "." + encodeURI(foswiki.getPreference("TOPIC"));
+        params["id"] = (new Date).getTime();
 
         if (uploader.features.multipart && uploader.settings.multipart) {
-          uploader.settings.multipart_params = {
-            "topic": encodeURI(foswiki.getPreference("WEB")) + "." + encodeURI(foswiki.getPreference("TOPIC")),
-            "id": (new Date).getTime(),
-            "filecomment": encodeURI(comment),
-            "createlink": (createlink?"on":"off"),
-            "hidefile": (hidefile?"on":"off")
-          };
+          uploader.settings.multipart_params = params;
         } else {
-          uploader.settings.url = settings.url + "?"
-            + "topic=" + encodeURI(foswiki.getPreference("WEB")) + "." + encodeURI(foswiki.getPreference("TOPIC")) + "&"
-            + "id=" + (new Date).getTime()
-            + "&filecomment=" + encodeURI(comment)
-            + "&createlink=" + (createlink?"on":"off")
-            + "&hidefile=" + (hidefile?"on":"off");
+          uploader.settings.url = settings.url;
+          for (var key in params) {
+            uploader.settings.url += (isFirst?"?":"&") + "key=" + params[key];
+            isFirst = false;
+          }
         }
 
         $.log("UPLOADER: url="+uploader.settings.url);
@@ -551,9 +548,6 @@
       startButton:  ".jqUploaderStart",
       stopButton:  ".jqUploaderStop",
       messageContainer:  ".jqUploaderMessage",
-      commentField: ".jqUploaderComment",
-      createLinkBox: ".jqUploaderCreateLink",
-      hideFileBox: ".jqUploaderHideFile",
       autoStartBox: ".jqUploaderAutoStart",
       error: null,
       success: function (uploader, files) {
