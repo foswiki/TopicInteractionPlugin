@@ -2,12 +2,9 @@
   margin-top:2.7692em; /* 36px */
 }
 .foswikiMetaData .jqTab {
-  border-left-width:0px;
-  border-right-width:0px;
-  border-bottom-width:0px;
   border-color:#ddd;
 }
-.foswikiMetaData .jqTabContents {
+.foswikiMetaData .jqTabPane .jqTabContents {
   padding:0px;
 }
 .foswikiMetaData .foswikiDataForm,
@@ -17,13 +14,10 @@
   border:0px;
   background-color:transparent;
 }
-.foswikiMetaData .foswikiFormStep {
-  margin:0;
-}
-.foswikiMetaData .foswikiFormFirst {
+.foswikiMetaData .foswikiFormStep:first-step {
   margin-bottom:1em;
 }
-.foswikiMetaData .foswikiFormLast {
+.foswikiMetaData .foswikiFormStep:last-child {
   margin-top:1em;
 }
 .foswikiMetaData .jqTabContents .foswikiFormSteps {

@@ -10,8 +10,8 @@
 %{ ################################################################################ }%
 %TMPL:DEF{"metadata::start"}%<!-- -->
 %CLEAR%
-<div class="foswikiMetaData %IF{"not '%WEB%.%TOPIC%' allows 'change'" then="foswikiMetaDataNotAllowed"}%">
-%TABPANE{select="%URLPARAM{"metadata_tab"}%" animate="on" class="simple"}%
+<div class="foswikiMetaData foswikiHideOnPrint %IF{"not '%WEB%.%TOPIC%' allows 'change'" then="foswikiMetaDataNotAllowed"}%">
+%TABPANE{select="%URLPARAM{"metadata_tab"}%" animate="on" class="plain"}%
 <!-- -->%TMPL:END%
 
 %{ ################################################################################ }%
@@ -56,7 +56,7 @@
 %{ ################################################################################ }%
 %TMPL:DEF{"metadata::javascript"}%<!-- -->
 %TMPL:P{"metadata::lightbox"}%<!-- -->
-%JQREQUIRE{"tooltip, easing, ui, uploader, twisty, media"}%<!-- -->
+%JQREQUIRE{"tooltip, ui, uploader, twisty, media"}%<!-- -->
 %IF{"context FlexPaperPluginEnabled" then="$percntFLEXPAPERINIT$percnt"}%<!-- -->
 %ADDTOZONE{"script" 
   id="METADATA::JS" 
@@ -92,7 +92,7 @@
 %TAB{"%MAKETEXT{"Comments [_1]" args="<span class='foswikiCommentsCount'>%METACOMMENTS{limit="1" format="($count)" singular="$count" plural="$count"}%</span>"}%" 
   id="comments" 
   url="%SCRIPTURL{"rest"}%/RenderPlugin/template?name=metacomments;expand=metacomments;topic=%WEB%.%TOPIC%;render=on;%GMTIME{"$epoch"}%"
-}%<div class='foswikiFormSteps foswikiAttachmentsProcess'>%ICON{"processing"}%</div>
+}%<div class='foswikiFormSteps foswikiAttachmentsProcess'><span class='jqAjaxLoader'>&nbsp;</span></div>
 %ENDTAB%
 %TMPL:P{"metadata::css"}%%TMPL:P{"metadata::javascript"}%<!-- -->
 <!-- -->%TMPL:END%
@@ -103,7 +103,7 @@
   topic="%BASEWEB%.%BASETOPIC%"
   excludeattr="[hH]"
   header="$percntTAB{\"%MAKETEXT{"Data form"}%\" id=\"dataform\"}$percnt
-          <div class=\"foswikiFormSteps foswikiDataForm jqTooltip\">
+          <div class='foswikiFormSteps foswikiDataForm jqTooltip'>
           $percntBUTTON{\"%MAKETEXT{"Help"}%\"
             title=\"%MAKETEXT{"Read more about Data Forms"}%\"
             icon=\"help\" 
@@ -144,7 +144,7 @@
     id=\"attachments\" 
     url=\"%SCRIPTURL{"rest"}%/RenderPlugin/template?name=metadata;expand=attachments;topic=%WEB%.%TOPIC%;render=on;%GMTIME{"$epoch"}%\"
   }$percnt
-  <div class='foswikiFormSteps foswikiAttachmentsProcess'>$percntICON{\"processing\"}$percnt</div>
+  <div class='foswikiFormSteps foswikiAttachmentsProcess'><span class='jqAjaxLoader'>&nbsp;</span></div>
   $percntENDTAB$percnt"
   limit="1"
   format=""
@@ -293,7 +293,7 @@
           %MAKETEXT{"Version [_1] uploaded by [_2] on [_3]" args="$version,$percntSPACEOUT{$user}$percnt,$date"}%
           $percntIF{\"$version>1\"
             then=\"...&nbsp;<a href='#' class='foswikiShowVersions' title='%MAKETEXT{"show previous revisions"}%'>%MAKETEXT{"more"}%</a><a href='#' class='foswikiHideVersions' title='%MAKETEXT{"hide other revisions"}%' style='display:none'>%MAKETEXT{"less"}%</a>
-                   <div class='foswikiVersionsContainer' style='display:none'>$dollarpercntICON{processing}$dollarpercnt</div>\"
+                   <div class='foswikiVersionsContainer' style='display:none'><span class='jqAjaxLoader'>&nbsp;</span></div>\"
             else=\"<!-- -->\"
           }$percnt
           <div class='foswikiAttachmentComment'>$comment</div>
