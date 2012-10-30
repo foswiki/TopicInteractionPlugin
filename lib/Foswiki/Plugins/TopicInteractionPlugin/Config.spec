@@ -15,7 +15,7 @@ $Foswiki::cfg{TopicInteractionPlugin}{UploadEngines} = 'html5, flash, html4';
 # as a good coverage of the most common office document extensions.
 $Foswiki::cfg{TopicInteractionPlugin}{WebDAVFilter} = undef;
 
-# *URL M**
+# **URL M**
 # Defines the uri pattern for webdav links.
 $Foswiki::cfg{TopicInteractionPlugin}{WebDAVUrl} = 'webdav://$host/dav/$web/$topic_files/$attachment';
 
