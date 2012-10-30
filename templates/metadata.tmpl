@@ -583,14 +583,11 @@
 %{ ################################################################################ }%
 %TMPL:DEF{"uploadform::buttonsstep"}%<!-- -->
 <div class="foswikiFormStep">
-  %TMPL:P{context="TopicInteractionPlugin_autostart" then="uploadform::buttonsstep::autostart"}%<!-- -->
-  %TMPL:P{context="TopicInteractionPlugin_autostart" else="uploadform::buttonsstep::manualstart"}%<!-- -->
-  %CLEAR%
-</div>
-<div class="foswikiFormStep">
   %TMPL:P{"uploadform::buttonsstep::addbutton"}%
   %TMPL:P{context="TopicInteractionPlugin_autostart" else="uploadform::buttonsstep::startbutton"}%<!-- -->
   %TMPL:P{"uploadform::buttonsstep::cancelbutton"}%<!-- -->
+  %TMPL:P{context="TopicInteractionPlugin_autostart" then="uploadform::buttonsstep::autostart"}%<!-- -->
+  %TMPL:P{context="TopicInteractionPlugin_autostart" else="uploadform::buttonsstep::manualstart"}%<!-- -->
   %CLEAR%
 </div>
 <!-- -->%TMPL:END%
@@ -606,7 +603,7 @@
 %TMPL:DEF{"uploadform::buttonsstep::manualstart"}%%TMPL:P{context="TopicInteractionPlugin_noautostart" else="uploadform::buttonsstep::autostartcheckbox"}%<!-- -->%TMPL:END%
 
 %TMPL:DEF{"uploadform::buttonsstep::autostartcheckbox"}%<!-- -->
-<label class="foswikiLeft" style="line-height:23px">
+<label style="line-height:23px">
   <input type="checkbox" class="foswikiCheckbox jqUploaderAutoStart" name="autostart" /> 
   %MAKETEXT{"Start upload immediately"}%
 </label>
