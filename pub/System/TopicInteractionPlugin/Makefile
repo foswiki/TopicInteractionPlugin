@@ -2,7 +2,6 @@ FOSWIKI_ROOT?=~/foswiki/trunk/core
 TARGET= \
   metadata.js \
   metadata.css \
-  metadata.pattern.css \
   gears.init.js \
   browserplus.init.js \
   plupload.browserplus.js \
@@ -13,7 +12,8 @@ TARGET= \
   plupload.silverlight.js \
   plupload.js \
   jquery.uploader.js \
-  jquery.uploader.css
+  jquery.uploader.css \
+  jquery.natedit.insertattachment.js
 
 SUBDIRS=i18n
 

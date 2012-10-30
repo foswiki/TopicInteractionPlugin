@@ -46,7 +46,8 @@
       if (!autoStartBox.is(".foswikiHidden")) {
         if (typeof(foswiki.Pref) !== 'undefined' && foswiki.Pref.getPref("UPLOADER::AUTOSTART")== "true") {
           autoStartBox.attr("checked", "checked");
-          startButton.hide();
+          //startButton.hide();
+          startButton.addClass("foswikiHidden");
         } else {
           autoStartBox.removeAttr("checked");
         }
@@ -59,9 +60,11 @@
         foswiki.Pref.setPref("UPLOADER::AUTOSTART", autoStart?"true":"false");
         autoStartBox.blur();
         if (autoStart) {
-          startButton.hide();
+          //startButton.hide();
+          startButton.addClass("foswikiHidden");
         } else {
-          startButton.show();
+          //startButton.show();
+          startButton.removeClass("foswikiHidden");
         }
       });
 
@@ -374,9 +377,11 @@
             }
           }
 
-          stopButton.hide();
+          //stopButton.hide();
+          stopButton.addClass("foswikiHidden");
           if (!autoStartBox.is(":checked")) {
-            startButton.show();
+            //startButton.show();
+            startButton.removeClass("foswikiHidden");
           }
 
         } else if (uploader.state === plupload.STARTED) {
@@ -479,8 +484,10 @@
         if (nrFiles) {
           if (!$(this).is("plupload_disabled")) {
             $.log("UPLOADER: starting ...");
-            startButton.hide();
-            stopButton.show();
+            //startButton.hide();
+            //stopButton.show();
+            startButton.addClass("foswikiHidden");
+            stopButton.removeClass("foswikiHidden");
            uploader.start();
           } 
         } else {
@@ -493,9 +500,11 @@
         $.log("UPLOADER: got Stop event");
         stopClicked = true;
         if (!autoStartBox.is(":checked")) {
-          startButton.show();
+          //startButton.show();
+          startButton.removeClass("foswikiHidden");
         }
-        stopButton.hide();
+        //stopButton.hide();
+        stopButton.addClass("foswikiHidden");
         $.each(uploader.files, function(i, file) {
           if(file.status == plupload.UPLOADING) {
             $.log("UPLOADER: ... setting file "+file.name+" to FAILED");
