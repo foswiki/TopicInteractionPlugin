@@ -120,7 +120,7 @@
             }$percnt
             %CLEAR%
           </div>
-          <div class='foswikiFormStep foswikiFormLast'>
+          <div class='foswikiFormStep'>
           <h2> $title </h2>
           %CLEAR%
           <table class='foswikiLayoutTable'>"
@@ -180,12 +180,6 @@
 %SESSION_VARIABLE{"attachments_reverse" set="%TMPL:P{"attachments::reverse"}%"}%<!-- -->
 %SESSION_VARIABLE{"attachments_limit" set="%TMPL:P{"attachments::limit"}%"}%<!-- -->
 <div class="foswikiFormStep foswikiFormFirst">
-%BUTTON{"%MAKETEXT{"Help"}%" 
-  title="%MAKETEXT{"Read more about attachments"}%" 
-  icon="help" 
-  class="simple foswikiRight foswikiMetaDataHelp" 
-  target="%SYSTEMWEB%.FileAttachment"
-}%
 %BUTTON{"%MAKETEXT{"Attach files"}%" 
   title="%MAKETEXT{"Upload files and images to this topic"}%" 
   icon="attach" 
@@ -239,7 +233,7 @@
   </div>
 </div>
 </div>
-<div class="foswikiFormStep foswikiFormLast">
+<div class="foswikiFormStep">
 <input type="hidden" name="allattachments" value="%ATTACHMENTS{
   warn="off"
   attr="%IF{"'%TMPL:P{"attachments::hidden"}%'!='on'" then="^[^h]*$"}%"
@@ -421,7 +415,7 @@
       <h3>%MAKETEXT{"Comment"}%:</h3>
       <input type="text" class="foswikiInputField" size="50" name="filecomment" value="" />
     </div>
-    <div class="foswikiFormStep foswikiFormOptions foswikiFormLast">
+    <div class="foswikiFormStep foswikiFormOptions">
       <h3>%MAKETEXT{"Options"}%:</h3>
       <label>
         <input type="checkbox" class="foswikiCheckbox" name="hidefile" />
@@ -588,12 +582,15 @@
 
 %{ ################################################################################ }%
 %TMPL:DEF{"uploadform::buttonsstep"}%<!-- -->
-<div class="foswikiFormStep foswikiFormLast" style="*zoom:1">
+<div class="foswikiFormStep">
+  %TMPL:P{context="TopicInteractionPlugin_autostart" then="uploadform::buttonsstep::autostart"}%<!-- -->
+  %TMPL:P{context="TopicInteractionPlugin_autostart" else="uploadform::buttonsstep::manualstart"}%<!-- -->
+  %CLEAR%
+</div>
+<div class="foswikiFormStep">
   %TMPL:P{"uploadform::buttonsstep::addbutton"}%
   %TMPL:P{context="TopicInteractionPlugin_autostart" else="uploadform::buttonsstep::startbutton"}%<!-- -->
   %TMPL:P{"uploadform::buttonsstep::cancelbutton"}%<!-- -->
-  %TMPL:P{context="TopicInteractionPlugin_autostart" then="uploadform::buttonsstep::autostart"}%<!-- -->
-  %TMPL:P{context="TopicInteractionPlugin_autostart" else="uploadform::buttonsstep::manualstart"}%<!-- -->
   %CLEAR%
 </div>
 <!-- -->%TMPL:END%
