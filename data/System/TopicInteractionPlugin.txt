@@ -148,11 +148,13 @@ generates:
 -->
 
 |  Author(s): | Michael Daum|
-|  Copyright: | &copy; 2010-2012 Michael Daum http://michaeldaumconsulting.com |
+|  Copyright: | &copy; 2010-2013 Michael Daum http://michaeldaumconsulting.com |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Release: | %$RELEASE% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  18 Jan 2013: | improved compatibility with !PatternSkin; \
+                  fixed =configure= barfing on an undef value |
 |  24 Sep 2012: | updated to latest plupload version; \
                   allow to add arbitary properties, not only comments, createlink, hide-file flags |
 |  10 Jul 2012: | replaced all simplemodals with jquery-ui dialogs; \

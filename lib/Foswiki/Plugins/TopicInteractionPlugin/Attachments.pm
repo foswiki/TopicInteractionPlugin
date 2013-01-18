@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# Copyright (C) 2005-2012 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2005-2013 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -233,7 +233,7 @@ sub handle {
     $text =~ s/\$attr\b/$info->{attr}/g;
     $text =~ s/\$autoattached\b/$info->{autoattached}/g;
     $text =~ s/\$comment\b/$info->{comment}/g;
-    $text =~ s/\$date\b/Foswiki::Func::formatTime($info->{date})/ge;
+    $text =~ s/\$date\b/defined($info->{date})?Foswiki::Func::formatTime($info->{date}):'???'/ge;
     $text =~ s/\$index\b/$index/g;
     $text =~ s/\$name\b/$info->{name}/g;
     $text =~ s/\$path\b/$info->{path}/g;

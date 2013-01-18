@@ -695,6 +695,7 @@
 		 * @param {String} name Style you want to get from the DOM element
 		 */
 		getStyle : function(obj, name) {
+                        if (!obj) return;
 			if (obj.currentStyle) {
 				return obj.currentStyle[name];
 			} else if (window.getComputedStyle) {

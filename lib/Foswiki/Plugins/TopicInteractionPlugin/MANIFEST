@@ -1,5 +1,3 @@
-locale/TopicInteractionPlugin/de.po 0644
-locale/TopicInteractionPlugin/Foswiki.pot 0644
 data/System/TopicInteractionPlugin.txt 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin/Action/ChangeProperties.pm 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin/Action/CreateImageGallery.pm 0644
@@ -15,6 +13,8 @@ lib/Foswiki/Plugins/TopicInteractionPlugin/Config.spec 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin/Core.pm 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin.pm 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin/Uploader.pm 0644
+locale/TopicInteractionPlugin/de.po 0644
+locale/TopicInteractionPlugin/Foswiki.pot 0644
 pub/System/TopicInteractionPlugin/browserplus.init.js 0644
 pub/System/TopicInteractionPlugin/browserplus.init.js.gz 0644
 pub/System/TopicInteractionPlugin/browserplus.init.uncompressed.js 0644
@@ -67,9 +67,6 @@ pub/System/TopicInteractionPlugin/metadata.css 0644
 pub/System/TopicInteractionPlugin/metadata.css.gz 0644
 pub/System/TopicInteractionPlugin/metadata.js 0644
 pub/System/TopicInteractionPlugin/metadata.js.gz 0644
-pub/System/TopicInteractionPlugin/metadata.pattern.css 0644
-pub/System/TopicInteractionPlugin/metadata.pattern.css.gz 0644
-pub/System/TopicInteractionPlugin/metadata.pattern.uncompressed.css 0644
 pub/System/TopicInteractionPlugin/metadata.uncompressed.css 0644
 pub/System/TopicInteractionPlugin/metadata.uncompressed.js 0644
 pub/System/TopicInteractionPlugin/plupload.browserplus.js 0644

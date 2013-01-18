@@ -1,5 +1,5 @@
 # TopicInteractionPlugin translations
-# Copyright (C) 2012 Michael Daum
+# Copyright (C) 2012-2013 Michael Daum
 # This file is distributed under the same license as the EditChapterPlugin package.
 # Michael Daum <foswiki@michaeldaumconsulting.com>, 2012.
 #, fuzzy

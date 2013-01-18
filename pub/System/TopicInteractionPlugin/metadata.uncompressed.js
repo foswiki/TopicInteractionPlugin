@@ -2,7 +2,7 @@
 
 Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 
-(c)opyright 2010-2012 Michael Daum http://michaeldaumconsulting.com
+(c)opyright 2010-2013 Michael Daum http://michaeldaumconsulting.com
 
 are listed in the AUTHORS file in the root of this distribution.
 NOTE: Please extend that file, not this notice.
@@ -527,13 +527,13 @@ jQuery(function($) {
 
     // ajaxify delete confirm
     $("#foswikiAttachmentConfirmDeleteForm").livequery(function() {
-      var $form = $(this),
-          filename = $form.find("input[name='filename']").val();
+      var $form = $(this), filename;
 
       $form.ajaxForm({
         dataType:"json",
         beforeSubmit: function() {
           $form.parent().dialog("close");
+          filename = $form.find("input[name='filename']").val();
           $.blockUI({
             message:"<h1>Deleting "+filename+" ...</h1>",
             fadeIn: 0,

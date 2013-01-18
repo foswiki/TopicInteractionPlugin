@@ -224,7 +224,7 @@
         <option class="foswikiOption" value="all" %IF{"'%TMPL:P{"attachments::limit"}%'='all'" then="selected"}%>%MAKETEXT{"all"}%</option>
       </select>
     </span>
-    <span class='foswikiDisplayHidden %IF{"'%ATTACHMENTS{attr="h" header="$count" format="" limit="1"}%'='0'" then="foswikiHidden"}%'>
+    <span class='foswikiDisplayHidden %IF{"'%ATTACHMENTS{attr="h" header="$count" format="" limit="1"}%'='0'" then="jqUploaderHidden"}%'>
       <label title="%MAKETEXT{"Enable/disable displaying hidden attachments"}%">
         <b>%MAKETEXT{"Display hidden"}%:</b>
         <input type='checkbox' class='foswikiCheckbox' %IF{"'%TMPL:P{"attachments::hidden"}%'='on'" then="checked='checked'"}% value='on' />
@@ -594,10 +594,10 @@
 
 %TMPL:DEF{"uploadform::buttonsstep::startbutton"}%%BUTTON{"%MAKETEXT{"Start upload"}%" icon="tick" class="jqUploaderStart"}%%TMPL:END%
 %TMPL:DEF{"uploadform::buttonsstep::addbutton"}%%BUTTON{"%MAKETEXT{"Choose files"}%" icon="folder" class="jqUploaderBrowse"}%%TMPL:END%
-%TMPL:DEF{"uploadform::buttonsstep::cancelbutton"}%%BUTTON{"%MAKETEXT{"Cancel upload"}%" icon="cross" class="jqUploaderStop foswikiHidden"}%%TMPL:END%
+%TMPL:DEF{"uploadform::buttonsstep::cancelbutton"}%%BUTTON{"%MAKETEXT{"Cancel upload"}%" icon="cross" class="jqUploaderStop jqUploaderHidden"}%%TMPL:END%
 
 %TMPL:DEF{"uploadform::buttonsstep::autostart"}%<!-- -->
-<input type="checkbox" class="foswikiCheckbox jqUploaderAutoStart foswikiHidden" checked name="autostart" /> 
+<input type="checkbox" class="foswikiCheckbox jqUploaderAutoStart jqUploaderHidden" checked name="autostart" /> 
 <!-- -->%TMPL:END%
 
 %TMPL:DEF{"uploadform::buttonsstep::manualstart"}%%TMPL:P{context="TopicInteractionPlugin_noautostart" else="uploadform::buttonsstep::autostartcheckbox"}%<!-- -->%TMPL:END%

@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2012 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2013 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,7 +18,8 @@ use strict;
 
 use Foswiki::Func ();
 use Foswiki::Plugins ();
-use Foswiki::Plugins::JQueryPlugin::Plugin;
+use Foswiki::Plugins::JQueryPlugin::Plugin ();
+use JSON ();
 
 our @ISA = qw( Foswiki::Plugins::JQueryPlugin::Plugin );
 
@@ -44,7 +45,7 @@ sub new {
   my $this = bless($class->SUPER::new( 
     $Foswiki::Plugins::SESSION,
     name => 'Uploader',
-    version => '1.0.0',
+    version => '1.2.0',
     author => 'Michael Daum',
     homepage => 'http://foswiki.org/Externsions/TopicInteractionPlugin',
     puburl => '%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin',
@@ -71,27 +72,27 @@ sub init {
 
   $this->SUPER::init();
 
-  my $attachFileSizeLimit = Foswiki::Func::getPreferencesValue("ATTACHFILESIZELIMIT") || 0;
 
   my $engines = $Foswiki::cfg{TopicInteractionPlugin}{UploadEngines} || 'html5, flash, silverlight, gears, browserplus, html4';
   my @engines = split(/\s*,\s*/, $engines);
   my %enabled = map {lc($_), 1} @engines;
 
-  # get meta configuration
-  my @meta = ();
+  # export configuration to javascript 
+  my %meta = ();
 
-  push @meta, '<meta name="foswiki.TopicInteractionPlugin.attachFileSizeLimit" content="'.$attachFileSizeLimit.'" />';
-  push @meta, '<meta name="foswiki.TopicInteractionPlugin.Runtimes" content="'.$engines.'" />';
+  $meta{"foswiki.TopicInteractionPlugin.attachFileSizeLimit"} = Foswiki::Func::getPreferencesValue("ATTACHFILESIZELIMIT") || 0;
+  $meta{"foswiki.TopicInteractionPlugin.Runtimes"} = $engines;
 
   # add flash config
-  push @meta, '<meta name="foswiki.TopicInteractionPlugin.flashUrl" content="%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/plupload.flash.swf" />'
+  $meta{"foswiki.TopicInteractionPlugin.flashUrl"} = "%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/plupload.flash.swf"
     if $enabled{flash};
 
   # add silverlight config
-  push @meta, '<meta name="foswiki.TopicInteractionPlugin.silverlightUrl" content="%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/plupload.silverlight.xap" />'
+  $meta{"foswiki.TopicInteractionPlugin.silverlightUrl"} = "%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/plupload.silverlight.xap"
     if $enabled{silverlight};
 
-  Foswiki::Func::addToZone("head", "JQUERYPLUGIN::UPLOADER::META", join("\n", @meta));
+  my $content = "<script type='text/javascript'>\njQuery.extend(foswiki.preferences, ".JSON::to_json(\%meta, {pretty=>1}) .");\n</script>";
+  Foswiki::Func::addToZone("script", "JQUERYPLUGIN::UPLOADER::META", $content, "JQUERYPLUGIN::FOSWIKI::PREFERENCES");
 
   my $js = $this->renderJS("plupload.js");
 
@@ -101,7 +102,7 @@ sub init {
     $js .= $this->renderJS("plupload.$engine.js");
   }
 
-  Foswiki::Func::addToZone("script", "JQUERYPLUGIN::UPLOADER::ENGINES", $js, 'JQUERYPLUGIN::UPLOADER');
+  Foswiki::Func::addToZone("script", "JQUERYPLUGIN::UPLOADER::ENGINES", $js, 'JQUERYPLUGIN::UPLOADER::META');
 }
 
 1;

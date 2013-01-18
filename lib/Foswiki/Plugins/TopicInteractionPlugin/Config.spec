@@ -13,7 +13,7 @@ $Foswiki::cfg{TopicInteractionPlugin}{UploadEngines} = 'html5, flash, html4';
 # By default this is undefined. Use 
 # <code>qr/((xlt|xls|ppt|pps|pot|doc|dot)(x|m)?)|odc|odb|odf|odg|otg|odi|odp|otp|ods|ots|odt|odm|ott|oth|mpp/</code>
 # as a good coverage of the most common office document extensions.
-$Foswiki::cfg{TopicInteractionPlugin}{WebDAVFilter} = undef;
+$Foswiki::cfg{TopicInteractionPlugin}{WebDAVFilter} = '';
 
 # **URL M**
 # Defines the uri pattern for webdav links.

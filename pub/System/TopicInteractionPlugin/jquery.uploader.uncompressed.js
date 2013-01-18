@@ -1,7 +1,7 @@
 /**
  * jquery.uploader.js
  *
- * Copyright 2010-2012, Michael Daum http://michaeldaumconsulting.com
+ * Copyright 2010-2013, Michael Daum http://michaeldaumconsulting.com
  *
  * based on jquery.plupload.queue.js  Copyright 2009, Moxiecode Systems AB
  *
@@ -43,11 +43,11 @@
       var uploader = new plupload.Uploader(settings);
 
       // init autoStartBox
-      if (!autoStartBox.is(".foswikiHidden")) {
+      if (!autoStartBox.is(".jqUploaderHidden")) {
         if (typeof(foswiki.Pref) !== 'undefined' && foswiki.Pref.getPref("UPLOADER::AUTOSTART")== "true") {
           autoStartBox.attr("checked", "checked");
           //startButton.hide();
-          startButton.addClass("foswikiHidden");
+          startButton.addClass("jqUploaderHidden");
         } else {
           autoStartBox.removeAttr("checked");
         }
@@ -61,10 +61,10 @@
         autoStartBox.blur();
         if (autoStart) {
           //startButton.hide();
-          startButton.addClass("foswikiHidden");
+          startButton.addClass("jqUploaderHidden");
         } else {
           //startButton.show();
-          startButton.removeClass("foswikiHidden");
+          startButton.removeClass("jqUploaderHidden");
         }
       });
 
@@ -378,10 +378,10 @@
           }
 
           //stopButton.hide();
-          stopButton.addClass("foswikiHidden");
+          stopButton.addClass("jqUploaderHidden");
           if (!autoStartBox.is(":checked")) {
             //startButton.show();
-            startButton.removeClass("foswikiHidden");
+            startButton.removeClass("jqUploaderHidden");
           }
 
         } else if (uploader.state === plupload.STARTED) {
@@ -486,8 +486,8 @@
             $.log("UPLOADER: starting ...");
             //startButton.hide();
             //stopButton.show();
-            startButton.addClass("foswikiHidden");
-            stopButton.removeClass("foswikiHidden");
+            startButton.addClass("jqUploaderHidden");
+            stopButton.removeClass("jqUploaderHidden");
            uploader.start();
           } 
         } else {
@@ -501,10 +501,10 @@
         stopClicked = true;
         if (!autoStartBox.is(":checked")) {
           //startButton.show();
-          startButton.removeClass("foswikiHidden");
+          startButton.removeClass("jqUploaderHidden");
         }
         //stopButton.hide();
-        stopButton.addClass("foswikiHidden");
+        stopButton.addClass("jqUploaderHidden");
         $.each(uploader.files, function(i, file) {
           if(file.status == plupload.UPLOADING) {
             $.log("UPLOADER: ... setting file "+file.name+" to FAILED");

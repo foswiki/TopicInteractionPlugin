@@ -113,6 +113,12 @@
   color: #777;
 }
 
+.jqUploaderHidden,
 .jqUploaderMessage {
   display:none;
+}
+
+/* PatternSkin fixes */
+#patternScreen .jqUploaderFilesContainer {
+  background-color:#f9f9fa;
 }
