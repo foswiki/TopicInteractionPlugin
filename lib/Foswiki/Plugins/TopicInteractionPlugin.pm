@@ -18,8 +18,8 @@ package Foswiki::Plugins::TopicInteractionPlugin;
 use strict;
 use warnings;
 
-our $VERSION = '3.21';
-our $RELEASE = '3.21';
+our $VERSION = '3.22';
+our $RELEASE = '3.22';
 our $SHORTDESCRIPTION = 'Improved interaction with attachments and !DataForms';
 our $NO_PREFS_IN_TOPIC = 1;
 
@@ -41,6 +41,7 @@ sub initPlugin {
   Foswiki::Func::registerRESTHandler('hide', \&restHide);
   Foswiki::Func::registerRESTHandler('unhide', \&restUnhide);
 
+  # just in case it did not make it to LocalSite.cfg in time
   Foswiki::Plugins::JQueryPlugin::registerPlugin("uploader", 'Foswiki::Plugins::TopicInteractionPlugin::Uploader');
 
   return 1;

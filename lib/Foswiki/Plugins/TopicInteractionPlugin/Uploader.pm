@@ -45,7 +45,7 @@ sub new {
   my $this = bless($class->SUPER::new( 
     $Foswiki::Plugins::SESSION,
     name => 'Uploader',
-    version => '1.2.0',
+    version => '1.2.1',
     author => 'Michael Daum',
     homepage => 'http://foswiki.org/Externsions/TopicInteractionPlugin',
     puburl => '%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin',

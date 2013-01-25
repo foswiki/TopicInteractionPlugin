@@ -153,6 +153,7 @@ generates:
 |  Release: | %$RELEASE% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  25 Jan 2013: | fixed auto-start feature; fixed registration of uploader component |
 |  18 Jan 2013: | improved compatibility with !PatternSkin; \
                   fixed =configure= barfing on an undef value |
 |  24 Sep 2012: | updated to latest plupload version; \

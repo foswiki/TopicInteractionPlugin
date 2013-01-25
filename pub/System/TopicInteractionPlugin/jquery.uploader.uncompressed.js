@@ -8,6 +8,7 @@
  */
 
 (function($) {
+  "use strict";
 
   var defaults;
 
@@ -22,7 +23,8 @@
           messageContainer = $this.find(settings.messageContainer),
           autoStartBox = $this.find(settings.autoStartBox),
           stopClicked = false,
-          isInited = false;
+          isInited = false,
+          doAutoStart = false;
 
       // set the browser button
       var browseId = browseButton.attr("id");
@@ -43,30 +45,33 @@
       var uploader = new plupload.Uploader(settings);
 
       // init autoStartBox
-      if (!autoStartBox.is(".jqUploaderHidden")) {
-        if (typeof(foswiki.Pref) !== 'undefined' && foswiki.Pref.getPref("UPLOADER::AUTOSTART")== "true") {
+      if (autoStartBox.attr("type") === "checkbox") {
+        if (typeof(foswiki.Pref) !== "undefined" && foswiki.Pref.getPref("UPLOADER::AUTOSTART")== "true") {
           autoStartBox.attr("checked", "checked");
-          //startButton.hide();
           startButton.addClass("jqUploaderHidden");
+          doAutoStart = true;
         } else {
           autoStartBox.removeAttr("checked");
+          doAutoStart = false;
         }
-      }
 
-      // add autoStartBox behaviour
-      autoStartBox.change(function() {
-        var autoStart = autoStartBox.is(":checked");
-        //$.log("UPLOADER: autoStartBox changed ... autoStart = "+autoStart);
-        foswiki.Pref.setPref("UPLOADER::AUTOSTART", autoStart?"true":"false");
-        autoStartBox.blur();
-        if (autoStart) {
-          //startButton.hide();
-          startButton.addClass("jqUploaderHidden");
-        } else {
-          //startButton.show();
-          startButton.removeClass("jqUploaderHidden");
-        }
-      });
+        // add autoStartBox behaviour
+        autoStartBox.change(function() {
+          doAutoStart = autoStartBox.is(":checked");
+          //$.log("UPLOADER: autoStartBox changed ... autoStart = "+doAutoStart);
+          foswiki.Pref.setPref("UPLOADER::AUTOSTART", doAutoStart?"true":"false");
+          autoStartBox.blur();
+          if (doAutoStart) {
+            //startButton.hide();
+            startButton.addClass("jqUploaderHidden");
+          } else {
+            //startButton.show();
+            startButton.removeClass("jqUploaderHidden");
+          }
+        });
+      } else if (autoStartBox.attr("type") === "hidden") {
+        doAutoStart = (autoStartBox.val() === "true")?true:false;
+      }
 
       /**********************************************************************/
       function handleStatus(file) {
@@ -379,7 +384,7 @@
 
           //stopButton.hide();
           stopButton.addClass("jqUploaderHidden");
-          if (!autoStartBox.is(":checked")) {
+          if (!doAutoStart) {
             //startButton.show();
             startButton.removeClass("jqUploaderHidden");
           }
@@ -396,7 +401,7 @@
         $.log("UPLOADER: got QueueChanged event");
         updateList();
         if (uploader.state !== plupload.STARTED) {
-          if (autoStartBox.is(":checked")) {
+          if (doAutoStart) {
             $.log("UPLOADER: autostart");
             $this.trigger("Start");
           } else {
@@ -499,7 +504,7 @@
       $this.bind("Stop", function(e) {
         $.log("UPLOADER: got Stop event");
         stopClicked = true;
-        if (!autoStartBox.is(":checked")) {
+        if (!doAutoStart) {
           //startButton.show();
           startButton.removeClass("jqUploaderHidden");
         }

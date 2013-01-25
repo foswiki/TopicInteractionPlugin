@@ -19,4 +19,13 @@ $Foswiki::cfg{TopicInteractionPlugin}{WebDAVFilter} = '';
 # Defines the uri pattern for webdav links.
 $Foswiki::cfg{TopicInteractionPlugin}{WebDAVUrl} = 'webdav://$host/dav/$web/$topic_files/$attachment';
 
+# ---++ JQueryPlugin
+# ---+++ Extra plugins
+
+# **STRING**
+$Foswiki::cfg{JQueryPlugin}{Plugins}{Uploader}{Module} = 'Foswiki::Plugins::TopicInteractionPlugin::Uploader';
+
+# **BOOLEAN**
+$Foswiki::cfg{JQueryPlugin}{Plugins}{Uploader}{Enabled} = 1;
+
 1;

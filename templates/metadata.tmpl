@@ -597,7 +597,7 @@
 %TMPL:DEF{"uploadform::buttonsstep::cancelbutton"}%%BUTTON{"%MAKETEXT{"Cancel upload"}%" icon="cross" class="jqUploaderStop jqUploaderHidden"}%%TMPL:END%
 
 %TMPL:DEF{"uploadform::buttonsstep::autostart"}%<!-- -->
-<input type="checkbox" class="foswikiCheckbox jqUploaderAutoStart jqUploaderHidden" checked name="autostart" /> 
+<input type="hidden" class="jqUploaderAutoStart" name="autostart" value="true" /> 
 <!-- -->%TMPL:END%
 
 %TMPL:DEF{"uploadform::buttonsstep::manualstart"}%%TMPL:P{context="TopicInteractionPlugin_noautostart" else="uploadform::buttonsstep::autostartcheckbox"}%<!-- -->%TMPL:END%
