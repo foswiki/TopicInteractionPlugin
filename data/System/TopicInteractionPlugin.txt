@@ -153,6 +153,7 @@ generates:
 |  Release: | %$RELEASE% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  31 Jan 2013: | using ATTACHLINKBOX to control the default state of the "create link" checkbox |
 |  25 Jan 2013: | fixed auto-start feature; fixed registration of uploader component |
 |  18 Jan 2013: | improved compatibility with !PatternSkin; \
                   fixed =configure= barfing on an undef value |

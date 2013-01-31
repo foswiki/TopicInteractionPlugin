@@ -167,7 +167,7 @@
 %TMPL:DEF{"attachments::hidden"}%%URLPARAM{"attachments_hidden" default="off"}%%TMPL:END%
 %TMPL:DEF{"attachments::showoptions"}%%URLPARAM{"attachments_showoptions" default="off"}%%TMPL:END%
 %TMPL:DEF{"attachments::showuploader"}%%URLPARAM{"attachments_showuploader" default="off"}%%TMPL:END%
-%TMPL:DEF{"attachments::filter"}%%URLPARAM{"attachments_filter" encode="entity"}%%TMPL:END%
+%TMPL:DEF{"attachments::filter"}%%URLPARAM{"attachments_filter" encode="quote"}%%TMPL:END%
 %TMPL:DEF{"attachments::selection"}%%URLPARAM{"attachments_selection" multiple="on" separator=","}%%TMPL:END%
 %TMPL:DEF{"attachments::skip"}%%URLPARAM{"attachments_skip" default="0"}%%TMPL:END%
 %TMPL:DEF{"attachments::cols"}%%URLPARAM{"attachments_cols" default="1"}%%TMPL:END%
@@ -568,7 +568,7 @@
   <h3>%MAKETEXT{"Options"}%:</h3>
   <div class="foswikiFormOptions">
     <label>
-      <input type="checkbox" class="foswikiCheckbox jqUploaderCreateLink" name="createlink" /> 
+      <input type="checkbox" class="foswikiCheckbox jqUploaderCreateLink" name="createlink" %ATTACHLINKBOX% /> 
       %MAKETEXT{"Create a <b>link</b> to the attached files at the end of the topic."}%
     </label> %BR%
     <label>
