@@ -25,8 +25,6 @@ use constant DRY => 0; # toggle me
 sub handle {
   my ($response, $params) = @_;
 
-  my @fileNames = split(/\s*,\s*/, $params->{filename});
-
   my $web = $params->{web};
   my $topic = $params->{topic};
   my $id = $params->{id};
@@ -38,7 +36,7 @@ sub handle {
   }
   my ($meta, $text) = Foswiki::Func::readTopic($web, $topic);
   my $format = '%IMAGEGALLERY{include="$pattern"}%';
-  my $pattern = '^('.join('|', @fileNames).')$';
+  my $pattern = '^('.join('|', @{$params->{filenames}}).')$';
   $format =~ s/\$pattern\b/$pattern/g;
   $text .= $format."\n";
 

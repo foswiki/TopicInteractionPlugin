@@ -157,7 +157,8 @@ generates:
                   hiding access to edit actions when not authorized anyway; \
                   fixed uploading files with special chars in their name; \
                   fixed initialization of flash backend; \
-                  fixed reading foswiki preference settings |
+                  fixed reading foswiki preference settings; \
+                  fixed uploading files with commas in their name |
 |  31 Jan 2013: | using ATTACHLINKBOX to control the default state of the "create link" checkbox |
 |  25 Jan 2013: | fixed auto-start feature; fixed registration of uploader component |
 |  18 Jan 2013: | improved compatibility with !PatternSkin; \

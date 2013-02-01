@@ -238,6 +238,9 @@ sub getRequestParams {
   foreach my $key ($request->param()) {
     my $val = $request->param($key);
     $params{$key} = urlDecode($val) if defined $val;
+    if ($key eq 'filename') { #SMELL: hard coded multi-val
+      $params{$key."s"} = [map {urlDecode($_)} split(/\s*,\s*/, $val)];
+    }
     writeDebug("param $key=$val") unless $key eq 'POSTDATA';
   }
 
@@ -245,8 +248,13 @@ sub getRequestParams {
 
   foreach my $item (split(/[&;]/, $queryString)) {
     if ($item =~ /^(.+?)=(.*)$/ && !defined($params{$1})) {
-      $params{$1} = urlDecode($2);
-      writeDebug("param $1=$params{$1}");
+      my $key = $1;
+      my $val = $2;
+      $params{$key} = urlDecode($val);
+      if ($key eq 'filename') { #SMELL: hard coded multi-val
+        $params{$key."s"} = [map {urlDecode($_)} split(/\s*,\s*/, $val)];
+      }
+      writeDebug("param $key=$params{$key}");
     }
   }
 

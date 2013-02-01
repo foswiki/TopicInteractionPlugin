@@ -27,20 +27,18 @@ use URI ();
 sub handle {
   my ($response, $params) = @_;
 
-  my @fileNames = split(/\s*,\s*/, $params->{filename});
-
   my $web = $params->{web};
   my $topic = $params->{topic};
   my $id = $params->{id};
 
   my $pubDir  = $Foswiki::cfg{PubDir}.'/'.$web.'/'.$topic;
-  my $archiveName = getArchiveName($web, $topic, \@fileNames);
+  my $archiveName = getArchiveName($web, $topic, $params->{filenames});
   my $archivePath = $pubDir."/".$archiveName;
   my $archiveUrl = URI->new_abs($Foswiki::cfg{PubUrlPath}."/".$web."/".$topic."/".$archiveName, Foswiki::Func::getUrlHost()."/")->as_string;
 
   unless (-e $archivePath) {
     my $zip = Archive::Zip->new();
-    foreach my $fileName (@fileNames) {
+    foreach my $fileName (@{$params->{filenames}}) {
       ($fileName) = Foswiki::Func::sanitizeAttachmentName($fileName);
 
       unless (Foswiki::Func::attachmentExists($web, $topic, $fileName)) {

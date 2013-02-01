@@ -27,10 +27,7 @@ sub handle {
 
   my $web = $params->{web};
   my $topic = $params->{topic};
-  my $fileNames = $params->{filename};
   my $id = $params->{id};
-
-  my @fileNames = split(/\s*,\s*/, $fileNames);
 
   # disable dbcache handler during loop
   my $dbCacheEnabled = Foswiki::Func::getContext()->{DBCachePluginEnabled};
@@ -40,7 +37,7 @@ sub handle {
   }
 
   my $error;
-  foreach my $fileName (@fileNames) {
+  foreach my $fileName (@{$params->{filenames}}) {
     ($fileName) = Foswiki::Sandbox::sanitizeAttachmentName($fileName);
 
     # SMELL: it is okay that it is gone, that's what we want anyway

@@ -25,8 +25,6 @@ use Foswiki::Func ();
 sub handle {
   my ($response, $params) = @_;
 
-  my @fileNames = split(/\s*,\s*/, $params->{filename});
-
   my $web = $params->{web};
   my $topic = $params->{topic};
   my $id = $params->{id};
@@ -62,7 +60,7 @@ sub handle {
   }
 
   my $error;
-  foreach my $fileName (@fileNames) {
+  foreach my $fileName (@{$params->{filenames}}) {
     ($fileName) = Foswiki::Sandbox::sanitizeAttachmentName($fileName);
 
     unless (Foswiki::Func::attachmentExists($web, $topic, $fileName)) {
