@@ -483,7 +483,11 @@ jQuery(function($) {
         error: function(xhr, msg) {
           var data = $.parseJSON(xhr.responseText);
           $.unblockUI();
-          $attachment.find(".foswikiAttachmentContainer").append("<div class='foswikiErrorMessage'>Error: "+data.error.message+"</div>");
+          $.pnotify({
+             title: 'Edit failed',
+             text: data.error.message,
+             type: 'error'
+          });
         }
       });
     });
@@ -497,7 +501,6 @@ jQuery(function($) {
 
       $.log("METADATA: clicked edit attachment");
 
-      $attachment.find(".foswikiErrorMessage").remove();
       loadDialog({
         id:"#foswikiAttachmentEditor", 
         template:"attachments::editor", 
@@ -548,7 +551,11 @@ jQuery(function($) {
         error: function(xhr, msg) {
           var data = $.parseJSON(xhr.responseText);
           $.unblockUI();
-          $attachment.find(".foswikiAttachmentContainer").append("<div class='foswikiErrorMessage'>Error: "+data.error.message+"</div>");
+          $.pnotify({
+             title: 'Failed to delete '+filename,
+             text: data.error.message,
+             type: 'error'
+          });
         }
       });
     });
@@ -561,7 +568,6 @@ jQuery(function($) {
           attachmentOpts = $.extend({}, $attachment.metadata()),
           thumbnail = $attachment.find(".foswikiThumbnail").clone(true).removeClass("foswikiLeft");
 
-      $attachment.find(".foswikiErrorMessage").remove();
       loadDialog({
         id:"#foswikiAttachmentConfirmDelete", 
         template:"attachments::confirmdelete",
@@ -601,7 +607,11 @@ jQuery(function($) {
         error: function(xhr, msg) {
           var data = $.parseJSON(xhr.responseText);
           $.unblockUI();
-          $attachment.find(".foswikiAttachmentContainer").append("<div class='foswikiErrorMessage'>Error: "+data.error.message+"</div>");
+          $.pnotify({
+             title: 'Move failed',
+             text: data.error.message,
+             type: 'error'
+          });
         }
       });
     });
@@ -612,8 +622,6 @@ jQuery(function($) {
           $attachment = $button.parents(".foswikiAttachment:first"),
           attachmentOpts = $.extend({}, $attachment.metadata()),
           thumbnail = $attachment.find(".foswikiThumbnail").clone(true).removeClass("foswikiLeft");
-
-      $attachment.find(".foswikiErrorMessage").remove();
 
       loadDialog({
         id: "#foswikiAttachmentMove", 
@@ -677,7 +685,11 @@ jQuery(function($) {
         error: function(xhr, msg) {
           var data = $.parseJSON(xhr.responseText);
           $.unblockUI();
-          $attachment.find(".foswikiAttachmentContainer").append("<div class='foswikiErrorMessage'>Error: "+data.error.message+"</div>");
+          $.pnotify({
+             title: 'Error during "'+action+'"',
+             text: data.error.message,
+             type: 'error'
+          });
         }
       });
     });
@@ -713,8 +725,6 @@ jQuery(function($) {
         alert("unknown action "+action);
         return;
       }
-
-      $this.find(".foswikiErrorMessage").remove();
 
       if (action != "move") {
         loadDialog({

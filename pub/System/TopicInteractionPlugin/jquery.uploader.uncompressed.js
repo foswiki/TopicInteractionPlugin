@@ -328,11 +328,24 @@
 
       /*********************************************************************/
       uploader.bind("Error", function(up, err) {
-        var file = err.file, 
-            msg = err.message.replace(/\.$/, "");
+        var file = err.file, msg, response;
         
-        if (err.details) {
-          msg += ", "+err.details;
+        if (err.response) {
+          try {
+            response = $.parseJSON(err.response);
+            if (typeof(response.error) !== 'undefined') {
+              msg = response.error.message;
+            }
+          } catch (e) {
+            alert("can't parse json response from backend");
+          }
+        }
+
+        if (typeof(msg) === 'undefined') {
+          msg = err.message.replace(/\.$/, "");
+          if (err.details) {
+            msg += ", "+err.details;
+          }
         }
 
         if (file) {
@@ -424,14 +437,31 @@
           parseError = true;
         }
 
-        // patch in renamed files
-        if (!parseError) {
-          $.each(uploader.files, function(i, file) {
-            if (typeof(response.result[file.name]) != 'undefined') {
-              file.name = response.result[file.name];
-            }
+        if (parseError) {
+           up.trigger('Error', {
+            code : plupload.HTTP_ERROR,
+            message : "can't parse json response from backend",
+            response: args.response,
+            file : file
           });
+          return false;
+        } 
+
+        if (typeof(response.error) !== 'undefined') {
+           up.trigger('Error', {
+            code : plupload.HTTP_ERROR,
+            message : response.error.message,
+            file : file
+          });
+          return false;
         }
+
+        // patch in renamed files
+        $.each(uploader.files, function(i, file) {
+          if (typeof(response.result[file.name]) != 'undefined') {
+            file.name = response.result[file.name];
+          }
+        });
 
         updateFileProgress(file);
         updateMessage();

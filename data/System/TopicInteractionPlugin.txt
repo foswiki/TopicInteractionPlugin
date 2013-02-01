@@ -153,6 +153,11 @@ generates:
 |  Release: | %$RELEASE% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  01 Feb 2013: | fixed error handling; \
+                  hiding access to edit actions when not authorized anyway; \
+                  fixed uploading files with special chars in their name; \
+                  fixed initialization of flash backend; \
+                  fixed reading foswiki preference settings |
 |  31 Jan 2013: | using ATTACHLINKBOX to control the default state of the "create link" checkbox |
 |  25 Jan 2013: | fixed auto-start feature; fixed registration of uploader component |
 |  18 Jan 2013: | improved compatibility with !PatternSkin; \

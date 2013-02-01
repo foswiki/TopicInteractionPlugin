@@ -180,7 +180,7 @@ sub handle {
     my $iconUrl = '%ICONURL{"' . $info->{name} . '" alt="else"}%';
     my $icon = '%ICON{"' . $info->{name} . '" alt="else"}%';
 
-    my $encName = urlEncode($info->{name});
+    my $encName = urlEncode($info, 'name');
 
     # actions
     my $thisWebDavUrl = $webDavUrl;
@@ -248,7 +248,7 @@ sub handle {
     $text =~ s/\$oldversions\b/$oldVersions/g;
     $text =~ s/\$web\b/$thisWeb/g;
     $text =~ s/\$topic\b/$thisTopic/g;
-    $text =~ s/\$encode\((.*?)\)/urlEncode($1)/ges;
+    $text =~ s/\$encode\((.*?)\)/urlEncode($info, $1)/ges;
 
     push @result, $text if $text;
   }
@@ -270,10 +270,10 @@ sub handle {
 }
 
 ##############################################################################
-# slightly different version as Foswiki::urlEncode: also encodes single quotes
 sub urlEncode {
-  my $text = shift;
+  my ($infoOrText, $property) = @_;
 
+  my $text = defined($property)?$infoOrText->{$property}:$infoOrText;
   $text =~ s/([^0-9a-zA-Z-_.:~!*\/])/'%'.sprintf('%02X',ord($1))/ge;
 
   return $text;

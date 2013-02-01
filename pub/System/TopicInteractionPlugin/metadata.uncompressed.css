@@ -24,7 +24,7 @@
   padding:1em;
 }
 .foswikiMetaDataNotAllowed .foswikiMetaDataEdit {
-  display:none;
+  display:none !important;
 }
 
 /* attachments */

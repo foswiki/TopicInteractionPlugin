@@ -254,7 +254,7 @@
   header="<div class='foswikiAttachmentsPager foswikiAttachmentsPagerTop {count:$count}'>$pager</div>
     <div class=\"foswikiAttachmentsContainer %TMPL:P{"metadata::lightbox::parameter"}% \">"
   footer="%CLEAR%<div class='foswikiAttachmentsPager foswikiAttachmentsPagerBottom'>$pager</div></div>"
-  format="<div class='foswikiAttachment {filename:\"$encode($name)\", filecomment:\"$encode($comment)\", fileattr:\"$attr\"}' id='$encode($name)'>
+  format="<div class='foswikiAttachment {filename:\"$encode(name)\", filecomment:\"$encode(comment)\", fileattr:\"$attr\"}' id='$encode(name)'>
       <div class='foswikiAttachmentContainer'>
         <div class='foswikiThumbnail foswikiLeft'>
         $percntIF{
@@ -263,7 +263,7 @@
           else=\"<a href='$url'>$percntMIMEICON{\"$name\" size=\"48\"}$percnt</a>\"
         }$percnt
         </div>
-        <div class=\"foswikiAttachmentControl foswikiRight \">
+        <div class=\"foswikiAttachmentControl foswikiRight foswikiMetaDataEdit\">
           <a href='#' class='foswikiAttachmentEditButton' title='%MAKETEXT{"Edit properties of this attachment"}%' rel='nofollow'>%JQICON{"pencil"}%</a>
           $percntIF{\"(context FlexPaperPluginEnabled and '$name'=~'\.pdf$') or '$name'=~'flv|swf|mp3'\" 
             then=\"<a href='#' class='foswikiAttachmentPreviewButton' title='%MAKETEXT{"Preview this attachment"}%' rel='nofollow'>%JQICON{"eye"}%</a>\"
@@ -303,16 +303,16 @@
     <td>
       <select class="foswikiSelect" name="bulkaction">
         <option class="foswikiOption" value="">%MAKETEXT{"Bulk action"}%</option>
-        <option class="foswikiOption" value="createlink">%MAKETEXT{"Insert links"}%</option>
+        <option class="foswikiOption foswikiMetaDataEdit" value="createlink">%MAKETEXT{"Insert links"}%</option>
 %IF{"context ImageGalleryPluginEnabled" 
-  then="        <option class='foswikiOption' value='createimagegallery'>%MAKETEXT{"Create image gallery"}%</option>"
+  then="        <option class='foswikiOption foswikiMetaDataEdit' value='createimagegallery'>%MAKETEXT{"Create image gallery"}%</option>"
   else="<!-- -->"
 }%
         <option class="foswikiOption" value="download">%MAKETEXT{"Download"}%</option>
-        <option class="foswikiOption" value="hide">%MAKETEXT{"Hide"}%</option>
-        <option class="foswikiOption" value="unhide">%MAKETEXT{"Unhide"}%</option>
-        <option class="foswikiOption" value="move">%MAKETEXT{"Move"}%</option>
-        <option class="foswikiOption" value="delete">%MAKETEXT{"Delete"}%</option>
+        <option class="foswikiOption foswikiMetaDataEdit" value="hide">%MAKETEXT{"Hide"}%</option>
+        <option class="foswikiOption foswikiMetaDataEdit" value="unhide">%MAKETEXT{"Unhide"}%</option>
+        <option class="foswikiOption foswikiMetaDataEdit" value="move">%MAKETEXT{"Move"}%</option>
+        <option class="foswikiOption foswikiMetaDataEdit" value="delete">%MAKETEXT{"Delete"}%</option>
       </select>
     </td>
     <td>
@@ -350,7 +350,7 @@
   format="$percntFORMATLIST{\"$oldversions\"
       split=\"$n\"
       pattern=\"(.*);(.*);(.*);(.*)\"
-      format=\"%MAKETEXT{"<a href='[_1]'>Version [_2]</a> uploaded by [_3] on [_4]" args="%SCRIPTURL{"viewfile"}%/%WEB%/%TOPIC%?filename=$encode($name);rev=$3,$3,$dollarpercntSPACEOUT{$2}$dollarpercnt,$1"}%\"
+      format=\"%MAKETEXT{"<a href='[_1]'>Version [_2]</a> uploaded by [_3] on [_4]" args="%SCRIPTURL{"viewfile"}%/%WEB%/%TOPIC%?filename=$encode(name);rev=$3,$3,$dollarpercntSPACEOUT{$2}$dollarpercnt,$1"}%\"
       separator=\"%BR%$n\"
     }$percnt"
 }%

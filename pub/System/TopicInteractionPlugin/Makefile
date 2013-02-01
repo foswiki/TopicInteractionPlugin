@@ -19,6 +19,8 @@ SUBDIRS=i18n
 
 -include $(FOSWIKI_ROOT)/pub/System/JQueryPlugin/Makefile.include
 
+DEBUG=false
+
 to-git: 
 	cp plupload.browserplus.uncompressed.js git/src/javascript/plupload.browserplus.js
 	cp plupload.flash.swf git/bin/plupload.flash.swf
