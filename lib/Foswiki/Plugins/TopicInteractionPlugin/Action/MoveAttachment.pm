@@ -17,6 +17,7 @@ package Foswiki::Plugins::TopicInteractionPlugin::Action::MoveAttachment;
 
 use strict;
 use warnings;
+
 use Error qw( :try );
 use Foswiki::Plugins::TopicInteractionPlugin::Core ();
 use constant DRY => 0; # toggle me
@@ -61,6 +62,7 @@ sub handle {
 
   my $error;
   foreach my $fileName (@{$params->{filenames}}) {
+    next unless $fileName;
     ($fileName) = Foswiki::Sandbox::sanitizeAttachmentName($fileName);
 
     unless (Foswiki::Func::attachmentExists($web, $topic, $fileName)) {

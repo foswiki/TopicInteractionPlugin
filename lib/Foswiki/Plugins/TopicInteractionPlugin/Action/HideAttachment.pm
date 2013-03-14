@@ -17,6 +17,7 @@ package Foswiki::Plugins::TopicInteractionPlugin::Action::HideAttachment;
 
 use strict;
 use warnings;
+
 use Error qw( :try );
 use Foswiki::Func ();
 use Foswiki::Plugins::TopicInteractionPlugin::Core ();
@@ -38,6 +39,7 @@ sub handle {
 
   my $error;
   foreach my $fileName (@{$params->{filenames}}) {
+    next unless $fileName;
     ($fileName) = Foswiki::Sandbox::sanitizeAttachmentName($fileName);
 
     unless (Foswiki::Func::attachmentExists($web, $topic, $fileName)) {

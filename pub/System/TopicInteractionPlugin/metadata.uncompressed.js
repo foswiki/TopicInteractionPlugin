@@ -160,7 +160,7 @@ jQuery(function($) {
       $this.find(".foswikiAttachmentSelected").removeClass("foswikiAttachmentSelected");
       if (opts.selection) {
         for (var i = 0; i < opts.selection.length; i++) {
-          var id = opts.selection[i];
+          var id = encodeURIComponent(opts.selection[i]);
           // jQuery can't handle id's with umlauts in it
           $(document.getElementById(id)).addClass("foswikiAttachmentSelected");
         }
@@ -375,7 +375,7 @@ jQuery(function($) {
         $(this).removeClass("foswikiAttachmentHover");
       }
     ).click(function(e) {
-      var $attachment = $(this), id = $attachment.attr('id');
+      var $attachment = $(this), id = decodeURIComponent($attachment.attr('id'));
 
       if (!$(e.target).is("a")) { // dont propagate the attachment clicks
         if (!$attachment.is(".foswikiAttachmentEdit")) {
@@ -400,7 +400,7 @@ jQuery(function($) {
         //$.log("refreshing from files");
         clearSelection();
         $.each(files, function(i, file) {
-          select(encodeURI(file.name));
+          select(file.name);
         });
       }
       loadAttachments();
@@ -410,7 +410,10 @@ jQuery(function($) {
     // add select all behaviour
     $this.find(".foswikiAttachmentsSelectAll").click(function() {
       //$.log("METADATA: clicked select all");
-      opts.selection = $this.find("input.foswikiAttachmentsAll").val().split(/\s*,\s*/);
+      opts.selection = [];
+      $this.find("input.foswikiAttachmentsAll").each(function() {
+        opts.selection.push($(this).val());
+      });
       $(this).hide();
       showSelection();
       return false;
@@ -734,9 +737,13 @@ jQuery(function($) {
             var $this = this
 
             $this.dialog("option", "open", function() {
+              var $form = $this.find("form");
+              $form.find("input[type='hidden'][name='filename']").remove();
+              $.each(opts.selection, function(i, val) {
+                $("<input type='hidden' name='filename' />").val(encodeURIComponent(val)).prependTo($form);
+              });
               $this.find("input[name='action']").val(action);
-              $this.find("input[name=filename]").val(opts.selection.join(","));
-              $this.find("form").attr("action", foswiki.getPreference("SCRIPTURL")+ "/rest/TopicInteractionPlugin/"+action);
+              $form.attr("action", foswiki.getPreference("SCRIPTURL")+ "/rest/TopicInteractionPlugin/"+action);
               $this.find(".foswikiAttachmentBulkMessage").hide();
               $this.find(msgClass).show().find("b").text(len);
             }).dialog("option", "position", "center").dialog("open");
@@ -752,8 +759,12 @@ jQuery(function($) {
             var $this = this;
 
             $this.dialog("option", "open", function() {
+              var $form = $this.find("form");
+              $form.find("input[type='hidden'][name='filename']").remove();
+              $.each(opts.selection, function(i, val) {
+                $("<input type='hidden' name='filename' />").val(encodeURIComponent(val)).prependTo($form);
+              });
               $this.find(".foswikiAttachmentsCount").text(opts.selection.length);
-              $this.find("input[name=filename]").val(opts.selection.join(","));
               $this.find(".foswikiThumbnailContainer").empty();
               $this.find(".foswikiGenericThumbnail").show();
             }).dialog("option", "position", "center").dialog("open");

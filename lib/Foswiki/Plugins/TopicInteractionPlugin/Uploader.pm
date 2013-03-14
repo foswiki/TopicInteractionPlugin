@@ -14,7 +14,9 @@
 # http://www.gnu.org/copyleft/gpl.html
 
 package Foswiki::Plugins::TopicInteractionPlugin::Uploader;
+
 use strict;
+use warnings;
 
 use Foswiki::Func ();
 use Foswiki::Plugins ();

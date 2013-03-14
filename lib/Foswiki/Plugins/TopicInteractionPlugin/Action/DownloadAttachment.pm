@@ -17,6 +17,7 @@ package Foswiki::Plugins::TopicInteractionPlugin::Action::DownloadAttachment;
 
 use strict;
 use warnings;
+
 use Foswiki::Func ();
 use Foswiki::Plugins::TopicInteractionPlugin::Core ();
 use constant DRY => 0; # toggle me
@@ -39,6 +40,7 @@ sub handle {
   unless (-e $archivePath) {
     my $zip = Archive::Zip->new();
     foreach my $fileName (@{$params->{filenames}}) {
+      next unless $fileName;
       ($fileName) = Foswiki::Func::sanitizeAttachmentName($fileName);
 
       unless (Foswiki::Func::attachmentExists($web, $topic, $fileName)) {

@@ -566,7 +566,7 @@
 
     defaults = {
       dragdrop: true,
-      /* chunk_size: "100KB", // 100KB: for debugging progress, 10MB for real world apps, or even undefine */
+      chunk_size: "1MB", // upload chuncked by default to work around request length and timeout limitations
       max_file_size: attachFileSizeLimit,
       multipart: true,
       urlstream_upload: true, // SMELL: required by flash backend. you get a flash io error #2038 for some reasons otherwise

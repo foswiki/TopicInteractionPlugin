@@ -31,8 +31,9 @@
 .foswikiMetaData .jqTabContents .foswikiAttachments {
   padding-left:1em;
   padding-right:1em;
+  margin-top:0;
 }
-.foswikiAttachments {
+.natMainContents .foswikiAttachments {
   padding:1px 0px 0px 0px;
 }
 .foswikiAttachmentsUploadToggleContainer {
@@ -40,7 +41,6 @@
 }
 .foswikiAttachmentsOptionsToggleContainer .foswikiAttachmentsOptions,
 .foswikiAttachmentsUploadToggleContainer .jqUploader {
-  margin:1em 0em;
   display:block; 
 }
 .foswikiAttachmentsOptionsToggleContainer {

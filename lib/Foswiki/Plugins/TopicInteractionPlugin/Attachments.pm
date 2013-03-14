@@ -16,6 +16,7 @@ package Foswiki::Plugins::TopicInteractionPlugin::Attachments;
 
 use strict;
 use warnings;
+
 use POSIX ();
 
 ###############################################################################

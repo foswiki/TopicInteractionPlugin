@@ -14,7 +14,9 @@
 # http://www.gnu.org/copyleft/gpl.html
 
 package Foswiki::Plugins::TopicInteractionPlugin::Core;
+
 use strict;
+use warnings;
 
 use Foswiki::Func ();
 use Foswiki::Sandbox ();
@@ -236,12 +238,15 @@ sub getRequestParams {
   my %params = ();
 
   foreach my $key ($request->param()) {
-    my $val = $request->param($key);
-    $params{$key} = urlDecode($val) if defined $val;
     if ($key eq 'filename') { #SMELL: hard coded multi-val
-      $params{$key."s"} = [map {urlDecode($_)} split(/\s*,\s*/, $val)];
+      my @val = $request->param($key);
+      $params{$key} = urlDecode($val[0]);
+      $params{$key."s"} = [map {urlDecode($_)} @val];
+    } else {
+      my $val = $request->param($key);
+      $params{$key} = urlDecode($val) if defined $val;
+      writeDebug("param $key=$val") unless $key eq 'POSTDATA';
     }
-    writeDebug("param $key=$val") unless $key eq 'POSTDATA';
   }
 
   my $queryString = $ENV{QUERY_STRING} || '';

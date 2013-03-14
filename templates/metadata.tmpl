@@ -234,14 +234,14 @@
 </div>
 </div>
 <div class="foswikiFormStep">
-<input type="hidden" name="allattachments" value="%ATTACHMENTS{
+%ATTACHMENTS{
   warn="off"
   attr="%IF{"'%TMPL:P{"attachments::hidden"}%'!='on'" then="^[^h]*$"}%"
   include="%FORMATLIST{"%TMPL:P{"attachments::filter"}%" split="\s+" header=".*" format="$1" separator=".*" footer=".*"}%"
   casesensitive="off"
-  format="$name"
-  separator=","
-}%" class="foswikiAttachmentsAll" />
+  format="<input type='hidden' name='allattachments' value='$name' class='foswikiAttachmentsAll' />"
+  separator="$n"
+}%<!-- -->
 %ATTACHMENTS{
   warn="off"
   attr="%IF{"'%TMPL:P{"attachments::hidden"}%'!='on'" then="^[^h]*$"}%"
@@ -302,7 +302,7 @@
   <tr>
     <td>
       <select class="foswikiSelect" name="bulkaction">
-        <option class="foswikiOption" value="">%MAKETEXT{"Bulk action"}%</option>
+        <option class="foswikiOption" value="">%MAKETEXT{"More actions"}%</option>
         <option class="foswikiOption foswikiMetaDataEdit" value="createlink">%MAKETEXT{"Insert links"}%</option>
 %IF{"context ImageGalleryPluginEnabled" 
   then="        <option class='foswikiOption foswikiMetaDataEdit' value='createimagegallery'>%MAKETEXT{"Create image gallery"}%</option>"
@@ -358,7 +358,7 @@
 
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments::previewer::start"}%<!-- -->
-<div class="jqUIDialog foswikiFormSteps {modal:true, resizable:false, width:'auto', draggable:true}" title="%MAKETEXT{"Preview"}%" style="display:none">
+<div class="jqUIDialog foswikiFormSteps {modal:true, resizable:false, width:'auto', draggable:true}" title="%MAKETEXT{"Preview"}%">
   <div class="foswikiFormStep foswikiPreviewContainer">
 <!-- -->%TMPL:END%
 
@@ -375,7 +375,7 @@
 %FLEXPAPER{
   "%URLPARAM{"filename"}%"
   topic="%BASEWEB%.%BASETOPIC%"
-  width="600"
+  width="800"
   height="400"
 }%
 %TMPL:P{"attachments::previewer::end"}%

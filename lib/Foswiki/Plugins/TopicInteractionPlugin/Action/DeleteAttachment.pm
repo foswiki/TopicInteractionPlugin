@@ -17,6 +17,7 @@ package Foswiki::Plugins::TopicInteractionPlugin::Action::DeleteAttachment;
 
 use strict;
 use warnings;
+
 use Error qw( :try );
 use Foswiki::Func ();
 use Foswiki::Plugins::TopicInteractionPlugin::Core ();
@@ -38,13 +39,15 @@ sub handle {
 
   my $error;
   foreach my $fileName (@{$params->{filenames}}) {
+    next unless $fileName;
     ($fileName) = Foswiki::Sandbox::sanitizeAttachmentName($fileName);
 
-    # SMELL: it is okay that it is gone, that's what we want anyway
-    #if (!Foswiki::Func::attachmentExists($web, $topic, $fileName)) {
-    #  Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 102, "Attachment $fileName does not exist", $id);
-    #  last;
-    #}
+    if (!Foswiki::Func::attachmentExists($web, $topic, $fileName)) {
+      Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("oops $fileName does not exist at $web.$topic");
+      #Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 102, "Attachment $fileName does not exist", $id);
+      #last;
+      next;
+    }
 
     try {
 

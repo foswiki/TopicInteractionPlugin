@@ -17,6 +17,7 @@ package Foswiki::Plugins::TopicInteractionPlugin::Action::ChangeProperties;
 
 use strict;
 use warnings;
+
 use Error qw( :try );
 use Foswiki::Func ();
 use Foswiki::Plugins::TopicInteractionPlugin::Core ();

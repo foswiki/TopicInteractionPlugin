@@ -12,8 +12,7 @@ TARGET= \
   plupload.silverlight.js \
   plupload.js \
   jquery.uploader.js \
-  jquery.uploader.css \
-  jquery.natedit.insertattachment.js
+  jquery.uploader.css
 
 SUBDIRS=i18n
 
