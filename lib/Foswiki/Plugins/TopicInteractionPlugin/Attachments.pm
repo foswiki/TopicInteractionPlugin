@@ -378,7 +378,7 @@ sub renderPager {
     my $skip = ($currentPage + 1) * $entriesPerPage;
     $result .= "<a href='#skip$skip' class='natAttachmentsPagerNext {skip:$skip}'>%MAKETEXT{\"Next\"}%</a>";
   } else {
-    $result .= "<span class='natAttachmentsPagerNext foswikiGrayText'>%MAKETEXT{\"Next\"}%</a>";
+    $result .= "<span class='natAttachmentsPagerNext foswikiGrayText'>%MAKETEXT{\"Next\"}%</span>";
   }
 
   return $result;

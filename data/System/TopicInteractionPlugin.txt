@@ -153,6 +153,7 @@ generates:
 |  Release: | %$RELEASE% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  08 Apr 2013: | fixed html error |
 |  14 Mar 2013: | default to chunked upload; \
                   fixed handling of attachments with commas in their name |
 |  01 Feb 2013: | fixed error handling; \
