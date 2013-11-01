@@ -352,4 +352,45 @@ sub deleteAttachmentArchives {
   }
 }
 
+##############################################################################
+sub setThumbnail {
+  my ($meta, $name, $value) = @_;
+
+  $value = 1 unless defined $value;
+
+  my $attachment = $meta->get("FILEATTACHMENT", $name);
+  return unless $attachment; # does not exist
+
+  my %attrs = map {$_ => 1} split(//, ($attachment->{attr} || ''));
+
+  if ($value) {
+    $attrs{t} = 1;
+  } else {
+    delete $attrs{t};
+  }
+
+  my $newAttr = join("", sort keys %attrs);
+
+  return if $newAttr eq $attachment->{attr}; # already set
+
+  # set new value
+  $attachment->{attr} = $newAttr;
+  $meta->putKeyed('FILEATTACHMENT', $attachment);
+
+  # remove t attr from other attachments
+  if ($value) {
+    foreach my $otherAttachment ($meta->find("FILEATTACHMENT")) {
+      next if $otherAttachment->{name} eq $name;
+      if($otherAttachment->{attr} && $otherAttachment->{attr} =~ /t/) {
+        my %attrs = map {$_ => 1} split(//, $otherAttachment->{attr});
+        delete $attrs{t};
+        $otherAttachment->{attr} = join("", sort keys %attrs);
+      }
+    }
+  }
+
+  # save
+  $meta->save();      
+}
+
 1;

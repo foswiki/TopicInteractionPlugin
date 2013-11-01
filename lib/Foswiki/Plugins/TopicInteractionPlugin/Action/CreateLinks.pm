@@ -20,6 +20,7 @@ use warnings;
 
 use Error qw( :try );
 use Foswiki::Func ();
+use Foswiki::Plugins ();
 use Foswiki::Plugins::TopicInteractionPlugin::Core ();
 use constant DRY => 0; # toggle me
 
@@ -50,18 +51,14 @@ sub handle {
     Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("createlink fileName=$fileName, web=$web, topic=$topic");
 
     my ($meta, $text) = Foswiki::Func::readTopic($web, $topic);
-    my $prevAttachment = $meta->get('FILEATTACHMENT', $fileName);
-    my $prevHide = ($prevAttachment && $prevAttachment->{attr} =~ /h/)?1:0;
 
     try {
       unless (DRY) {
-        $error = Foswiki::Func::saveAttachment(
-          $web, $topic, $fileName, {
-            dontlog     => !$Foswiki::cfg{Log}{upload},
-            hide        => $prevHide, # SMELL: we need to ship the prev hide flag as it gets nulled otherwise
-            createlink  => 1,
-          });
-
+        my $session = $Foswiki::Plugins::SESSION;
+        $text = '' unless defined $text;
+        $text .= $session->attach->getAttachmentLink($meta, $fileName);
+        $meta->text($text);
+        $meta->save();
       }
     } catch Error::Simple with {
       $error = shift->{-text};

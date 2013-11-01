@@ -37,15 +37,22 @@ sub handle {
     Foswiki::Plugins::DBCachePlugin::disableRenameHandler();
   }
 
+  my ($meta) = Foswiki::Func::readTopic($web, $topic);
+
   my $error;
+  my $thumbnail;
   foreach my $fileName (@{$params->{filenames}}) {
     next unless $fileName;
     ($fileName) = Foswiki::Sandbox::sanitizeAttachmentName($fileName);
 
-    unless (Foswiki::Func::attachmentExists($web, $topic, $fileName)) {
+    my $attachment = $meta->get("FILEATTACHMENT", $fileName);
+    unless ($attachment) {
       Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 102, "Attachment $fileName does not exist", $id);
       last;
     }
+
+    my %attrs = map {$_ => 1} split(//, ($attachment->{attr} || ''));
+    next unless $attrs{h}; # not hidden
 
     Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("unhiding fileName=$fileName, web=$web, topic=$topic");
 
@@ -64,7 +71,11 @@ sub handle {
     };
 
     last if $error;
+
+    $thumbnail = $fileName if $attrs{t};
   }
+  ($meta) = Foswiki::Func::readTopic($web, $topic);
+  Foswiki::Plugins::TopicInteractionPlugin::Core::setThumbnail($meta, $thumbnail) if $thumbnail && !DRY;
 
   if ($dbCacheEnabled) {
     # enabling dbcache handlers again

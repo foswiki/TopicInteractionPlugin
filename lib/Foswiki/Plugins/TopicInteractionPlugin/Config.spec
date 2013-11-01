@@ -4,7 +4,7 @@
 # **STRING**
 # This is the preference list of engines to test.
 # Available engines: html5, flash, silverlight, gears, browserplus, html4
-# Note that silverlight, gears and browserplus are disabled by default as these browser extensions are mostly unsupported and/or untested.
+# Note that silverlight, gears and browserplus are disabled by default as these browser extensions are mostly unsupported.
 $Foswiki::cfg{TopicInteractionPlugin}{UploadEngines} = 'html5, flash, html4';
 
 # ---+++ WebDAV 
@@ -15,8 +15,8 @@ $Foswiki::cfg{TopicInteractionPlugin}{UploadEngines} = 'html5, flash, html4';
 # as a good coverage of the most common office document extensions.
 $Foswiki::cfg{TopicInteractionPlugin}{WebDAVFilter} = '';
 
-# **URL M**
-# Defines the uri pattern for webdav links.
+# **STRING**
+# Defines the uri pattern for webdav links. Empty this in case you don't use webdav enabled urls.
 $Foswiki::cfg{TopicInteractionPlugin}{WebDAVUrl} = 'webdav://$host/dav/$web/$topic_files/$attachment';
 
 # ---++ JQueryPlugin

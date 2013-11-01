@@ -187,16 +187,16 @@ sub handle {
     my $thisWebDavUrl = $webDavUrl;
     $thisWebDavUrl =~ s/\$attachment/$encName/g;
 
-    my $webDavAction = '<a rel="nofollow" href="' . $thisWebDavUrl . '" ' . 'title="%MATETEXT{"edit this attachment" args="<nop>' . $info->{name} . '"}%">' . '%MAKETEXT{"edit"}%</a>';
+    my $webDavAction = '<a rel="nofollow" href="' . $thisWebDavUrl . '" ' . 'title="%MATETEXT{"Edit this attachment" args="<nop>' . $info->{name} . '"}%">' . '%MAKETEXT{"edit"}%</a>';
 
     my $propsUrl = '%SCRIPTURLPATH{"attach"}%/' . $thisWeb . '/' . $thisTopic . '?filename=' . $encName . '&revInfo=1';
-    my $propsAction = '<a rel="nofollow" href="' . $propsUrl . '" ' . 'title="%MAKETEXT{"manage properties of [_1]" args="<nop>' . $info->{name} . '"}%">' . '%MAKETEXT{"props"}%</a>';
+    my $propsAction = '<a rel="nofollow" href="' . $propsUrl . '" ' . 'title="%MAKETEXT{"Manage properties of [_1]" args="<nop>' . $info->{name} . '"}%">' . '%MAKETEXT{"props"}%</a>';
 
     my $moveUrl = '%SCRIPTURLPATH{"rename"}%/' . $thisWeb . '/' . $thisTopic . '?attachment=' . $encName;
-    my $moveAction = '<a rel="nofollow" href="' . $moveUrl . '" ' . 'title="%MAKETEXT{"move or delete [_1]" args="<nop>' . $info->{name} . '"}%">' . '%MAKETEXT{"move"}%</a>';
+    my $moveAction = '<a rel="nofollow" href="' . $moveUrl . '" ' . 'title="%MAKETEXT{"Move or delete [_1]" args="<nop>' . $info->{name} . '"}%">' . '%MAKETEXT{"move"}%</a>';
 
     my $deleteUrl = '%SCRIPTURLPATH{"rename"}%/' . $thisWeb . '/' . $thisTopic . '?attachment=' . $encName . '&newweb=Trash';
-    my $deleteAction = '<a rel="nofollow" href="' . $deleteUrl . '" ' . 'title="%MAKETEXT{"delete [_1]" args="<nop>' . $info->{name} . '"}%">' . '%MAKETEXT{"delete"}%</a>';
+    my $deleteAction = '<a rel="nofollow" href="' . $deleteUrl . '" ' . 'title="%MAKETEXT{"Delete [_1]" args="<nop>' . $info->{name} . '"}%">' . '%MAKETEXT{"delete"}%</a>';
 
     my $url = '%PUBURL%'."/$thisWeb/$thisTopic/$encName";
     my $urlPath = '%PUBURLPATH%'."/$thisWeb/$thisTopic/$encName";
@@ -212,10 +212,10 @@ sub handle {
       $oldVersions = join("\n", @oldVersions);
     }
 
-    # use webdav urls for document types that are webdav-enabled via WebDAVLinkPlugin
-    if (defined($webDAVFilter) && $info->{name} =~ /\.($webDAVFilter)$/i) {
-      # switch normal pubUrls to webdavUrls
-      $url = $thisWebDavUrl;
+    # use webdav urls for document types that are webdav-enabled; null them otherwise
+    unless (defined($webDAVFilter) && $info->{name} =~ /\.($webDAVFilter)$/i) {
+      $webDavAction = '';
+      $thisWebDavUrl = '';
     }
 
     my $text = $theFormat;
@@ -330,9 +330,9 @@ sub renderPager {
   my $result = '';
   if ($currentPage > 0) {
     my $skip = ($currentPage - 1) * $entriesPerPage;
-    $result .= "<a href='#skip$skip' class='natAttachmentsPagerPrev {skip:$skip}'>%MAKETEXT{\"Previous\"}%</a>";
+    $result .= "<a href='#skip$skip' class='foswikiAttachmentsPagerPrev {skip:$skip}'>%MAKETEXT{\"Previous\"}%</a>";
   } else {
-    $result .= "<span class='natAttachmentsPagerPrev foswikiGrayText'>%MAKETEXT{\"Previous\"}%</span>";
+    $result .= "<span class='foswikiAttachmentsPagerPrev foswikiGrayText'>%MAKETEXT{\"Previous\"}%</span>";
   }
 
   my $startPage = $currentPage - 4;
@@ -352,7 +352,7 @@ sub renderPager {
   }
 
   if ($startPage > 1) {
-    $result .= "<span class='natAttachmentsPagerEllipsis'>&hellip;</span>";
+    $result .= "<span class='foswikiAttachmentsPagerEllipsis'>&hellip;</span>";
   }
 
   my $count = 1;
@@ -365,7 +365,7 @@ sub renderPager {
   }
 
   if ($endPage < $lastPage-1) {
-    $result .= "<span class='natAttachmentsPagerEllipsis'>&hellip;</span>"
+    $result .= "<span class='foswikiAttachmentsPagerEllipsis'>&hellip;</span>"
   }
 
   if ($endPage < $lastPage) {
@@ -376,9 +376,9 @@ sub renderPager {
 
   if ($currentPage < $lastPage) {
     my $skip = ($currentPage + 1) * $entriesPerPage;
-    $result .= "<a href='#skip$skip' class='natAttachmentsPagerNext {skip:$skip}'>%MAKETEXT{\"Next\"}%</a>";
+    $result .= "<a href='#skip$skip' class='foswikiAttachmentsPagerNext {skip:$skip}'>%MAKETEXT{\"Next\"}%</a>";
   } else {
-    $result .= "<span class='natAttachmentsPagerNext foswikiGrayText'>%MAKETEXT{\"Next\"}%</span>";
+    $result .= "<span class='foswikiAttachmentsPagerNext foswikiGrayText'>%MAKETEXT{\"Next\"}%</span>";
   }
 
   return $result;

@@ -64,7 +64,8 @@ jQuery(function($) {
 
     /* function to reload all attachments **********************************/
     function loadAttachments() {
-      var thisUrl = url;
+      var thisUrl = url, i;
+
       thisUrl += ";expand=attachments";
       if (typeof(opts.hidden) !== 'undefined') {
         thisUrl += ";attachments_hidden=" + opts.hidden;
@@ -79,7 +80,7 @@ jQuery(function($) {
         thisUrl += ";attachments_filter="+encodeURI(opts.filter);
       }
       if (typeof(opts.selection) !== 'undefined') {
-        for (var i = 0; i < opts.selection.length; i++) {
+        for (i = 0; i < opts.selection.length; i++) {
           thisUrl += ";attachments_selection="+encodeURI(opts.selection[i].replace(/\\\./, '.'));
         }
       }
@@ -114,7 +115,9 @@ jQuery(function($) {
 
     /* switch number of columns based on screen width **********************/
     function dynCols() {
-      var thisWidth = $this.width(), newClass, $attachments = $this.find(".foswikiAttachment");
+      var thisWidth = $this.width(), 
+          newClass, maxHeight, height, 
+          $attachments = $this.find(".foswikiAttachment");
 
       if (thisWidth > 1300 && opts.nrAttachments >= 3) {
         newClass = "foswikiAttachmentsCols3";
@@ -138,9 +141,9 @@ jQuery(function($) {
 
       // adjust bucket height to clean up differences causing probs when floating
       if (opts.cols > 1) {
-        var maxHeight = 0;
+        maxHeight = 0;
         $attachments.css('height', 'auto').each(function() {
-          var height = $(this).height();
+          height = $(this).height();
           if (height > maxHeight) {
             maxHeight = height;
           }
@@ -157,10 +160,12 @@ jQuery(function($) {
 
     /* mark current selection **********************************************/
     function showSelection() {
+      var i, id;
+
       $this.find(".foswikiAttachmentSelected").removeClass("foswikiAttachmentSelected");
       if (opts.selection) {
-        for (var i = 0; i < opts.selection.length; i++) {
-          var id = encodeURIComponent(opts.selection[i]);
+        for (i = 0; i < opts.selection.length; i++) {
+          id = encodeURIComponent(opts.selection[i]);
           // jQuery can't handle id's with umlauts in it
           $(document.getElementById(id)).addClass("foswikiAttachmentSelected");
         }
@@ -180,7 +185,7 @@ jQuery(function($) {
       if (!id) {
         return;
       }
-      $.log("METADATA: select("+id+")");
+      //$.log("METADATA: select("+id+")");
       if (typeof(opts.selection) === 'undefined') {
         opts.selection = [];
       }
@@ -319,9 +324,10 @@ jQuery(function($) {
 
     // add behaviour to filter
     $this.find(".foswikiFilter input").bind("keypress", function(event) {
-      var $input = $(this);
+      var $input = $(this), val;
+
       if(event.keyCode == 13) {
-        var val = $input.val();
+        val = $input.val();
         if (val === 'none') {
           val = '';
         } 
@@ -395,7 +401,7 @@ jQuery(function($) {
 
     // add listener for Refresh event
     $this.bind("Refresh", function(e, files) {
-      $.log("METADATA: got Refresh event");
+      //$.log("METADATA: got Refresh event");
       if (files) {
         //$.log("refreshing from files");
         clearSelection();
@@ -431,7 +437,8 @@ jQuery(function($) {
       var $button = $(this),
           $attachment = $button.parents(".foswikiAttachment:first"),
           attachmentOpts = $.extend({}, $attachment.metadata()),
-          extension = attachmentOpts.filename.replace(/^.+\./, '');
+          extension = attachmentOpts.filename.replace(/^.+\./, ''),
+          previewType;
 
       if (extension.match(/mp3/)) { // SMELL: add other common audio extensions playable using jwplayer
         previewType = "audio";
@@ -494,15 +501,20 @@ jQuery(function($) {
         }
       });
     });
+
+    // edi behaviour
+    $this.find(".foswikiAttachmentEditButton").click(function(ev) {
+        ev.stopPropagation();
+    });
   
-    // add editor behaviour 
-    $this.find(".foswikiAttachmentEditButton").click(function() {
+    // add button behaviour 
+    $this.find(".foswikiAttachmentPropertiesButton").click(function() {
       var $button = $(this),
           $attachment = $button.parents(".foswikiAttachment:first"),
           attachmentOpts = $.extend({}, $attachment.metadata()),
-          thumbnail = $attachment.find(".foswikiThumbnail").clone(true).removeClass("foswikiLeft");
+          thumbnail = $attachment.find(".foswikiThumbnail").clone().removeClass("foswikiLeft");
 
-      $.log("METADATA: clicked edit attachment");
+      //$.log("METADATA: clicked edit attachment");
 
       loadDialog({
         id:"#foswikiAttachmentEditor", 
@@ -511,18 +523,28 @@ jQuery(function($) {
           var $this = this;
 
           $this.dialog("option", "open", function() {
-            var $hideFile = $this.find("input[name=hidefile]");
+            var $hideFile = $this.find("input[name=hidefile]"),
+                $isThumbnail = $this.find("input[name=isthumbnail]");
 
-            $.log("METADATA: show attachment editor");
+            //$.log("METADATA: show attachment editor");
             $this.find("input[name=origfilename]").val(decodeURIComponent(attachmentOpts.filename));
             $this.find("input[name=filename]").val(decodeURIComponent(attachmentOpts.filename));
             $this.find("input[name=filecomment]").val(decodeURIComponent(attachmentOpts.filecomment));
             $this.find(".foswikiThumbnailContainer").html(thumbnail);
-
-            if (attachmentOpts.fileattr == 'h') {
+            if (attachmentOpts.filename.match(/\.(gif|jpe?g|png|bmp|svg)$/)) {
+              $this.find(".foswikiThumbnailStep").show();
+            } else {
+              $this.find(".foswikiThumbnailStep").hide();
+            }
+            if (attachmentOpts.fileattr.match(/h/)) {
               $hideFile.attr("checked", "checked");
             } else {
               $hideFile.removeAttr("checked");
+            }
+            if (attachmentOpts.fileattr.match(/t/)) {
+              $isThumbnail.attr("checked", "checked");
+            } else {
+              $isThumbnail.removeAttr("checked");
             }
           }).dialog("option", "position", "center").dialog("open");
         }
@@ -569,7 +591,7 @@ jQuery(function($) {
       var $button = $(this),
           $attachment = $button.parents(".foswikiAttachment:first"),
           attachmentOpts = $.extend({}, $attachment.metadata()),
-          thumbnail = $attachment.find(".foswikiThumbnail").clone(true).removeClass("foswikiLeft");
+          thumbnail = $attachment.find(".foswikiThumbnail").clone().removeClass("foswikiLeft");
 
       loadDialog({
         id:"#foswikiAttachmentConfirmDelete", 
@@ -624,7 +646,7 @@ jQuery(function($) {
       var $button = $(this),
           $attachment = $button.parents(".foswikiAttachment:first"),
           attachmentOpts = $.extend({}, $attachment.metadata()),
-          thumbnail = $attachment.find(".foswikiThumbnail").clone(true).removeClass("foswikiLeft");
+          thumbnail = $attachment.find(".foswikiThumbnail").clone().removeClass("foswikiLeft");
 
       loadDialog({
         id: "#foswikiAttachmentMove", 
@@ -664,13 +686,13 @@ jQuery(function($) {
           $.unblockUI();
           // perform reload
           if (action == "createlink" || action == "createimagegallery") {
-            $.log("METADATA: reloading topic");
+            //$.log("METADATA: reloading topic");
             window.location.href = foswiki.getPreference("SCRIPTURL")+"/view/"+foswiki.getPreference("WEB")+"/"+foswiki.getPreference("TOPIC");
           } 
           
           // perform redirect
           else if (action == "download") {
-            $.log("METADATA: redirect url="+data.result);
+            //$.log("METADATA: redirect url="+data.result);
             window.location.href = data.result;
           } 
 
@@ -734,7 +756,7 @@ jQuery(function($) {
           id: "#foswikiAttachmentConfirmBulk", 
           template: "attachments::confirmbulkaction",
           callback: function() {
-            var $this = this
+            var $this = this;
 
             $this.dialog("option", "open", function() {
               var $form = $this.find("form");

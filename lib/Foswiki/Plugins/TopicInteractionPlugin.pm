@@ -18,8 +18,8 @@ package Foswiki::Plugins::TopicInteractionPlugin;
 use strict;
 use warnings;
 
-our $VERSION = '3.31';
-our $RELEASE = '3.31';
+our $VERSION = '3.40';
+our $RELEASE = '3.40';
 our $SHORTDESCRIPTION = 'Improved interaction with attachments and !DataForms';
 our $NO_PREFS_IN_TOPIC = 1;
 
@@ -47,6 +47,35 @@ sub initPlugin {
   return 1;
 }
 
+##############################################################################
+# keep a t=thumbnail attr in attachments
+sub beforeUploadHandler {
+  my ($attachment, $meta) = @_;
+
+  my $oldAttachment = $meta->get("FILEATTACHMENT", $attachment->{name});
+
+  if ($oldAttachment && $oldAttachment->{attr} && ($oldAttachment->{attr} || '') =~ /t/) {
+    $attachment->{isthumbnail} = 1;
+  }
+}
+
+sub afterUploadHandler {
+  my ($attachment, $meta) = @_;
+
+  if ($attachment->{isthumbnail}) {
+    delete $attachment->{isthumbnail};
+
+    my $oldAttr = $attachment->{attr} || '';
+    my %attrs = map {$_=>1} split(//, $oldAttr);
+    $attrs{t} = 1;
+    my $newAttr = join("", sort keys %attrs);
+    if ($oldAttr ne $newAttr) {
+      $attachment->{attr} = $newAttr;
+      $meta->putKeyed("FILEATTACHMENT", $attachment);
+      $meta->save();
+    }
+  }
+}
 ##############################################################################
 sub handleATTACHMENTS {
   require Foswiki::Plugins::TopicInteractionPlugin::Attachments;

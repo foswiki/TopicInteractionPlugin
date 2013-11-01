@@ -7,6 +7,9 @@
  *
  */
 
+/*jslint forin:true*/
+/*global plupload*/
+
 (function($) {
   "use strict";
 
@@ -24,10 +27,11 @@
           autoStartBox = $this.find(settings.autoStartBox),
           stopClicked = false,
           isInited = false,
-          doAutoStart = false;
+          doAutoStart = false,
+          browseId, containerId, uploader;
 
       // set the browser button
-      var browseId = browseButton.attr("id");
+      browseId = browseButton.attr("id");
       if (!browseId) {
         browseId = plupload.guid();
         browseButton.attr("id", browseId);
@@ -35,14 +39,14 @@
       settings.browse_button = browseId;
       
       // set container 
-      var containerId = browseButton.parent().attr("id");
+      containerId = browseButton.parent().attr("id");
       if (!containerId) {
         containerId = plupload.guid();
         browseButton.parent().attr("id", containerId);
       }
       settings.container = containerId;
 
-      var uploader = new plupload.Uploader(settings);
+      uploader = new plupload.Uploader(settings);
 
       // init autoStartBox
       if (autoStartBox.attr("type") === "checkbox") {
@@ -80,7 +84,7 @@
           fileRow = $("#"+file.id),
           statusText = file.statusText || "";
 
-        $.log("UPLOADER: called handleStatus for "+file.name+" state="+state);
+        //$.log("UPLOADER: called handleStatus for "+file.name+" state="+state);
         fileRow.find(".jqUploaderFileAction").removeClass("jqUploaderDelete").children("a").attr("title", statusText);
 
         if (state == plupload.DONE) {
@@ -105,13 +109,13 @@
         }
 
         if (actionClass !== undefined) {
-          $.log("UPLOADER: actionClass="+actionClass);
+          //$.log("UPLOADER: actionClass="+actionClass);
           fileRow.removeClass("jqUploaderDone jqUploaderFailed jqUploaderQueued jqUploaderUploading").addClass(actionClass);
 
         }
 
         return fileRow;
-      };
+      }
 
       /*********************************************************************/
       function updateMessage(msg, msgClass) {
@@ -149,11 +153,11 @@
         }
 
         return messageContainer.text(msg).show();
-      };
+      }
 
       /*********************************************************************/
       function updateFileProgress(file) {
-        $.log("UPLOADER: called updateFileProgress for "+file.name);
+        //$.log("UPLOADER: called updateFileProgress for "+file.name);
         var fileRow = $("#"+file.id),
             fileName = fileRow.find(".jqUploaderFileName"),
             width = fileName.width() * file.percent / 100.0,
@@ -169,18 +173,7 @@
         fileRow.find(".jqUploaderFileStatus").html(file.percent + "%");
 
         handleStatus(file);
-      };
-
-      /*********************************************************************/
-      function updateList() {
-        $.log("UPLOADER: updateList");
-        fileList.empty();
-        $.each(uploader.files, function(i, file) {
-          addFile(file);
-          updateFileProgress(file);
-        });
-        $.log("UPLOADER: uploader has got "+uploader.files.length+" file(s)");
-      };
+      }
 
       /**********************************************************************/
       function addFile(file) {
@@ -189,7 +182,7 @@
         if (file.status == plupload.DONE) {
           return;
         }
-        $.log("UPLOADER: called addFile()");
+        //$.log("UPLOADER: called addFile()");
 
         if (fileSize) {
           fileSize = plupload.formatSize(fileSize);
@@ -208,28 +201,41 @@
           "</tr>"
         ).appendTo(fileList);
 
-        $.log("UPLOADER: adding "+file.name+" id="+file.id);
+        //$.log("UPLOADER: adding "+file.name+" id="+file.id);
 
         $(".jqUploaderFileAction a", fileRow).click(function(e) {
-          $.log("UPLOADER: file action clicked for "+file.name);
+          //$.log("UPLOADER: file action clicked for "+file.name);
           var actionButton = $(this);
           if (actionButton.parent().is(".jqUploaderDelete")) {
-            $.log("UPLOADER: ... removing");
+            //$.log("UPLOADER: ... removing");
             fileRow.remove();
             uploader.removeFile(file);
           } else {
-            $.log("action class="+actionButton.parent().attr("class"));
+            //$.log("action class="+actionButton.parent().attr("class"));
           }
           return false;
         });
 
         return fileRow;
-      };
+      }
+
+      /*********************************************************************/
+      function updateList() {
+        //$.log("UPLOADER: updateList");
+        fileList.empty();
+        $.each(uploader.files, function(i, file) {
+          addFile(file);
+          updateFileProgress(file);
+        });
+        //$.log("UPLOADER: uploader has got "+uploader.files.length+" file(s)");
+      }
 
       /**********************************************************************/
       uploader.bind("BeforeUpload", function(up, file) {
-        $.log("UPLOADER: got BeforeUpload event for file "+file.name);
-        var params = {}, isFirst = true;
+        var params = {}, isFirst = true, key;
+
+        //$.log("UPLOADER: got BeforeUpload event for file "+file.name);
+
         $this.find("input").each(function() {
           var $input = $(this), 
               name = $input.attr("name"),
@@ -247,30 +253,30 @@
           }
         });
 
-        params["topic"] = encodeURI(foswiki.getPreference("WEB")) + "." + encodeURI(foswiki.getPreference("TOPIC"));
-        params["id"] = (new Date).getTime();
+        params.topic = encodeURI(foswiki.getPreference("WEB")) + "." + encodeURI(foswiki.getPreference("TOPIC"));
+        params.id = (new Date()).getTime();
 
         if (uploader.features.multipart && uploader.settings.multipart) {
           uploader.settings.multipart_params = params;
         } else {
           uploader.settings.url = settings.url;
-          for (var key in params) {
+          for (key in params) {
             uploader.settings.url += (isFirst?"?":"&") + "key=" + params[key];
             isFirst = false;
           }
         }
 
-        $.log("UPLOADER: url="+uploader.settings.url);
+        //$.log("UPLOADER: url="+uploader.settings.url);
       });
 
       /**********************************************************************/
       uploader.bind("UploadComplete", function(up, files) {
-        $.log("UPLOADER: got UploadComplete event for files");
+        //$.log("UPLOADER: got UploadComplete event for files");
       });
 
       /**********************************************************************/
       uploader.bind("UploadFile", function(up, file) {
-        $.log("UPLOADER: got UploadFile event for file "+file.name);
+        //$.log("UPLOADER: got UploadFile event for file "+file.name);
         var fileRow = $("#"+file.id);
         updateFileProgress(file);
         updateMessage();
@@ -289,38 +295,39 @@
       /*********************************************************************/
       uploader.bind("Init", function(up, res) {
         if (isInited) {
-          $.log("UPLOADER: warning ... alread had an init event ... ignoring")
+          //$.log("UPLOADER: warning ... alread had an init event ... ignoring")
           return;
         }
 
-        $.log("UPLOADER: got Init event");
-        $.log("UPLOADER: using runtime: " + res.runtime);
+        //$.log("UPLOADER: got Init event");
+        //$.log("UPLOADER: using runtime: " + res.runtime);
 
         isInited = true;
 
         // Enable drag/drop
         if (uploader.features.dragdrop && uploader.settings.dragdrop) {
           
-          var dropZone = fileList.parent();
-          var id = dropZone.attr("id");
+          var dropZone = fileList.parent(),
+              id = dropZone.attr("id");
+
           if (!id) {
             id = plupload.guid();
             dropZone.attr("id", id);
           }
-          $.log("UPLOADER: enabling drag&drop on id=#"+id);
+          //$.log("UPLOADER: enabling drag&drop on id=#"+id);
           $this.find(".jqUploaderDropText").show();
           uploader.settings.drop_element = id;
         }
 
         startButton.click(function(e) {
-          $.log("your clicked the start button");
+          //$.log("your clicked the start button");
           messageContainer.hide();
           $this.trigger("Start");
           return false;
         });
 
         stopButton.click(function(e) {
-          $.log("your clicked the stop button");
+          //$.log("your clicked the stop button");
           $this.trigger("Stop");
           return false;
         });
@@ -353,15 +360,15 @@
           handleStatus(file).attr("title", msg);
         }
 
-        $.log("UPLOADER: got Error event "+msg);
+        //$.log("UPLOADER: got Error event "+msg);
         updateMessage(msg, "foswikiErrorMessage");
       });
 
       /*********************************************************************/
       uploader.bind("StateChanged", function() {
-        $.log("UPLOADER: got StateChanged event");
+        //$.log("UPLOADER: got StateChanged event");
         if (uploader.state == plupload.STOPPED) {
-          $.log("UPLOADER ... stopped");
+          //$.log("UPLOADER ... stopped");
           var errorMsg;
 
           if (stopClicked) {
@@ -384,13 +391,13 @@
             */
 
             if (uploader.settings.error) {
-              $.log("UPLOADER: calling error handler");
+              //$.log("UPLOADER: calling error handler");
               uploader.settings.error($this, uploader.files);
             }
           } else {
             // SUCCESS
             if (uploader.settings.success) {
-              $.log("UPLOADER: calling success handler");
+              //$.log("UPLOADER: calling success handler");
               uploader.settings.success($this, uploader.files);
             }
           }
@@ -411,14 +418,14 @@
 
       /*********************************************************************/
       uploader.bind("QueueChanged", function() {
-        $.log("UPLOADER: got QueueChanged event");
+        //$.log("UPLOADER: got QueueChanged event");
         updateList();
         if (uploader.state !== plupload.STARTED) {
           if (doAutoStart) {
-            $.log("UPLOADER: autostart");
+            //$.log("UPLOADER: autostart");
             $this.trigger("Start");
           } else {
-            $.log("UPLOADER: no autostart");
+            //$.log("UPLOADER: no autostart");
           }
         }
       });
@@ -427,7 +434,7 @@
       uploader.bind("FileUploaded", function(up, file, args) {
         var response, parseError = false;
 
-        $.log("UPLOADER: got FileUploaded event for file "+file.name);
+        //$.log("UPLOADER: got FileUploaded event for file "+file.name);
 
         // expect non-wellformed json
         try {
@@ -469,7 +476,7 @@
 
       /*********************************************************************/
       uploader.bind("UploadProgress", function(up, file) {
-        $.log("UPLOADER: got UploadProgress event for file "+file.name);
+        //$.log("UPLOADER: got UploadProgress event for file "+file.name);
         if (uploader.state !== plupload.STOPPED) {
           if (uploader.total.uploaded == uploader.files.length) {
             uploader.stop();
@@ -484,18 +491,18 @@
 
       /*********************************************************************/
       uploader.bind("FilesAdded", function(up, files) {
-        $.log("UPLOADER: got FilesAdded event");
+        //$.log("UPLOADER: got FilesAdded event");
         messageContainer.hide();
       });
 
       /*********************************************************************/
       uploader.bind("ChunkUploaded", function(up, file, args) {
-        $.log("UPLOADER: got ChunkUploaded even for file "+file.name);
+        //$.log("UPLOADER: got ChunkUploaded even for file "+file.name);
       });
 
       /*********************************************************************/
       uploader.bind("FilesRemoved", function() {
-        $.log("UPLOADER: got FilesRemoved event");
+        //$.log("UPLOADER: got FilesRemoved event");
         //updateList();
       });
 
@@ -506,7 +513,7 @@
 
       /*********************************************************************/
       $this.bind("Refresh", function(e) {
-        $.log("UPLOADER: got Refresh event");
+        //$.log("UPLOADER: got Refresh event");
         uploader.refresh();
         e.stopPropagation();
         return false;
@@ -514,11 +521,11 @@
 
       /*********************************************************************/
       $this.bind("Start", function(e) {
-        $.log("UPLOADER: got Start event");
+        //$.log("UPLOADER: got Start event");
         var nrFiles = uploader.files.length;
         if (nrFiles) {
           if (!$(this).is("plupload_disabled")) {
-            $.log("UPLOADER: starting ...");
+            //$.log("UPLOADER: starting ...");
             //startButton.hide();
             //stopButton.show();
             startButton.addClass("jqUploaderHidden");
@@ -526,13 +533,13 @@
            uploader.start();
           } 
         } else {
-          $.log("UPLOADER: not starting ... no files in queue");
+          //$.log("UPLOADER: not starting ... no files in queue");
         }
       });
 
       /*********************************************************************/
       $this.bind("Stop", function(e) {
-        $.log("UPLOADER: got Stop event");
+        //$.log("UPLOADER: got Stop event");
         stopClicked = true;
         if (!doAutoStart) {
           //startButton.show();
@@ -542,7 +549,7 @@
         stopButton.addClass("jqUploaderHidden");
         $.each(uploader.files, function(i, file) {
           if(file.status == plupload.UPLOADING) {
-            $.log("UPLOADER: ... setting file "+file.name+" to FAILED");
+            //$.log("UPLOADER: ... setting file "+file.name+" to FAILED");
             file.status = plupload.FAILED;
           }
         });
@@ -551,7 +558,7 @@
 
 
       /*********************************************************************/
-      $.log("UPLOADER: initing uploader");
+      //$.log("UPLOADER: initing uploader");
       uploader.init();
     });
 
@@ -595,7 +602,7 @@
       autoStartBox: ".jqUploaderAutoStart",
       error: null,
       success: function (uploader, files) {
-        $.log("UPLOADER: finished");
+        //$.log("UPLOADER: finished");
       }
     };
 
@@ -604,7 +611,7 @@
       var $this = $(this),
           settings = $.extend({}, defaults, $this.metadata());
 
-      $.log("UPLOADER: found a jqUploader");
+      //$.log("UPLOADER: found a jqUploader");
       $this.addClass("jqInitedUploader");
       $this.uploader(settings);
     });
