@@ -153,6 +153,7 @@ generates:
 |  Release: | %$RELEASE% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  07 Nov 2013: | fix malformed JSON on some remote procedures |
 |  01 Nov 2013: | have a checkbox in the properties dialog to mark an image attachment to be used as a thumbnail in search results; \
                   better support for WebDavContrib: one-click edit of office attachments; \
                   jslinting javascript code (excluding 3rd party upstream code) |

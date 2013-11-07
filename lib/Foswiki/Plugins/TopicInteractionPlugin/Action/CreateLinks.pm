@@ -45,7 +45,7 @@ sub handle {
 
     if (!Foswiki::Func::attachmentExists($web, $topic, $fileName)) {
       Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 104, "Attachment $fileName does not exist", $id);
-      last;
+      return;
     }
 
     Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("createlink fileName=$fileName, web=$web, topic=$topic");

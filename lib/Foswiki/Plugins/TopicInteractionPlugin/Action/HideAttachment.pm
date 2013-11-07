@@ -48,7 +48,7 @@ sub handle {
     my $attachment = $meta->get("FILEATTACHMENT", $fileName);
     unless ($attachment) {
       Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 102, "Attachment $fileName does not exist", $id);
-      last;
+      return;
     }
 
     my %attrs = map {$_ => 1} split(//, ($attachment->{attr} || ''));
