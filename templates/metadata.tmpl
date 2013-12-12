@@ -37,7 +37,7 @@
 
 %{ ################################################################################ }%
 %TMPL:DEF{"metadata::lightbox"}%%TMPL:P{
-  context="PrettyPhotoEnabled" 
+  context="PrettyPhotoRegistered" 
   then="metadata::lightbox::prettyphoto" 
   else="metadata::lightbox::slimbox"
 }%%TMPL:END%
@@ -46,7 +46,7 @@
 
 %{ ################################################################################ }%
 %TMPL:DEF{"metadata::lightbox::parameter"}%%TMPL:P{
-  context="PrettyPhotoEnabled" 
+  context="PrettyPhotoRegistered" 
   then="metadata::lightbox::prettyphoto::parameter" 
   else="metadata::lightbox::slimbox::parameter"
 }%%TMPL:END%

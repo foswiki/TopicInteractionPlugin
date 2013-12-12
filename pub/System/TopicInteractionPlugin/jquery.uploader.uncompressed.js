@@ -17,6 +17,46 @@
 
   $.fn.uploader = function(settings) {
 
+    if (typeof(defaults) === 'undefined') {
+      defaults = {
+        dragdrop: true,
+        chunk_size: "10MB", // upload chuncked by default to work around request length and timeout limitations
+        max_file_size: (foswiki.getPreference("TopicInteractionPlugin.attachFileSizeLimit") || 0)*1024,
+        multipart: true,
+        urlstream_upload: true, // SMELL: required by flash backend. you get a flash io error #2038 for some reasons otherwise
+        file_data_name: "file",
+        multi_selection: true,
+        filters: [
+          {title: "All files", extensions: "*"},
+          {title: "Archives", extensions: "zip,rar,gz,bz,tar"},
+          {title: "Audio files", extensions: "amr,awb,amr,awb,axa,au,snd,flac,mid,midi,kar,mpga,mpega,mp2,mp3,m4a,m3u,oga,ogg,spx,sid,aif,aiff,aifc,gsm,m3u,wma,wax,ra,rm,ram,ra,pls,sd2,wav"},
+          {title: "Image files", extensions: "art,bmp,cdr,cdt,cpt,djvu,djv,gif,ico,ief,jng,jpeg,jpg,jpe,pat,pbm,pcx,pgm,png,pnm,ppm,psd,ras,rgb,svg,svgz,tiff,tif,wbmp,xbm,xpm,xwd"},
+          {title: "MS Office files", extensions: "doc,docx,xls,xlsx,ppt,pptx"},
+          {title: "Open Office files", extensions: "odc,odb,odf,odg,otg,odi,odp,otp,ods,ots,odt,odm,ott,oth"},
+          {title: "PDF files", extensions: "pdf"},
+          {title: "Text files", extensions: "txt"},
+          {title: "Video files", extensions: "3gp,axv,dl,dif,dv,fli,gl,mpeg,mpg,mpe,mp4,m4v,qt,mov,ogv,mxu,flv,lsf,lsx,mng,asf,asx,wm,wmv,wmx,wvx,avi,movie,mpv"}
+        ],
+        runtimes: foswiki.getPreference("TopicInteractionPlugin.Runtimes"),
+        flash_swf_url: foswiki.getPreference("TopicInteractionPlugin.flashUrl"),
+        silverlight_xap_url: foswiki.getPreference("TopicInteractionPlugin.silverlightUrl"),
+        url: foswiki.getPreference("SCRIPTURL")+"/rest/TopicInteractionPlugin/upload",
+        fileList: ".jqUploaderFiles",
+        browseButton:  ".jqUploaderBrowse",
+        startButton:  ".jqUploaderStart",
+        stopButton:  ".jqUploaderStop",
+        messageContainer:  ".jqUploaderMessage",
+        autoStartBox: ".jqUploaderAutoStart",
+        autoStart: false,
+        error: null,
+        success: function (uploader, files) {
+          //$.log("UPLOADER: finished");
+        }
+      };
+    }
+
+    settings = $.extend({}, defaults, settings);
+
     this.each(function() {
       var $this = $(this),
           fileList = $this.find(settings.fileList),
@@ -27,7 +67,7 @@
           autoStartBox = $this.find(settings.autoStartBox),
           stopClicked = false,
           isInited = false,
-          doAutoStart = false,
+          doAutoStart = settings.autoStart,
           browseId, containerId, uploader;
 
       // set the browser button
@@ -47,6 +87,7 @@
       settings.container = containerId;
 
       uploader = new plupload.Uploader(settings);
+      $this.data("uploader", uploader);
 
       // init autoStartBox
       if (autoStartBox.attr("type") === "checkbox") {
@@ -568,48 +609,10 @@
   /************************************************************************/
   $(function() {
 
-    var attachFileSizeLimit = foswiki.getPreference("TopicInteractionPlugin.attachFileSizeLimit") || 0;
-    attachFileSizeLimit *= 1024;
-
-    defaults = {
-      dragdrop: true,
-      chunk_size: "1MB", // upload chuncked by default to work around request length and timeout limitations
-      max_file_size: attachFileSizeLimit,
-      multipart: true,
-      urlstream_upload: true, // SMELL: required by flash backend. you get a flash io error #2038 for some reasons otherwise
-      file_data_name: "file",
-      multi_selection: true,
-      filters: [
-        {title: "All files", extensions: "*"},
-        {title: "Archives", extensions: "zip,rar,gz,bz,tar"},
-        {title: "Audio files", extensions: "amr,awb,amr,awb,axa,au,snd,flac,mid,midi,kar,mpga,mpega,mp2,mp3,m4a,m3u,oga,ogg,spx,sid,aif,aiff,aifc,gsm,m3u,wma,wax,ra,rm,ram,ra,pls,sd2,wav"},
-        {title: "Image files", extensions: "art,bmp,cdr,cdt,cpt,djvu,djv,gif,ico,ief,jng,jpeg,jpg,jpe,pat,pbm,pcx,pgm,png,pnm,ppm,psd,ras,rgb,svg,svgz,tiff,tif,wbmp,xbm,xpm,xwd"},
-        {title: "MS Office files", extensions: "doc,docx,xls,xlsx,ppt,pptx"},
-        {title: "Open Office files", extensions: "odc,odb,odf,odg,otg,odi,odp,otp,ods,ots,odt,odm,ott,oth"},
-        {title: "PDF files", extensions: "pdf"},
-        {title: "Text files", extensions: "txt"},
-        {title: "Video files", extensions: "3gp,axv,dl,dif,dv,fli,gl,mpeg,mpg,mpe,mp4,m4v,qt,mov,ogv,mxu,flv,lsf,lsx,mng,asf,asx,wm,wmv,wmx,wvx,avi,movie,mpv"}
-      ],
-      runtimes: foswiki.getPreference("TopicInteractionPlugin.Runtimes"),
-      flash_swf_url: foswiki.getPreference("TopicInteractionPlugin.flashUrl"),
-      silverlight_xap_url: foswiki.getPreference("TopicInteractionPlugin.silverlightUrl"),
-      url: foswiki.getPreference("SCRIPTURL")+"/rest/TopicInteractionPlugin/upload",
-      fileList: ".jqUploaderFiles",
-      browseButton:  ".jqUploaderBrowse",
-      startButton:  ".jqUploaderStart",
-      stopButton:  ".jqUploaderStop",
-      messageContainer:  ".jqUploaderMessage",
-      autoStartBox: ".jqUploaderAutoStart",
-      error: null,
-      success: function (uploader, files) {
-        //$.log("UPLOADER: finished");
-      }
-    };
-
     /* init */
     $(".jqUploader:not(.jqInitedUploader)").livequery(function() {
       var $this = $(this),
-          settings = $.extend({}, defaults, $this.metadata());
+          settings = $this.metadata();
 
       //$.log("UPLOADER: found a jqUploader");
       $this.addClass("jqInitedUploader");
