@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# Copyright (C) 2010-2013 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2014 Michael Daum, http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,11 +27,8 @@ use constant DRY => 0;    # toggle me
 sub handle {
   my ($response, $params) = @_;
 
-  my $newFileName = $params->{filename};
-  my $fileName = $params->{origfilename};
-
-  ($fileName) = Foswiki::Func::sanitizeAttachmentName($fileName);
-  ($newFileName) = Foswiki::Func::sanitizeAttachmentName($newFileName);
+  my $newFileName = Foswiki::Plugins::TopicInteractionPlugin::Core::sanitizeAttachmentName($params->{filename});
+  my $fileName = Foswiki::Plugins::TopicInteractionPlugin::Core::sanitizeAttachmentName($params->{origfilename});
 
   my $web = $params->{web};
   my $topic = $params->{topic};

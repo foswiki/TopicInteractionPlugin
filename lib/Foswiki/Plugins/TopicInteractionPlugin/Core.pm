@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2013 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2014 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -392,5 +392,22 @@ sub setThumbnail {
   # save
   $meta->save();      
 }
+
+##############################################################################
+# local version
+sub sanitizeAttachmentName {
+  my $fileName = shift;
+
+  $fileName =~ s{[\\/]+$}{};    # Get rid of trailing slash/backslash (unlikely)
+  $fileName =~ s!^.*[\\/]!!;    # Get rid of leading directory components
+
+  # DON'T Change spaces to underscore
+  # DON'T Apply the NameFilter
+  # DON'T Append .txt to some files
+
+  # Untaint
+  return Foswiki::Sandbox::untaintUnchecked($fileName);
+}
+
 
 1;

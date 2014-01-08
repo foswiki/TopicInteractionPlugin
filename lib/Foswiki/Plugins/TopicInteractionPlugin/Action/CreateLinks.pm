@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2013 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2014 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ sub handle {
   my $error;
   foreach my $fileName (@{$params->{filenames}}) {
     next unless $fileName;
-    ($fileName) = Foswiki::Sandbox::sanitizeAttachmentName($fileName);
+    $fileName = Foswiki::Plugins::TopicInteractionPlugin::Core::sanitizeAttachmentName($fileName);
 
     if (!Foswiki::Func::attachmentExists($web, $topic, $fileName)) {
       Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 104, "Attachment $fileName does not exist", $id);

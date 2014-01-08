@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2013 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2014 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -29,7 +29,9 @@ sub handle {
   my $web = $params->{web};
   my $topic = $params->{topic};
   my $id = $params->{id};
-  my ($fileName, $origName) = Foswiki::Func::sanitizeAttachmentName($params->{filename});
+
+  my $origName = $params->{filename};
+  my $fileName = Foswiki::Plugins::TopicInteractionPlugin::Core::sanitizeAttachmentName($origName);
 
   Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("'$origName' has been renamed to '$fileName'")
     unless $fileName eq $origName;
@@ -84,7 +86,7 @@ sub handle {
     appendFile($tmpFileName, $data);
   } else {
     Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("saving to $tmpFileName");
-    Foswiki::Func::saveFile($tmpFileName, $data);
+    saveFile($tmpFileName, $data);
   }
 
   # end of transaction
@@ -171,7 +173,20 @@ sub appendFile {
   unless (open($FILE, '>>', $name)) {
     die "Can't append to $name - $!\n";
   }
+  binmode($FILE);
   print $FILE $text;
   close($FILE);
 }
+
+sub saveFile {
+  my ($name, $text) = @_;
+  my $FILE;
+  unless (open($FILE, '>', $name)) {
+    die "Can't create file $name - $!\n";
+  }
+  binmode($FILE);
+  print $FILE $text;
+  close($FILE);
+}
+
 1;
