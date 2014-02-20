@@ -373,9 +373,7 @@ jQuery(function($) {
     // add attachment behaviour
     $this.find(".foswikiAttachment").hover(
       function() {
-        if (!$(this).is(".foswikiAttachmentEdit")) {
-          $(this).addClass("foswikiAttachmentHover");
-        }
+        $(this).addClass("foswikiAttachmentHover");
       },
       function() {
         $(this).removeClass("foswikiAttachmentHover");
@@ -384,15 +382,12 @@ jQuery(function($) {
       var $attachment = $(this), id = decodeURIComponent($attachment.attr('id'));
 
       if (!$(e.target).is("a")) { // dont propagate the attachment clicks
-        if (!$attachment.is(".foswikiAttachmentEdit")) {
+        $attachment.toggleClass("foswikiAttachmentSelected");
 
-          $attachment.toggleClass("foswikiAttachmentSelected");
-
-          if ($attachment.hasClass("foswikiAttachmentSelected")) {
-            select(id);
-          } else {
-            clear(id);
-          }
+        if ($attachment.hasClass("foswikiAttachmentSelected")) {
+          select(id);
+        } else {
+          clear(id);
         }
         e.stopPropagation();
         return false;
@@ -837,5 +832,20 @@ jQuery(function($) {
     });
 
   }); /** end of livequery for foswikiAttachments **/
+
+  // add webdav behavior
+  $("a[href^='edit://']").livequery(function() {
+    var $this = $(this), 
+        url = $this.attr("href"),
+        version = $this.data("version");
+
+    if ($.browser.msie) {
+      $this.addClass(".jqWebDAVLink").on("click", function() {
+       url = url.replace(/^edit:/, "https:");
+       new ActiveXObject('SharePoint.OpenDocuments.1').EditDocument(url);
+       return false;
+      });
+    }
+  });
 
 });

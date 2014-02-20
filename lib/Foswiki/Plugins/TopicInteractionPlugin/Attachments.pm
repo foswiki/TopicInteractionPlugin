@@ -163,7 +163,7 @@ sub handle {
   $index = 0;
   my $webDAVFilter = $Foswiki::cfg{TopicInteractionPlugin}{WebDAVFilter};
   my $webDavUrl = $Foswiki::cfg{TopicInteractionPlugin}{WebDAVUrl} || 'webdav://$host/dav/$web/$topic_files/$attachment';
-  my $host = $Foswiki::cfg{DefaultUrlHost};
+  my $host = Foswiki::Func::getUrlHost();
   $host =~ s/^https?:\/+//;
   $webDavUrl =~ s/\$host/$host/g;
   $webDavUrl =~ s/\$web/$thisWeb/g;

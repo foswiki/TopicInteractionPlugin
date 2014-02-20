@@ -39,6 +39,14 @@ sub handle {
     return;
   }
 
+  # check permissions
+  my $wikiName = Foswiki::Func::getWikiName();
+  unless (Foswiki::Func::checkAccessPermission(
+    'CHANGE', $wikiName, undef, $topic, $web)) {
+    Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 102, "Access denied", $id);
+    return;
+  }
+
   my $fileCreateLink = $params->{createlink} || '0';
   $fileCreateLink = $fileCreateLink eq 'on' ? 1 : 0;
 

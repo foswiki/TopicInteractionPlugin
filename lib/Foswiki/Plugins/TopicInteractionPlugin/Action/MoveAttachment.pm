@@ -33,6 +33,14 @@ sub handle {
   my $newWeb = $params->{newweb} || $web;
   my $newTopic = $params->{newtopic} || $topic;
 
+  # check permissions
+  my $wikiName = Foswiki::Func::getWikiName();
+  unless (Foswiki::Func::checkAccessPermission(
+    'CHANGE', $wikiName, undef, $topic, $web)) {
+    Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 102, "Access denied", $id);
+    return;
+  }
+
   # check existence
   ($newWeb, $newTopic) = Foswiki::Func::normalizeWebTopicName($newWeb, $newTopic);
   unless (Foswiki::Func::topicExists($newWeb, $newTopic)) {

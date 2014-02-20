@@ -210,7 +210,7 @@ sub prepareAction {
   my $wikiName = Foswiki::Func::getWikiName();
   writeDebug("wikiName=$wikiName, web=$web, $topic=$topic");
   unless (Foswiki::Func::checkAccessPermission(
-    'CHANGE', $wikiName, undef, $topic, $web)) {
+    'VIEW', $wikiName, undef, $topic, $web)) {
     printJSONRPC($response, 102, "Access denied", $id);
     return;
   }
@@ -400,12 +400,8 @@ sub sanitizeAttachmentName {
 
   $fileName =~ s{[\\/]+$}{};    # Get rid of trailing slash/backslash (unlikely)
   $fileName =~ s!^.*[\\/]!!;    # Get rid of leading directory components
+  $fileName =~ s/[\*?~^\$@%`"'&;|<>\[\]#\x00-\x1f\(\)]//g; # Get rid of a subset of Namefilter
 
-  # DON'T Change spaces to underscore
-  # DON'T Apply the NameFilter
-  # DON'T Append .txt to some files
-
-  # Untaint
   return Foswiki::Sandbox::untaintUnchecked($fileName);
 }
 

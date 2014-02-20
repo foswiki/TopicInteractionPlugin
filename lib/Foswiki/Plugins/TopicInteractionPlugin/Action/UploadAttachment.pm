@@ -30,6 +30,14 @@ sub handle {
   my $topic = $params->{topic};
   my $id = $params->{id};
 
+  # check permissions
+  my $wikiName = Foswiki::Func::getWikiName();
+  unless (Foswiki::Func::checkAccessPermission(
+    'CHANGE', $wikiName, undef, $topic, $web)) {
+    Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 102, "Access denied", $id);
+    return;
+  }
+
   my $origName = $params->{filename};
   my $fileName = Foswiki::Plugins::TopicInteractionPlugin::Core::sanitizeAttachmentName($origName);
 

@@ -267,7 +267,7 @@
       <div class='foswikiAttachmentContainer'>
         <div class='foswikiThumbnail foswikiLeft'>
         $percntIF{
-          \"lc('$name')=~'.*\.(gif|jpe?g|png|bmp|svg)$' and context ImagePluginEnabled\"
+          \"lc('$name')=~'.*\.(gif|jpe?g|png|bmp|svg|ico)$' and context ImagePluginEnabled\"
 	  then=\"$dollarpercntTMPL:P{\\"attachments::thumbnail\\" filename=\\"$name\\" url=\\"$url\\"}$dollarpercnt\"
           else=\"<a href='$url'>$percntMIMEICON{\"$name\" size=\"48\"}$percnt</a>\"
         }$percnt

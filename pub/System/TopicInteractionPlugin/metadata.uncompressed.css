@@ -20,9 +20,6 @@
 .foswikiMetaData .foswikiFormStep:last-child {
   margin-top:1em;
 }
-.foswikiMetaData .jqTabContents .foswikiFormSteps {
-  padding:1em;
-}
 .foswikiMetaDataNotAllowed .foswikiMetaDataEdit {
   display:none !important;
 }
