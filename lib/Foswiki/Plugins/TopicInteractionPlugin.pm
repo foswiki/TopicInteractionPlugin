@@ -31,15 +31,15 @@ sub initPlugin {
 
   Foswiki::Func::registerTagHandler('ATTACHMENTS', \&handleATTACHMENTS);
 
-  Foswiki::Func::registerRESTHandler('changeproperties', \&restChangeProperties);
-  Foswiki::Func::registerRESTHandler('delete', \&restDelete);
-  Foswiki::Func::registerRESTHandler('move', \&restMove);
-  Foswiki::Func::registerRESTHandler('upload', \&restUpload);
-  Foswiki::Func::registerRESTHandler('createlink', \&restCreateLink);
-  Foswiki::Func::registerRESTHandler('createimagegallery', \&restCreateImageGallery);
-  Foswiki::Func::registerRESTHandler('download', \&restDownload);
-  Foswiki::Func::registerRESTHandler('hide', \&restHide);
-  Foswiki::Func::registerRESTHandler('unhide', \&restUnhide);
+  Foswiki::Func::registerRESTHandler('changeproperties', \&restChangeProperties, authenticate => 0);
+  Foswiki::Func::registerRESTHandler('delete', \&restDelete, authenticate => 0);
+  Foswiki::Func::registerRESTHandler('move', \&restMove, authenticate => 0);
+  Foswiki::Func::registerRESTHandler('upload', \&restUpload, authenticate => 0);
+  Foswiki::Func::registerRESTHandler('createlink', \&restCreateLink, authenticate => 0);
+  Foswiki::Func::registerRESTHandler('createimagegallery', \&restCreateImageGallery, authenticate => 0);
+  Foswiki::Func::registerRESTHandler('download', \&restDownload, authenticate => 0);
+  Foswiki::Func::registerRESTHandler('hide', \&restHide, authenticate => 0);
+  Foswiki::Func::registerRESTHandler('unhide', \&restUnhide, authenticate => 0);
 
   # just in case it did not make it to LocalSite.cfg in time
   Foswiki::Plugins::JQueryPlugin::registerPlugin("uploader", 'Foswiki::Plugins::TopicInteractionPlugin::Uploader');
