@@ -23,7 +23,7 @@ use Foswiki::Sandbox ();
 use JSON ();
 use Encode ();
 
-use constant DEBUG => 0; # toggle me
+use constant TRACE => 0; # toggle me
 
 # Error codes for json-rpc response
 # -32601: unknown action
@@ -285,7 +285,7 @@ sub urlDecode {
 
 ##############################################################################
 sub writeDebug {
-  print STDERR "- TopicInteractionPlugin - $_[0]\n" if DEBUG;
+  print STDERR "- TopicInteractionPlugin - $_[0]\n" if TRACE;
 }
 
 ##############################################################################

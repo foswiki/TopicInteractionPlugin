@@ -19,9 +19,11 @@ use strict;
 use warnings;
 
 use Error qw( :try );
+use Foswiki::Func ();
+use Foswiki::Plugins ();
+use Foswiki::Meta ();
 use Foswiki::Plugins::TopicInteractionPlugin::Core ();
 use constant DRY => 0; # toggle me
-use Foswiki::Func ();
 
 sub handle {
   my ($response, $params) = @_;
@@ -68,14 +70,20 @@ sub handle {
     Foswiki::Plugins::DBCachePlugin::disableRenameHandler();
   }
 
+  # load source and target topics
+  my $fromObj = Foswiki::Meta->load($Foswiki::Plugins::SESSION, $web, $topic); # web, topic already normalized
+  my $toObj = Foswiki::Meta->load($Foswiki::Plugins::SESSION, $newWeb, $newTopic);
+
   my $error;
   foreach my $fileName (@{$params->{filenames}}) {
     next unless $fileName;
     $fileName = Foswiki::Plugins::TopicInteractionPlugin::Core::sanitizeAttachmentName($fileName);
 
-    unless (Foswiki::Func::attachmentExists($web, $topic, $fileName)) {
-      Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 104, "Attachment $fileName does not exist", $id);
-      return;
+    unless ($fromObj->hasAttachment($fileName)) {
+      Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("oops $fileName does not exist at $web.$topic");
+      #Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 104, "Attachment $fileName does not exist", $id);
+      #last;
+      next;
     }
 
     try {
@@ -89,19 +97,15 @@ sub handle {
       }
       my $toAttachment = $fileName;
       my $n = 1;
-      while (Foswiki::Func::attachmentExists($newWeb, $newTopic, $toAttachment)) {
+      while ($toObj->hasAttachment($toAttachment)) {
         $toAttachment = $base . $n . $ext;
         $n++;
       }
 
       Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("moving $web.$topic.$fileName to $newWeb.$newTopic.$toAttachment");
 
-      unless (DRY) {
-        Foswiki::Func::moveAttachment(
-          $web, $topic, $fileName,
-          $newWeb, $newTopic, $toAttachment
-        );
-      }
+      $fromObj->moveAttachment($fileName, $toObj, new_name => $toAttachment) unless DRY;
+
     } catch Error::Simple with {
       $error = shift->{-text};
       Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("ERROR: $error");

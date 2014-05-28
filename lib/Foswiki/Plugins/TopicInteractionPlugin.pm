@@ -18,8 +18,8 @@ package Foswiki::Plugins::TopicInteractionPlugin;
 use strict;
 use warnings;
 
-our $VERSION = '3.51';
-our $RELEASE = '3.51';
+our $VERSION = '3.52';
+our $RELEASE = '3.52';
 our $SHORTDESCRIPTION = 'Improved interaction with attachments and !DataForms';
 our $NO_PREFS_IN_TOPIC = 1;
 

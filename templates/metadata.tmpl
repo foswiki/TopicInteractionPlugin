@@ -464,11 +464,11 @@
     <img class="foswikiGenericThumbnail" src="%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/icons/document-export.png" alt="document-export" width="48" height="48" align="right" />
     <div class="foswikiFormStep">
       <h3>%MAKETEXT{"To web"}%</h3>
-      <input type="text" class="foswikiInputField jqUIAutocomplete" name="newweb" size="50" value="%WEB%" autocomplete="%SCRIPTURL{"view"}%/%SYSTEMWEB%/JQueryAjaxHelper?section=web&skin=text" />
+      <input type="text" class="foswikiInputField jqUIAutocomplete" name="newweb" size="50" value="%WEB%" autocomplete="%SCRIPTURL{"view"}%/%SYSTEMWEB%/JQueryAjaxHelper?section=web&skin=text&contenttype=application/json" />
     </div>
     <div class="foswikiFormStep">
       <h3>%MAKETEXT{"To topic"}%:</h3>
-      <input type="text" class="foswikiInputField jqUIAutocomplete {extraParams:{baseweb:function() {return jQuery('#foswikiAttachmentMove input[name=newweb]').val()}}}" name="newtopic" size="50" value="%TOPIC%" autocomplete="%SCRIPTURL{"view"}%/%SYSTEMWEB%/JQueryAjaxHelper?section=topic&skin=text" />
+      <input type="text" class="foswikiInputField jqUIAutocomplete {extraParams:{baseweb:function() {return jQuery('#foswikiAttachmentMove input[name=newweb]').val()}}}" name="newtopic" size="50" value="%TOPIC%" autocomplete="%SCRIPTURL{"view"}%/%SYSTEMWEB%/JQueryAjaxHelper?section=topic&skin=text&contenttype=application/json" />
       <div class="foswikiFormDescription">
         %MAKETEXT{"The new topic chosen must already exist."}%
       </div>

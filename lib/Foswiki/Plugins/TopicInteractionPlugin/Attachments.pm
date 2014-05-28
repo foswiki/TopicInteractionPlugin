@@ -19,6 +19,8 @@ use warnings;
 
 use POSIX ();
 
+#use Data::Dump qw(dump);
+
 ###############################################################################
 sub handle {
   my ($session, $params, $theTopic, $theWeb) = @_;
@@ -283,6 +285,8 @@ sub urlEncode {
 ##############################################################################
 sub getAttachmentInfo {
   my $attachment = shift;
+
+  #print STDERR dump($attachment)."\n";
 
   my $size = $attachment->{size} || 0;
   my %info = (

@@ -21,6 +21,8 @@ As per the GPL, removal of this notice is prohibited.
 
 */
 
+/*global ActiveXObject:false */
+
 jQuery(function($) {
 
   /* init attachments tab *************************************************/
@@ -336,7 +338,7 @@ jQuery(function($) {
         event.preventDefault();
         return false;
       }
-    }).focus().select();
+    });
 
     // add sort behaviour
     $this.find(".foswikiSortBy select").change(function() {
@@ -486,11 +488,17 @@ jQuery(function($) {
           loadAttachments();
         },
         error: function(xhr, msg) {
-          var data = $.parseJSON(xhr.responseText);
+          var data;
+          try {
+            data = $.parseJSON(xhr.responseText);
+            msg = data.error.message;
+          } catch(err) {
+            // ignore
+          }
           $.unblockUI();
           $.pnotify({
              title: 'Edit failed',
-             text: data.error.message,
+             text: msg,
              type: 'error'
           });
         }
@@ -569,11 +577,17 @@ jQuery(function($) {
           loadAttachments();
         },
         error: function(xhr, msg) {
-          var data = $.parseJSON(xhr.responseText);
+          var data;
+          try {
+            data = $.parseJSON(xhr.responseText);
+            msg = data.error.message;
+          } catch(err) {
+            // ignore
+          }
           $.unblockUI();
           $.pnotify({
              title: 'Failed to delete '+filename,
-             text: data.error.message,
+             text: msg,
              type: 'error'
           });
         }
@@ -625,11 +639,17 @@ jQuery(function($) {
           loadAttachments();
         },
         error: function(xhr, msg) {
-          var data = $.parseJSON(xhr.responseText);
+          var data;
+          try {
+            data = $.parseJSON(xhr.responseText);
+            msg = data.error.message;
+          } catch(err) {
+            // ignore
+          }
           $.unblockUI();
           $.pnotify({
              title: 'Move failed',
-             text: data.error.message,
+             text: msg,
              type: 'error'
           });
         }
@@ -703,11 +723,17 @@ jQuery(function($) {
           }
         },
         error: function(xhr, msg) {
-          var data = $.parseJSON(xhr.responseText);
+          var data;
+          try {
+            data = $.parseJSON(xhr.responseText);
+            msg = data.error.message;
+          } catch(err) {
+            // ignore
+          }
           $.unblockUI();
           $.pnotify({
              title: 'Error during "'+action+'"',
-             text: data.error.message,
+             text: msg,
              type: 'error'
           });
         }
@@ -837,12 +863,13 @@ jQuery(function($) {
   $("a[href^='edit://']").livequery(function() {
     var $this = $(this), 
         url = $this.attr("href"),
-        version = $this.data("version");
+        version = $this.data("version"),
+        obj;
 
     if ($.browser.msie) {
       $this.addClass(".jqWebDAVLink").on("click", function() {
        url = url.replace(/^edit:/, "https:");
-       new ActiveXObject('SharePoint.OpenDocuments.1').EditDocument(url);
+       obj = new ActiveXObject('SharePoint.OpenDocuments.1').EditDocument(url);
        return false;
       });
     }

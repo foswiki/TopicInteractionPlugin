@@ -20,6 +20,8 @@ use warnings;
 
 use Error qw( :try );
 use Foswiki::Func ();
+use Foswiki::Plugins ();
+use Foswiki::Meta ();
 use Foswiki::Plugins::TopicInteractionPlugin::Core ();
 use constant DRY => 0; # toggle me
 
@@ -30,11 +32,20 @@ sub handle {
   my $topic = $params->{topic};
   my $id = $params->{id};
 
+  my $newWeb = $Foswiki::cfg{TrashWebName};
+  my $newTopic = 'TrashAttachment';
+
   # check permissions
   my $wikiName = Foswiki::Func::getWikiName();
   unless (Foswiki::Func::checkAccessPermission(
     'CHANGE', $wikiName, undef, $topic, $web)) {
     Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 102, "Access denied", $id);
+    return;
+  }
+
+  # check null move
+  if ($newWeb eq $web && $newTopic eq $topic) {
+    Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 108, "Won't copy attachment to itself", $id);
     return;
   }
 
@@ -45,13 +56,16 @@ sub handle {
     Foswiki::Plugins::DBCachePlugin::disableRenameHandler();
   }
 
+  # load source and target topics
+  my $fromObj = Foswiki::Meta->load($Foswiki::Plugins::SESSION, $web, $topic); # web, topic already normalized
+  my $toObj = Foswiki::Meta->load($Foswiki::Plugins::SESSION, $newWeb, $newTopic);
+
   my $error;
   foreach my $fileName (@{$params->{filenames}}) {
     next unless $fileName;
     $fileName = Foswiki::Plugins::TopicInteractionPlugin::Core::sanitizeAttachmentName($fileName);
 
-
-    if (!Foswiki::Func::attachmentExists($web, $topic, $fileName)) {
+    unless ($fromObj->hasAttachment($fileName)) {
       Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("oops $fileName does not exist at $web.$topic");
       #Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 102, "Attachment $fileName does not exist", $id);
       #last;
@@ -69,19 +83,14 @@ sub handle {
       }
       my $toAttachment = $fileName;
       my $n = 1;
-      while (Foswiki::Func::attachmentExists($Foswiki::cfg{TrashWebName}, 'TrashAttachment', $toAttachment)) {
+      while ($toObj->hasAttachment($toAttachment)) {
         $toAttachment = $base . $n . $ext;
         $n++;
       }
 
-      Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("moving $web.$topic.$fileName to Trash.TrashAttachment.$toAttachment");
+      Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("moving $web.$topic.$fileName to $newWeb.$newTopic.$toAttachment");
 
-      unless (DRY) {
-        Foswiki::Func::moveAttachment(
-          $web, $topic, $fileName,
-          $Foswiki::cfg{TrashWebName}, 'TrashAttachment', $toAttachment
-        );
-      }
+      $fromObj->moveAttachment($fileName, $toObj, new_name => $toAttachment) unless DRY;
 
     } catch Error::Simple with {
       $error = shift->{-text};
