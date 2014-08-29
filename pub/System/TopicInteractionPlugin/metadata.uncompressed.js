@@ -534,7 +534,7 @@ jQuery(function($) {
             $this.find("input[name=filename]").val(decodeURIComponent(attachmentOpts.filename));
             $this.find("input[name=filecomment]").val(decodeURIComponent(attachmentOpts.filecomment));
             $this.find(".foswikiThumbnailContainer").html(thumbnail);
-            if (attachmentOpts.filename.match(/\.(gif|jpe?g|png|bmp|svg)$/)) {
+            if (attachmentOpts.filename.match(/\.(gif|jpe?g|png|bmp|svg|tiff?)$/i)) {
               $this.find(".foswikiThumbnailStep").show();
             } else {
               $this.find(".foswikiThumbnailStep").hide();

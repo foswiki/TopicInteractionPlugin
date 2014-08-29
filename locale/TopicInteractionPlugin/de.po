@@ -82,11 +82,11 @@ msgstr "<b>Verweis</b> auf die Anhänge am Ende des Topics erzeugen."
 
 #: templates/metadata.tmpl:326
 msgid "Create image gallery"
-msgstr "Bilder-Gallerie anlegen"
+msgstr "Bilder-Galerie anlegen"
 
 #: templates/metadata.tmpl:518
 msgid "Creating image gallery"
-msgstr "Bilder-Gallerie wird angelegt"
+msgstr "Bilder-Galerie wird angelegt"
 
 #: templates/metadata.tmpl:512
 msgid "Creating links"
@@ -126,7 +126,7 @@ msgstr "Anzeige abschalten"
 
 #: templates/metadata.tmpl:516
 msgid "Do you really want to create an image gallery for %1 attachment(s)?"
-msgstr "Wollen Sie wirklich eine Bilder-Gallerie für %1 Anhänge anlegen?"
+msgstr "Wollen Sie wirklich eine Bilder-Galerie für %1 Anhänge anlegen?"
 
 #: templates/metadata.tmpl:510
 msgid "Do you really want to create links to %1 attachment(s)?"

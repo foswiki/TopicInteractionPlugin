@@ -18,8 +18,8 @@ package Foswiki::Plugins::TopicInteractionPlugin;
 use strict;
 use warnings;
 
-our $VERSION = '3.52';
-our $RELEASE = '3.52';
+our $VERSION = '3.60';
+our $RELEASE = '3.60';
 our $SHORTDESCRIPTION = 'Improved interaction with attachments and !DataForms';
 our $NO_PREFS_IN_TOPIC = 1;
 
@@ -31,15 +31,59 @@ sub initPlugin {
 
   Foswiki::Func::registerTagHandler('ATTACHMENTS', \&handleATTACHMENTS);
 
-  Foswiki::Func::registerRESTHandler('changeproperties', \&restChangeProperties, authenticate => 0);
-  Foswiki::Func::registerRESTHandler('delete', \&restDelete, authenticate => 0);
-  Foswiki::Func::registerRESTHandler('move', \&restMove, authenticate => 0);
-  Foswiki::Func::registerRESTHandler('upload', \&restUpload, authenticate => 0);
-  Foswiki::Func::registerRESTHandler('createlink', \&restCreateLink, authenticate => 0);
-  Foswiki::Func::registerRESTHandler('createimagegallery', \&restCreateImageGallery, authenticate => 0);
-  Foswiki::Func::registerRESTHandler('download', \&restDownload, authenticate => 0);
-  Foswiki::Func::registerRESTHandler('hide', \&restHide, authenticate => 0);
-  Foswiki::Func::registerRESTHandler('unhide', \&restUnhide, authenticate => 0);
+  Foswiki::Func::registerRESTHandler('changeproperties', \&restChangeProperties, 
+    authenticate => 1,
+    validate => 0,
+    http_allow => 'POST',
+  );
+
+  Foswiki::Func::registerRESTHandler('delete', \&restDelete, 
+    authenticate => 1,
+    validate => 0,
+    http_allow => 'POST',
+  );
+
+  Foswiki::Func::registerRESTHandler('move', \&restMove, 
+    authenticate => 1,
+    validate => 0,
+    http_allow => 'POST',
+  );
+
+  Foswiki::Func::registerRESTHandler('upload', \&restUpload, 
+    authenticate => 1,
+    validate => 0,
+    http_allow => 'POST',
+  );
+
+  Foswiki::Func::registerRESTHandler('createlink', \&restCreateLink, 
+    authenticate => 1,
+    validate => 0,
+    http_allow => 'POST',
+  );
+
+  Foswiki::Func::registerRESTHandler('createimagegallery', \&restCreateImageGallery, 
+    authenticate => 1,
+    validate => 0,
+    http_allow => 'POST',
+  );
+
+  Foswiki::Func::registerRESTHandler('download', \&restDownload, 
+    authenticate => 1,
+    validate => 0,
+    http_allow => 'POST',
+  );
+
+  Foswiki::Func::registerRESTHandler('hide', \&restHide, 
+    authenticate => 1,
+    validate => 0,
+    http_allow => 'POST',
+  );
+
+  Foswiki::Func::registerRESTHandler('unhide', \&restUnhide, 
+    authenticate => 1,
+    validate => 0,
+    http_allow => 'POST',
+  );
 
   # just in case it did not make it to LocalSite.cfg in time
   Foswiki::Plugins::JQueryPlugin::registerPlugin("uploader", 'Foswiki::Plugins::TopicInteractionPlugin::Uploader');

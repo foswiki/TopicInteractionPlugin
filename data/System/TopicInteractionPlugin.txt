@@ -153,6 +153,7 @@ generates:
 |  Release: | %$RELEASE% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  29 Aug 2014: | fully specify rest security |
 |  28 May 2014: | improve performance on bulk operations on attachments; fixed tooltip poping up automatically |
 |  04 Apr 2014: | flag rest handlers that don't require authentication |
 |  18 Mar 2014: | render correct form data when displaying an old revision |

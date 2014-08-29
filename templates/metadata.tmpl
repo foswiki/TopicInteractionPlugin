@@ -185,7 +185,7 @@
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments"}%<!-- -->
 <noautolink>
-<div class="foswikiFormSteps foswikiAttachments foswikiAttachmentsCols%TMPL:P{"attachments::cols"}% {hidden:'%TMPL:P{"attachments::hidden"}%', sort:'%TMPL:P{"attachments::sort"}%', reverse:'%TMPL:P{"attachments::reverse"}%', topic:'%WEB%.%TOPIC%', filter:'%TMPL:P{"attachments::filter"}%', selection:'%TMPL:P{"attachments::selection"}%', limit:'%TMPL:P{"attachments::limit"}%', skip:%TMPL:P{"attachments::skip"}%, showOptions:'%TMPL:P{"attachments::showoptions"}%', showUploader:'%TMPL:P{"attachments::showuploader"}%', cols:%TMPL:P{"attachments::cols"}%}">
+<div class="foswikiFormSteps foswikiAttachments foswikiAttachmentsCols%TMPL:P{"attachments::cols"}% {hidden:'%TMPL:P{"attachments::hidden"}%', sort:'%TMPL:P{"attachments::sort"}%', reverse:'%TMPL:P{"attachments::reverse"}%', topic:'%ENCODE{"%WEB%.%TOPIC%"}%', filter:'%TMPL:P{"attachments::filter"}%', selection:'%TMPL:P{"attachments::selection"}%', limit:'%TMPL:P{"attachments::limit"}%', skip:%TMPL:P{"attachments::skip"}%, showOptions:'%TMPL:P{"attachments::showoptions"}%', showUploader:'%TMPL:P{"attachments::showuploader"}%', cols:%TMPL:P{"attachments::cols"}%}">
 %IF{"'%URLPARAM{"attachments_sort"}%'!=''" then="$percntSESSION_VARIABLE{\"_attachments_sort\" set=\"%TMPL:P{"attachments::sort"}%\"}$percnt"}%<!-- -->
 %IF{"'%URLPARAM{"attachments_reverse"}%'!=''" then="$percntSESSION_VARIABLE{\"_attachments_reverse\" set=\"%TMPL:P{"attachments::reverse"}%\"}$percnt"}%<!-- -->
 %IF{"'%URLPARAM{"attachments_limit"}%'!=''" then="$percntSESSION_VARIABLE{\"_attachments_limit\" set=\"%TMPL:P{"attachments::limit"}%\"}$percnt"}%<!-- -->
@@ -268,7 +268,7 @@
       <div class='foswikiAttachmentContainer'>
         <div class='foswikiThumbnail foswikiLeft'>
         $percntIF{
-          \"lc('$name')=~'.*\.(gif|jpe?g|png|bmp|svg|ico)$' and context ImagePluginEnabled\"
+          \"lc('$name')=~'.*\.(gif|jpe?g|png|bmp|svg|ico|tiff?)$' and context ImagePluginEnabled\"
 	  then=\"$dollarpercntTMPL:P{\\"attachments::thumbnail\\" filename=\\"$name\\" url=\\"$url\\"}$dollarpercnt\"
           else=\"<a href='$url'>$percntMIMEICON{\"$name\" size=\"48\"}$percnt</a>\"
         }$percnt
