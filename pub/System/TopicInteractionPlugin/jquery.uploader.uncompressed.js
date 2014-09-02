@@ -11,7 +11,7 @@
 /*global plupload*/
 
 (function($) {
-  "use strict";
+"use strict";
 
   var defaults;
 
