@@ -56,7 +56,7 @@
 %{ ################################################################################ }%
 %TMPL:DEF{"metadata::javascript"}%<!-- -->
 %TMPL:P{"metadata::lightbox"}%<!-- -->
-%JQREQUIRE{"ui::tooltip, ui, uploader, twisty, media"}%<!-- -->
+%JQREQUIRE{"ui::tooltip, ui, uploader, twisty, mediaelement" warn="off"}%<!-- -->
 %IF{"context FlexPaperPluginEnabled" then="$percntFLEXPAPERINIT$percnt"}%<!-- -->
 %ADDTOZONE{"script" 
   id="METADATA::JS" 
@@ -268,7 +268,7 @@
       <div class='foswikiAttachmentContainer'>
         <div class='foswikiThumbnail foswikiLeft'>
         $percntIF{
-          \"lc('$name')=~'.*\.(gif|jpe?g|png|bmp|svg|ico|tiff?)$' and context ImagePluginEnabled\"
+          \"lc('$name')=~'.*\.(gif|jpe?g|png|bmp|svg|ico|tiff?|xcf|psd)$' and context ImagePluginEnabled\"
 	  then=\"$dollarpercntTMPL:P{\\"attachments::thumbnail\\" filename=\\"$name\\" url=\\"$url\\"}$dollarpercnt\"
           else=\"<a href='$url'>$percntMIMEICON{\"$name\" size=\"48\"}$percnt</a>\"
         }$percnt
@@ -279,7 +279,7 @@
             else=\"<!-- -->\"
           }$percnt
           <a href='#' class='foswikiAttachmentPropertiesButton' title='%MAKETEXT{"Edit properties of this attachment"}%' rel='nofollow'>%JQICON{"wrench"}%</a>
-          $percntIF{\"(context FlexPaperPluginEnabled and '$name'=~'\.pdf$') or '$name'=~'flv|swf|mp3'\" 
+          $percntIF{\"(context FlexPaperPluginEnabled and '$name'=~'\.pdf$') or (context MediaElementPluginEnabled and '$name'=~'flv|swf|mp3|mp4|mov|ogg|mpe?g|wav')\" 
             then=\"<a href='#' class='foswikiAttachmentPreviewButton' title='%MAKETEXT{"Preview this attachment"}%' rel='nofollow'>%JQICON{"eye"}%</a>\"
             else=\"<!-- -->\"
           }$percnt
@@ -384,7 +384,7 @@
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments::previewer::end"}%<!-- -->
   </div>
-  <a class="jqUIDialogButton jqUIDialogClose {icon:'ui-icon-cancel'}">%MAKETEXT{"Close"}%</a> 
+  <a class="jqUIDialogButton jqUIDialogDestroy {icon:'ui-icon-cancel'}">%MAKETEXT{"Close"}%</a> 
 </div>
 <!-- -->%TMPL:END%
 
@@ -403,18 +403,14 @@
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments::previewer::video"}%<!-- -->
 %TMPL:P{"attachments::previewer::start"}%
-<div class="jqMedia {width:600, height:400, autoplay:true, bgColor:'#000'}">
-  <a href="%PUBURLPATH%/%BASEWEB%/%BASETOPIC%/%URLPARAM{"filename"}%">%URLPARAM{"filename"}%</a>
-</div>
+%VIDEO{"%URLPARAM{"filename"}%" topic="%BASEWEB%.%BASETOPIC%" width="480" height="270" autoplay="on" preload="on" controls="on" poster="off"}%
 %TMPL:P{"attachments::previewer::end"}%
 <!-- -->%TMPL:END%
 
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments::previewer::audio"}%<!-- -->
 %TMPL:P{"attachments::previewer::start"}%
-<div class="jqMedia {width:600, height:24, autoplay:true, bgColor:'#fff'}">
-  <a href="%PUBURLPATH%/%BASEWEB%/%BASETOPIC%/%URLPARAM{"filename"}%">%URLPARAM{"filename"}%</a>
-</div>
+%AUDIO{"%URLPARAM{"filename"}%" topic="%BASEWEB%.%BASETOPIC%" autoplay="on"}%
 %TMPL:P{"attachments::previewer::end"}%
 <!-- -->%TMPL:END%
 

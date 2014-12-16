@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ProjectContributor" comment="reprev" date="1392911760" format="1.1" reprev="5" version="6"}%
+%META:TOPICINFO{author="ProjectContributor" comment="" date="1418746985" format="1.1"  version="1"}%
 ---+!! %TOPIC%
 %SHORTDESCRIPTION%
 
@@ -153,6 +153,7 @@ generates:
 |  Release: | %$RELEASE% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  16 Dec 2014: | add support for Foswiki:Extensions/MediaElementPlugin to preview audio and video attachments |
 |  29 Aug 2014: | fully specify rest security |
 |  28 May 2014: | improve performance on bulk operations on attachments; fixed tooltip poping up automatically |
 |  04 Apr 2014: | flag rest handlers that don't require authentication |
@@ -191,8 +192,8 @@ generates:
 |  Home page: | Foswiki:Extensions/%TOPIC% |
 |  Support: | Foswiki:Support/%TOPIC% |
 
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap5.png" attachment="TopicInteractionPluginSnap5.png" attr="" comment="" date="1335456088" size="36218" user="ProjectContributor" version="1"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap4.png" attachment="TopicInteractionPluginSnap4.png" attr="" comment="" date="1335456089" size="45039" user="ProjectContributor" version="1"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap3.png" attachment="TopicInteractionPluginSnap3.png" attr="" comment="" date="1335456090" size="99574" user="ProjectContributor" version="1"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap2.png" attachment="TopicInteractionPluginSnap2.png" attr="" comment="" date="1335456091" size="111026" user="ProjectContributor" version="1"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap1.png" attachment="TopicInteractionPluginSnap1.png" attr="" comment="" date="1335456092" size="16199" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap5.png" attachment="TopicInteractionPluginSnap5.png" attr="" comment="" date="1418746985" size="36218" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap4.png" attachment="TopicInteractionPluginSnap4.png" attr="" comment="" date="1418746985" size="45039" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap3.png" attachment="TopicInteractionPluginSnap3.png" attr="" comment="" date="1418746985" size="99574" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap2.png" attachment="TopicInteractionPluginSnap2.png" attr="" comment="" date="1418746985" size="111026" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap1.png" attachment="TopicInteractionPluginSnap1.png" attr="" comment="" date="1418746985" size="16199" user="ProjectContributor" version="1"}%

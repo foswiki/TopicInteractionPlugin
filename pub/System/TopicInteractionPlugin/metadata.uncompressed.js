@@ -437,9 +437,9 @@ jQuery(function($) {
           extension = attachmentOpts.filename.replace(/^.+\./, ''),
           previewType;
 
-      if (extension.match(/mp3/)) { // SMELL: add other common audio extensions playable using jwplayer
+      if (extension.match(/mp3|wav/)) {
         previewType = "audio";
-      } else if (extension.match(/flv|swf/)) { // SMELL: add other common video extensions viewable using jwplayer
+      } else if (extension.match(/flv|swf|mp4|mpe?g|mov|ogg/)) { 
         previewType = "video";
       } else {
         previewType = extension; // for now only pdf

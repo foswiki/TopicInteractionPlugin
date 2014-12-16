@@ -239,7 +239,7 @@ sub getRequestParams {
 
   foreach my $key ($request->param()) {
     if ($key eq 'filename') { #SMELL: hard coded multi-val
-      my @val = $request->param($key);
+      my @val = $request->multi_param($key);
       $params{$key} = urlDecode($val[0]);
       $params{$key."s"} = [map {urlDecode($_)} @val];
     } else {

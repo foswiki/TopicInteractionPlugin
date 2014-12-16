@@ -18,13 +18,25 @@ package Foswiki::Plugins::TopicInteractionPlugin;
 use strict;
 use warnings;
 
-our $VERSION = '3.60';
-our $RELEASE = '3.60';
+our $VERSION = '3.70';
+our $RELEASE = '3.70';
 our $SHORTDESCRIPTION = 'Improved interaction with attachments and !DataForms';
 our $NO_PREFS_IN_TOPIC = 1;
 
 use Foswiki::Func ();
 use Foswiki::Plugins::JQueryPlugin ();
+
+use Foswiki::Request();
+
+BEGIN {
+    # Backwards compatibility for Foswiki 1.1.x
+    unless ( Foswiki::Request->can('multi_param') ) {
+        no warnings 'redefine';
+        *Foswiki::Request::multi_param = \&Foswiki::Request::param;
+        use warnings 'redefine';
+    }
+}
+
 
 ##############################################################################
 sub initPlugin {

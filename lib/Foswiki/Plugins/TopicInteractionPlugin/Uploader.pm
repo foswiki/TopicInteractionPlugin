@@ -55,7 +55,7 @@ sub new {
       documentation => "$Foswiki::cfg{SystemWebName}.TopicInteractionPlugin",
       javascript => ['jquery.uploader.js'],
       css => ['jquery.uploader.css'],
-      dependencies => ['blockui', 'scrollto', 'button', 'livequery', 'metadata', 'ui::dialog', 'pnotify', 'form', 'JavaScriptFiles/foswikiPref', 'JQUERYPLUGIN::UPLOADER::ENGINES'],
+      dependencies => ['blockui', 'scrollto', 'button', 'livequery', 'metadata', 'ui::dialog', 'pnotify', 'form', 'JavascriptFiles/foswikiPref', 'JQUERYPLUGIN::UPLOADER::ENGINES'],
       @_
     ),
     $class
