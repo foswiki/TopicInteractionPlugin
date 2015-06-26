@@ -197,6 +197,7 @@ sub prepareAction {
 
   # read parameters 
   my $topic = $params->{topic} || $session->{webTopic};
+  $topic = Foswiki::decode_utf8($topic) if ( $Foswiki::UNICODE );
   my $web = $session->{webName};
 
   ($web, $topic) = Foswiki::Func::normalizeWebTopicName($web, $topic);
@@ -273,8 +274,10 @@ sub urlDecode {
 
   $value =~ s/%([\da-f]{2})/chr(hex($1))/gei;
   my $session = $Foswiki::Plugins::SESSION;
-  my $downgradedValue = $session->UTF82SiteCharSet($value);
-  $value = $downgradedValue if defined $downgradedValue;
+  unless ($Foswiki::UNICODE) {
+      my $downgradedValue = $session->UTF82SiteCharSet($value);
+      $value = $downgradedValue if defined $downgradedValue;
+  }
  
   $value =~ s/^\s+//g;
   $value =~ s/\s+$//g;
@@ -319,7 +322,7 @@ sub printJSONRPC {
   }
 
   $message = JSON::to_json($message, {pretty=>1});
-  $response->print($message);
+  $response->body($message);
 }
 
 ##############################################################################
