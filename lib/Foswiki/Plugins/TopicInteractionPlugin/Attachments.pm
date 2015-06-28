@@ -277,7 +277,6 @@ sub urlEncode {
   my ($infoOrText, $property) = @_;
 
   my $text = defined($property)?$infoOrText->{$property}:$infoOrText;
-  $text = Foswiki::encode_utf8($text) if ( $Foswiki::UNICODE );
   $text =~ s/([^0-9a-zA-Z-_.:~!*\/])/'%'.sprintf('%02X',ord($1))/ge;
 
   return $text;
