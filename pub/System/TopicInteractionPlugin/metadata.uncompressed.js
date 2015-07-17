@@ -2,7 +2,7 @@
 
 Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 
-(c)opyright 2010-2014 Michael Daum http://michaeldaumconsulting.com
+(c)opyright 2010-2015 Michael Daum http://michaeldaumconsulting.com
 
 are listed in the AUTHORS file in the root of this distribution.
 NOTE: Please extend that file, not this notice.
@@ -124,7 +124,7 @@ jQuery(function($) {
       if (thisWidth > 1300 && opts.nrAttachments >= 3) {
         newClass = "foswikiAttachmentsCols3";
         opts.cols = 3;
-      } else if (thisWidth > 870 && opts.nrAttachments >=2) {
+      } else if (thisWidth > 940 && opts.nrAttachments >=2) {
         newClass = "foswikiAttachmentsCols2";
         opts.cols = 2;
       } else {
@@ -439,7 +439,7 @@ jQuery(function($) {
 
       if (extension.match(/mp3|wav/)) {
         previewType = "audio";
-      } else if (extension.match(/flv|swf|mp4|mpe?g|mov|ogg/)) { 
+      } else if (extension.match(/flv|swf|mp4|mpe?g|mov|ogg|webm/)) { 
         previewType = "video";
       } else {
         previewType = extension; // for now only pdf
@@ -533,7 +533,9 @@ jQuery(function($) {
             $this.find("input[name=origfilename]").val(decodeURIComponent(attachmentOpts.filename));
             $this.find("input[name=filename]").val(decodeURIComponent(attachmentOpts.filename));
             $this.find("input[name=filecomment]").val(decodeURIComponent(attachmentOpts.filecomment));
-            $this.find(".foswikiThumbnailContainer").html(thumbnail);
+            if (thumbnail.find(".foswikiAlert").length === 0) {
+              $this.find(".foswikiThumbnailContainer").html(thumbnail);
+            }
             if (attachmentOpts.filename.match(/\.(gif|jpe?g|png|bmp|svg|tiff?)$/i)) {
               $this.find(".foswikiThumbnailStep").show();
             } else {
@@ -611,7 +613,9 @@ jQuery(function($) {
           $this.dialog("option", "open", function() {
             $this.find("#deleteAttachment").text(decodeURIComponent(attachmentOpts.filename));
             $this.find("input[name=filename]").val(decodeURIComponent(attachmentOpts.filename));
-            $this.find(".foswikiThumbnailContainer").html(thumbnail);
+            if (thumbnail.find(".foswikiAlert").length === 0) {
+              $this.find(".foswikiThumbnailContainer").html(thumbnail);
+            }
           }).dialog("option", "position", "center").dialog("open");
         }
       });
@@ -671,7 +675,9 @@ jQuery(function($) {
 
           $this.dialog("option", "open", function() {
             $this.find("input[name=filename]").val(decodeURIComponent(attachmentOpts.filename));
-            $this.find(".foswikiThumbnailContainer").html(thumbnail);
+            if (thumbnail.find(".foswikiAlert").length === 0) {
+              $this.find(".foswikiThumbnailContainer").html(thumbnail);
+            }
             $this.find(".foswikiGenericThumbnail").hide();
           }).dialog("open");
         }

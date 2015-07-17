@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# Copyright (C) 2005-2014 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2005-2015 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,6 +18,7 @@ use strict;
 use warnings;
 
 use POSIX ();
+use Encode ();
 
 #use Data::Dump qw(dump);
 
@@ -274,9 +275,10 @@ sub handle {
 
 ##############################################################################
 sub urlEncode {
-  my ($infoOrText, $property) = @_;
+  my ($info, $property) = @_;
 
-  my $text = defined($property)?$infoOrText->{$property}:$infoOrText;
+  my $text = defined($property)?$info->{$property}:$info;
+  $text = Encode::encode_utf8($text) if $Foswiki::UNICODE;
   $text =~ s/([^0-9a-zA-Z-_.:~!*\/])/'%'.sprintf('%02X',ord($1))/ge;
 
   return $text;

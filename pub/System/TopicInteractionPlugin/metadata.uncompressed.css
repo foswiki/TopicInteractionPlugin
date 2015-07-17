@@ -52,16 +52,6 @@
 .foswikiAttachmentsOptions b {
   padding:0.1538em 0.3846em; /* 2px 5px */
 }
-a.foswikiAttachmentsOptionsToggle:hover {
-  background-color:transparent;
-  color:red;
-}
-a.foswikiAttachmentsOptionsToggle {
-  color:inherit;
-  text-decoration:underline;
-  height:23px;
-  line-height:23px;
-}
 .foswikiFormSteps .foswikiAttachmentsOptions .foswikiCheckbox {
   margin-right:0px;
 }

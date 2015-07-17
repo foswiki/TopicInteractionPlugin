@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2009-2014 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2009-2015 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,8 +18,8 @@ package Foswiki::Plugins::TopicInteractionPlugin;
 use strict;
 use warnings;
 
-our $VERSION = '3.70';
-our $RELEASE = '3.70';
+our $VERSION = '4.00';
+our $RELEASE = '17 Jul 2015';
 our $SHORTDESCRIPTION = 'Improved interaction with attachments and !DataForms';
 our $NO_PREFS_IN_TOPIC = 1;
 
@@ -42,6 +42,7 @@ BEGIN {
 sub initPlugin {
 
   Foswiki::Func::registerTagHandler('ATTACHMENTS', \&handleATTACHMENTS);
+  Foswiki::Func::registerTagHandler('WEBDAVURL', \&handleWEBDAVURL);
 
   Foswiki::Func::registerRESTHandler('changeproperties', \&restChangeProperties, 
     authenticate => 1,
@@ -136,6 +137,12 @@ sub afterUploadHandler {
 sub handleATTACHMENTS {
   require Foswiki::Plugins::TopicInteractionPlugin::Attachments;
   return Foswiki::Plugins::TopicInteractionPlugin::Attachments::handle(@_);
+}
+
+##############################################################################
+sub handleWEBDAVURL {
+  require Foswiki::Plugins::TopicInteractionPlugin::WebDAVUrl;
+  return Foswiki::Plugins::TopicInteractionPlugin::WebDAVUrl::handle(@_);
 }
 
 ##############################################################################

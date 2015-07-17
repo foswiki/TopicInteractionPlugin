@@ -263,7 +263,7 @@
   casesensitive="off"
   header="<div class='foswikiAttachmentsPager foswikiAttachmentsPagerTop {count:$count}'>$pager</div>
     <div class=\"foswikiAttachmentsContainer %TMPL:P{"metadata::lightbox::parameter"}% jqUITooltip\" data-theme='info' data-position='top' data-arrow='true'>"
-  footer="%CLEAR%<div class='foswikiAttachmentsPager foswikiAttachmentsPagerBottom'>$pager</div></div>"
+  footer="%CLEAR%</div><div class='foswikiAttachmentsPager foswikiAttachmentsPagerBottom'>$pager</div>"
   format="<div class='foswikiAttachment {filename:\"$encode(name)\", filecomment:\"$encode(comment)\", fileattr:\"$attr\"}' id='$encode(name)'>
       <div class='foswikiAttachmentContainer'>
         <div class='foswikiThumbnail foswikiLeft'>
@@ -279,7 +279,7 @@
             else=\"<!-- -->\"
           }$percnt
           <a href='#' class='foswikiAttachmentPropertiesButton' title='%MAKETEXT{"Edit properties of this attachment"}%' rel='nofollow'>%JQICON{"wrench"}%</a>
-          $percntIF{\"(context FlexPaperPluginEnabled and '$name'=~'\.pdf$') or (context MediaElementPluginEnabled and '$name'=~'flv|swf|mp3|mp4|mov|ogg|mpe?g|wav')\" 
+          $percntIF{\"(context FlexPaperPluginEnabled and '$name'=~'\.pdf$') or (context MediaElementPluginEnabled and '$name'=~'flv|swf|mp3|mp4|mov|ogg|mpe?g|wav|webm')\" 
             then=\"<a href='#' class='foswikiAttachmentPreviewButton' title='%MAKETEXT{"Preview this attachment"}%' rel='nofollow'>%JQICON{"eye"}%</a>\"
             else=\"<!-- -->\"
           }$percnt
@@ -477,7 +477,7 @@
 
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments::confirmdelete"}%<!-- -->
-<div id="foswikiAttachmentConfirmDelete" class="jqUIDialog foswikiFormSteps {modal:true, draggable:true, width:350}" title="%MAKETEXT{"Delete attachment?"}%" style="display:none">
+<div id="foswikiAttachmentConfirmDelete" class="jqUIDialog foswikiFormSteps {modal:true, draggable:true, width:350, maxWidth:600, maxHeight:480}" title="%MAKETEXT{"Delete attachment?"}%" style="display:none">
   <form id="foswikiAttachmentConfirmDeleteForm" action="%SCRIPTURLPATH{"rest"}%/TopicInteractionPlugin/delete" method="post">
     <input type="hidden" name="id" value="delete" />
     <input type="hidden" name="filename" value="" />

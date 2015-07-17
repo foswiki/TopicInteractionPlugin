@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2014 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2015 Michael Daum http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -65,12 +65,12 @@ sub handle {
     next unless $fileName;
     $fileName = Foswiki::Plugins::TopicInteractionPlugin::Core::sanitizeAttachmentName($fileName);
 
-    unless ($fromObj->hasAttachment($fileName)) {
-      Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("oops $fileName does not exist at $web.$topic");
-      #Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 102, "Attachment $fileName does not exist", $id);
-      #last;
-      next;
-    }
+    # Disabled to be able to clear up wrong META data
+#   unless ($fromObj->hasAttachment($fileName)) {
+#     Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("oops $fileName does not exist at $web.$topic");
+#     $error = "Attachment $fileName does not exist";
+#     last;
+#   }
 
     try {
 

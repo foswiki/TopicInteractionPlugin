@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2014 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2015 Michael Daum http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -240,48 +240,31 @@ sub getRequestParams {
   foreach my $key ($request->param()) {
     if ($key eq 'filename') { #SMELL: hard coded multi-val
       my @val = $request->multi_param($key);
-      $params{$key} = urlDecode($val[0]);
-      $params{$key."s"} = [map {urlDecode($_)} @val];
+      $params{$key} = $val[0];
+      $params{$key."s"} = [@val];
     } else {
       my $val = $request->param($key);
-      $params{$key} = urlDecode($val) if defined $val;
+      $params{$key} = $val if defined $val;
       writeDebug("param $key=$val") unless $key eq 'POSTDATA';
     }
   }
 
-  my $queryString = $ENV{QUERY_STRING} || '';
-
-  foreach my $item (split(/[&;]/, $queryString)) {
-    if ($item =~ /^(.+?)=(.*)$/ && !defined($params{$1})) {
-      my $key = $1;
-      my $val = $2;
-      $params{$key} = urlDecode($val);
-      if ($key eq 'filename') { #SMELL: hard coded multi-val
-        $params{$key."s"} = [map {urlDecode($_)} split(/\s*,\s*/, $val)];
-      }
-      writeDebug("param $key=$params{$key}");
-    }
-  }
+#  my $queryString = $ENV{QUERY_STRING} || '';
+#
+#  foreach my $item (split(/[&;]/, $queryString)) {
+#    if ($item =~ /^(.+?)=(.*)$/ && !defined($params{$1})) {
+#      my $key = $1;
+#      my $val = $2;
+#      $params{$key} = urlDecode($val);
+#      if ($key eq 'filename') { #SMELL: hard coded multi-val
+#        $params{$key."s"} = [map {urlDecode($_)} split(/\s*,\s*/, $val)];
+#      }
+#      writeDebug("param $key=$params{$key}");
+#    }
+#  }
 
   return \%params;
 }
-
-##############################################################################
-# this one handles url params that are url-encoded and/or utf8 encoded
-sub urlDecode {
-  my $value = shift;
-
-  $value =~ s/%([\da-f]{2})/chr(hex($1))/gei;
-  my $session = $Foswiki::Plugins::SESSION;
-  my $downgradedValue = $session->UTF82SiteCharSet($value);
-  $value = $downgradedValue if defined $downgradedValue;
- 
-  $value =~ s/^\s+//g;
-  $value =~ s/\s+$//g;
-
-  return $value;
-}
-
 
 ##############################################################################
 sub writeDebug {
@@ -400,7 +383,7 @@ sub sanitizeAttachmentName {
 
   $fileName =~ s{[\\/]+$}{};    # Get rid of trailing slash/backslash (unlikely)
   $fileName =~ s!^.*[\\/]!!;    # Get rid of leading directory components
-  $fileName =~ s/[\*?~^\$@%`"'&;|<>\[\]#\x00-\x1f\(\)]//g; # Get rid of a subset of Namefilter
+  $fileName =~ s/[\s\*?~^\$@%`"'&;|<>\[\]#\x00-\x1f\(\)]+/_/g; # Get rid of a subset of Namefilter
 
   return Foswiki::Sandbox::untaintUnchecked($fileName);
 }

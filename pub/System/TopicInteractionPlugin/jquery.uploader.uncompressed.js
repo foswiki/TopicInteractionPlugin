@@ -1,7 +1,7 @@
 /**
  * jquery.uploader.js
  *
- * Copyright 2010-2014, Michael Daum http://michaeldaumconsulting.com
+ * Copyright 2010-2015, Michael Daum http://michaeldaumconsulting.com
  *
  * based on jquery.plupload.queue.js  Copyright 2009, Moxiecode Systems AB
  *
@@ -290,11 +290,11 @@
           }
 
           if (typeof(name) !== 'undefined' && typeof(val) !== 'undefined') {
-            params[name] = encodeURI(val);
+            params[name] = val;
           }
         });
 
-        params.topic = encodeURI(foswiki.getPreference("WEB")) + "." + encodeURI(foswiki.getPreference("TOPIC"));
+        params.topic = foswiki.getPreference("WEB") + "." + foswiki.getPreference("TOPIC");
         params.id = (new Date()).getTime();
 
         if (uploader.features.multipart && uploader.settings.multipart) {

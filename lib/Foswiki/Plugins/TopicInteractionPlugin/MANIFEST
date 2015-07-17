@@ -11,8 +11,10 @@ lib/Foswiki/Plugins/TopicInteractionPlugin/Action/UploadAttachment.pm 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin/Config.spec 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin/Core.pm 0644
+lib/Foswiki/Plugins/TopicInteractionPlugin/DEPENDENCIES 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin.pm 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin/Uploader.pm 0644
+lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm 0644
 locale/TopicInteractionPlugin/de.po 0644
 locale/TopicInteractionPlugin/Foswiki.pot 0644
 pub/System/TopicInteractionPlugin/browserplus.init.js 0644
