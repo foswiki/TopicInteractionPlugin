@@ -1,0 +1,29 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\vnd.sun.star.webdav]
+@="URL: vnd.sun.star.webdav Protocol"
+"URL Protocol"=""
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\vnd.sun.star.webdav\DefaultIcon]
+@="C:\\Program Files\\LibreOffice 5\\program\\soffice.exe"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\vnd.sun.star.webdav\shell]
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\vnd.sun.star.webdav\shell\open]
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\vnd.sun.star.webdav\shell\open\command]
+@="\"C:\\Program Files\\LibreOffice 5\\program\\soffice.exe\" \"%1\""
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\vnd.sun.star.webdavs]
+@="URL: vnd.sun.star.webdavs Protocol"
+"URL Protocol"=""
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\vnd.sun.star.webdavs\DefaultIcon]
+@="C:\\Program Files\\LibreOffice 5\\program\\soffice.exe"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\vnd.sun.star.webdavs\shell]
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\vnd.sun.star.webdavs\shell\open]
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\vnd.sun.star.webdavs\shell\open\command]
+@="\"C:\\Program Files\\LibreOffice 5\\program\\soffice.exe\" \"%1\""

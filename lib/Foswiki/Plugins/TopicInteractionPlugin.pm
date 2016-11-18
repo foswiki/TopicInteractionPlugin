@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2009-2015 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2009-2016 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,10 +18,11 @@ package Foswiki::Plugins::TopicInteractionPlugin;
 use strict;
 use warnings;
 
-our $VERSION = '4.00';
-our $RELEASE = '17 Jul 2015';
+our $VERSION = '5.00';
+our $RELEASE = '18 Nov 2016';
 our $SHORTDESCRIPTION = 'Improved interaction with attachments and !DataForms';
 our $NO_PREFS_IN_TOPIC = 1;
+our $core;
 
 use Foswiki::Func ();
 use Foswiki::Plugins::JQueryPlugin ();
@@ -37,62 +38,86 @@ BEGIN {
     }
 }
 
-
 ##############################################################################
 sub initPlugin {
 
-  Foswiki::Func::registerTagHandler('ATTACHMENTS', \&handleATTACHMENTS);
-  Foswiki::Func::registerTagHandler('WEBDAVURL', \&handleWEBDAVURL);
+  Foswiki::Func::registerTagHandler('ATTACHMENTS', sub {
+    require Foswiki::Plugins::TopicInteractionPlugin::Attachments;
+    return Foswiki::Plugins::TopicInteractionPlugin::Attachments::handle(@_);
+  });
 
-  Foswiki::Func::registerRESTHandler('changeproperties', \&restChangeProperties, 
+  Foswiki::Func::registerTagHandler('WEBDAVURL', sub {
+    require Foswiki::Plugins::TopicInteractionPlugin::WebDAVUrl;
+    return Foswiki::Plugins::TopicInteractionPlugin::WebDAVUrl::handle(@_);
+  });
+
+  Foswiki::Func::registerRESTHandler('changeproperties', sub { 
+      return getCore(shift)->restChangeProperties(@_);
+    },
     authenticate => 1,
     validate => 0,
     http_allow => 'POST',
   );
 
-  Foswiki::Func::registerRESTHandler('delete', \&restDelete, 
+  Foswiki::Func::registerRESTHandler('delete', sub {
+      return getCore(shift)->restDelete(@_);
+    },
     authenticate => 1,
     validate => 0,
     http_allow => 'POST',
   );
 
-  Foswiki::Func::registerRESTHandler('move', \&restMove, 
+  Foswiki::Func::registerRESTHandler('move', sub {
+      return getCore(shift)->restMove(@_);
+    },
     authenticate => 1,
     validate => 0,
     http_allow => 'POST',
   );
 
-  Foswiki::Func::registerRESTHandler('upload', \&restUpload, 
+  Foswiki::Func::registerRESTHandler('upload', sub {
+      return getCore(shift)->restUpload(@_);
+    },
     authenticate => 1,
     validate => 0,
     http_allow => 'POST',
   );
 
-  Foswiki::Func::registerRESTHandler('createlink', \&restCreateLink, 
+  Foswiki::Func::registerRESTHandler('createlink', sub {
+      return getCore(shift)->restCreateLink(@_);
+    },
     authenticate => 1,
     validate => 0,
     http_allow => 'POST',
   );
 
-  Foswiki::Func::registerRESTHandler('createimagegallery', \&restCreateImageGallery, 
+  Foswiki::Func::registerRESTHandler('createimagegallery', sub {
+      return getCore(shift)->restCreateImageGallery(@_);
+    },
     authenticate => 1,
     validate => 0,
     http_allow => 'POST',
   );
 
-  Foswiki::Func::registerRESTHandler('download', \&restDownload, 
+  Foswiki::Func::registerRESTHandler('download', sub {
+      return getCore(shift)->restDownload(@_);
+    },
     authenticate => 1,
     validate => 0,
     http_allow => 'POST',
   );
 
-  Foswiki::Func::registerRESTHandler('hide', \&restHide, 
+  Foswiki::Func::registerRESTHandler('hide', sub {
+      return getCore(shift)->restHide(@_);
+    },
     authenticate => 1,
     validate => 0,
     http_allow => 'POST',
   );
 
-  Foswiki::Func::registerRESTHandler('unhide', \&restUnhide, 
+  Foswiki::Func::registerRESTHandler('unhide', sub {
+      return getCore(shift)->restUnhide(@_);
+    },
     authenticate => 1,
     validate => 0,
     http_allow => 'POST',
@@ -101,7 +126,26 @@ sub initPlugin {
   # just in case it did not make it to LocalSite.cfg in time
   Foswiki::Plugins::JQueryPlugin::registerPlugin("uploader", 'Foswiki::Plugins::TopicInteractionPlugin::Uploader');
 
+  # init 
+  getCore();
+
   return 1;
+}
+
+##############################################################################
+sub finishPlugin {
+  undef $core;
+}
+##############################################################################
+sub getCore {
+  my $session = shift;
+
+  unless ($core) {
+    require Foswiki::Plugins::TopicInteractionPlugin::Core;
+    $core = Foswiki::Plugins::TopicInteractionPlugin::Core->new($session);
+  }
+
+  return $core;
 }
 
 ##############################################################################
@@ -116,6 +160,7 @@ sub beforeUploadHandler {
   }
 }
 
+##############################################################################
 sub afterUploadHandler {
   my ($attachment, $meta) = @_;
 
@@ -133,70 +178,6 @@ sub afterUploadHandler {
     }
   }
 }
-##############################################################################
-sub handleATTACHMENTS {
-  require Foswiki::Plugins::TopicInteractionPlugin::Attachments;
-  return Foswiki::Plugins::TopicInteractionPlugin::Attachments::handle(@_);
-}
 
-##############################################################################
-sub handleWEBDAVURL {
-  require Foswiki::Plugins::TopicInteractionPlugin::WebDAVUrl;
-  return Foswiki::Plugins::TopicInteractionPlugin::WebDAVUrl::handle(@_);
-}
-
-##############################################################################
-sub restChangeProperties {
-  require Foswiki::Plugins::TopicInteractionPlugin::Core;
-  return Foswiki::Plugins::TopicInteractionPlugin::Core::restChangeProperties(@_);
-}
-
-##############################################################################
-sub restDelete {
-  require Foswiki::Plugins::TopicInteractionPlugin::Core;
-  return Foswiki::Plugins::TopicInteractionPlugin::Core::restDelete(@_);
-}
-
-##############################################################################
-sub restMove {
-  require Foswiki::Plugins::TopicInteractionPlugin::Core;
-  return Foswiki::Plugins::TopicInteractionPlugin::Core::restMove(@_);
-}
-
-##############################################################################
-sub restUpload {
-  require Foswiki::Plugins::TopicInteractionPlugin::Core;
-  return Foswiki::Plugins::TopicInteractionPlugin::Core::restUpload(@_);
-}
-
-##############################################################################
-sub restCreateLink {
-  require Foswiki::Plugins::TopicInteractionPlugin::Core;
-  return Foswiki::Plugins::TopicInteractionPlugin::Core::restCreateLink(@_);
-}
-
-##############################################################################
-sub restCreateImageGallery {
-  require Foswiki::Plugins::TopicInteractionPlugin::Core;
-  return Foswiki::Plugins::TopicInteractionPlugin::Core::restCreateImageGallery(@_);
-}
-
-##############################################################################
-sub restDownload {
-  require Foswiki::Plugins::TopicInteractionPlugin::Core;
-  return Foswiki::Plugins::TopicInteractionPlugin::Core::restDownload(@_);
-}
-
-##############################################################################
-sub restHide {
-  require Foswiki::Plugins::TopicInteractionPlugin::Core;
-  return Foswiki::Plugins::TopicInteractionPlugin::Core::restHide(@_);
-}
-
-##############################################################################
-sub restUnhide {
-  require Foswiki::Plugins::TopicInteractionPlugin::Core;
-  return Foswiki::Plugins::TopicInteractionPlugin::Core::restUnhide(@_);
-}
 
 1;

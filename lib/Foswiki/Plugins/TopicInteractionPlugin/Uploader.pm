@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2015 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2016 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@ use warnings;
 use Foswiki::Func ();
 use Foswiki::Plugins ();
 use Foswiki::Plugins::JQueryPlugin::Plugin ();
+use Foswiki::Plugins::TopicInteractionPlugin::Core();
 use JSON ();
 
 our @ISA = qw( Foswiki::Plugins::JQueryPlugin::Plugin );
@@ -48,7 +49,7 @@ sub new {
     $class->SUPER::new(
       $Foswiki::Plugins::SESSION,
       name => 'Uploader',
-      version => '1.3.0',
+      version => '1.3.1',
       author => 'Michael Daum',
       homepage => 'http://foswiki.org/Externsions/TopicInteractionPlugin',
       puburl => '%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin',
@@ -56,6 +57,7 @@ sub new {
       javascript => ['jquery.uploader.js'],
       css => ['jquery.uploader.css'],
       dependencies => ['blockui', 'scrollto', 'button', 'livequery', 'metadata', 'ui::dialog', 'pnotify', 'form', 'JavascriptFiles/foswikiPref', 'JQUERYPLUGIN::UPLOADER::ENGINES'],
+      i18n => $Foswiki::cfg{SystemWebName} . "/TopicInteractionPlugin/i18n",
       @_
     ),
     $class
@@ -77,33 +79,14 @@ sub init {
 
   $this->SUPER::init();
 
-
-  my $engines = $Foswiki::cfg{TopicInteractionPlugin}{UploadEngines} || 'html5, flash, silverlight, gears, browserplus, html4';
-  my @engines = split(/\s*,\s*/, $engines);
-  my %enabled = map {lc($_), 1} @engines;
-
-  # export configuration to javascript 
-  my %meta = ();
-
-  $meta{"TopicInteractionPlugin.attachFileSizeLimit"} = Foswiki::Func::getPreferencesValue("ATTACHFILESIZELIMIT") || 0;
-  $meta{"TopicInteractionPlugin.Runtimes"} = $engines;
-
-  # add flash config
-  $meta{"TopicInteractionPlugin.flashUrl"} = "%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/plupload.flash.swf"
-    if $enabled{flash};
-
-  # add silverlight config
-  $meta{"TopicInteractionPlugin.silverlightUrl"} = "%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/plupload.silverlight.xap"
-    if $enabled{silverlight};
-
-  my $content = "<script type='text/javascript'>\njQuery.extend(foswiki.preferences, ".JSON::to_json(\%meta, {pretty=>1}) .");\n</script>";
-  Foswiki::Func::addToZone("script", "JQUERYPLUGIN::UPLOADER::META", $content, "JQUERYPLUGIN::FOSWIKI::PREFERENCES");
-
   my $js = $this->renderJS("plupload.js");
 
   # get js for runtime engines
-  foreach my $engine (@engines) {
-    $js .= $this->renderJS("$engine.init.js") if $engine =~ /browserplus|gears/;
+  foreach my $engine (split(/\s*,\s*/, $Foswiki::cfg{TopicInteractionPlugin}{UploadEngines} || 'html5, flash, silverlight, gears, browserplus, html4')) {
+    $js .= $this->renderJS("$engine.init.js") if
+      Foswiki::Plugins::TopicInteractionPlugin::Core::isEngineEnabled("browserplus") ||
+      Foswiki::Plugins::TopicInteractionPlugin::Core::isEngineEnabled("gears");
+
     $js .= $this->renderJS("plupload.$engine.js");
   }
 

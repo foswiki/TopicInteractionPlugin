@@ -1,3 +1,4 @@
+*,v
 igp_*
 *.gz
 *.swp
@@ -14,10 +15,10 @@ pub/System/TopicInteractionPlugin/plupload.js
 pub/System/TopicInteractionPlugin/metadata.css
 pub/System/TopicInteractionPlugin/metadata.js
 pub/System/TopicInteractionPlugin/gears.init.js
-TopicInteractionPlugin.md5
-TopicInteractionPlugin.sha1
-TopicInteractionPlugin.tgz
-TopicInteractionPlugin.txt
-TopicInteractionPlugin.zip
-TopicInteractionPlugin_installer
-TopicInteractionPlugin_installer.pl
+/TopicInteractionPlugin.md5
+/TopicInteractionPlugin.sha1
+/TopicInteractionPlugin.tgz
+/TopicInteractionPlugin.txt
+/TopicInteractionPlugin.zip
+/TopicInteractionPlugin_installer
+/TopicInteractionPlugin_installer.pl

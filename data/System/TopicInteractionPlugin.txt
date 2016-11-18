@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="ProjectContributor" comment="" date="1437154320" format="1.1"  version="1"}%
+%META:TOPICINFO{author="micha" comment="gainedLibreOfficeWebDAV.reg" date="1470922302" format="1.1" version="2"}%
 ---+!! %TOPIC%
-%SHORTDESCRIPTION%
+%FORMFIELD{"Description"}%
 
 %TOC%
 
@@ -80,7 +80,7 @@ limit the number of attachments to be listed.
 | =nullformat="..."= | format string to be used when no attachments have been found and =hidenull= is switched off | 
 | =nullheader="..."= | header string to be used when no attachments have been found and =hidenull= is switched off | 
 | =nullfooter="..."= | footer string to be used when no attachments have been found and =hidenull= is switched off | 
-| =sort="name,date,size,user,comment,comment:name"= | sort results by specified field |
+| =sort="name,date,size,user,comment,comment:name,random"= | sort results by specified property |
 | =reverse="on/off"= | enable reverse sorting |
 | =limit="..."= | limit the number of attachments to the given number; by default show all |
 
@@ -102,8 +102,10 @@ The following variables can be used in the format parameter:
    * $props: the action to change the properties of the current attachment
    * $propsUrl: the url used in the props action
    * $size: the size in bytes 
+   * $sizeH: file size in a humanized display (using KB, MB, GB, etc) as needed
    * $sizeK: the size in kilo bytes 
    * $sizeM: the size in mega bytes 
+   * $sizeG: the size in giga bytes 
    * $topic: the name of the topic of whose attachments are listed
    * $url: the attachments url
    * $urlpath: the attachments urlpath
@@ -142,17 +144,22 @@ generates:
 
 %$INSTALL_INSTRUCTIONS%
 
----++ Info
-<!--
-   * Set SHORTDESCRIPTION = %$SHORTDESCRIPTION%
--->
+---++ Dependencies
+%$DEPENDENCIES%
 
-|  Author(s): | Michael Daum|
-|  Copyright: | &copy; 2010-2015 Michael Daum http://michaeldaumconsulting.com |
-|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Release: | %$RELEASE% |
-|  Version: | %$VERSION% |
-|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+---++ Change History
+%TABLE{columnwidths="7em" tablewidth="100%"}%
+|  18 Nov 2016: | oo-ified core; \
+                  added humanized file size display, removed flash backend from default; \
+                  improved webdav integration for one-click editing office documents; \
+                  fixed sanitizing attachemnt names during upload using the standard mechanism again; \
+                  removed (optional) dependency on <nop>FlexPaperPlugin (flash) in favour of <nop>DocumentViewerPlugin (html5); \
+                  fixed url construction in javascript land; \
+                  add support for <nop>JQPhotoSwipeContrib, a much nicer lightbox image preview; \
+                  added support for <nop>LikePlugin to rate attachments; \
+                  replaced famfamfam icons with fontawsome ones; \
+                  added registry entry to use register <nop>LibreOffice to be used for one-click edits on windows |
+|  11 Oct 2016: | using jquery-i18n for translations now |
 |  17 Jul 2015: | added support for Foswiki-2.0; added support for Foswiki:Extensions/WebDAVContrib |
 |  16 Dec 2014: | add support for Foswiki:Extensions/MediaElementPlugin to preview audio and video attachments |
 |  29 Aug 2014: | fully specify rest security |
@@ -189,12 +196,20 @@ generates:
                   fixed dependency on Foswiki:Extensions/RenderPlugin; \
                   fixed interaction with Foswiki:Extensions/MetaCommentPlugin |
 |  26 Apr 2012: | initial release |
-|  Dependencies: | %$DEPENDENCIES% |
-|  Home page: | Foswiki:Extensions/%TOPIC% |
-|  Support: | Foswiki:Support/%TOPIC% |
 
+%META:FORM{name="PackageForm"}%
+%META:FIELD{name="Author" title="Author" value="Michael Daum"}%
+%META:FIELD{name="Copyright" title="Copyright" value="&copy; 2010-2016 Michael Daum http://michaeldaumconsulting.com"}%
+%META:FIELD{name="Description" title="Description" value="%25$SHORTDESCRIPTION%25"}%
+%META:FIELD{name="Home" title="Home" value="Foswiki:Extensions/%25TOPIC%25"}%
+%META:FIELD{name="License" title="License" value="[[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]]"}%
+%META:FIELD{name="Release" title="Release" value="%25$RELEASE%25"}%
+%META:FIELD{name="Repository" title="Repository" value="https://github.com/foswiki/%25TOPIC%25"}%
+%META:FIELD{name="Support" title="Support" value="Foswiki:Support/%25TOPIC%25"}%
+%META:FIELD{name="Version" title="Version" value="%25$VERSION%25"}%
 %META:FILEATTACHMENT{name="TopicInteractionPluginSnap5.png" attachment="TopicInteractionPluginSnap5.png" attr="" comment="" date="1437154320" size="36218" user="ProjectContributor" version="1"}%
 %META:FILEATTACHMENT{name="TopicInteractionPluginSnap4.png" attachment="TopicInteractionPluginSnap4.png" attr="" comment="" date="1437154320" size="45039" user="ProjectContributor" version="1"}%
 %META:FILEATTACHMENT{name="TopicInteractionPluginSnap3.png" attachment="TopicInteractionPluginSnap3.png" attr="" comment="" date="1437154320" size="99574" user="ProjectContributor" version="1"}%
 %META:FILEATTACHMENT{name="TopicInteractionPluginSnap2.png" attachment="TopicInteractionPluginSnap2.png" attr="" comment="" date="1437154320" size="111026" user="ProjectContributor" version="1"}%
 %META:FILEATTACHMENT{name="TopicInteractionPluginSnap1.png" attachment="TopicInteractionPluginSnap1.png" attr="" comment="" date="1437154320" size="16199" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="LibreOfficeWebDAV.reg" attachment="LibreOfficeWebDAV.reg" attr="" comment="" date="1470917899" moveby="micha" movedto="System.TopicInteractionPlugin.LibreOfficeWebDAV.reg" movedwhen="1470922302" movefrom="Sandbox.OpenToEditTest.LibreOfficeWebDAV.reg" size="1126" user="micha" version="2"}%

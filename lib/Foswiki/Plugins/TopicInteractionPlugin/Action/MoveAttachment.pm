@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2015 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2016 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,11 +22,15 @@ use Error qw( :try );
 use Foswiki::Func ();
 use Foswiki::Plugins ();
 use Foswiki::Meta ();
-use Foswiki::Plugins::TopicInteractionPlugin::Core ();
+use Foswiki::Plugins::TopicInteractionPlugin::Action ();
+our @ISA = ('Foswiki::Plugins::TopicInteractionPlugin::Action');
 use constant DRY => 0; # toggle me
 
 sub handle {
-  my ($response, $params) = @_;
+  my ($this, $response) = @_;
+
+  my $params = $this->prepareAction($response);
+  return unless $params;
 
   my $web = $params->{web};
   my $topic = $params->{topic};
@@ -39,27 +43,27 @@ sub handle {
   my $wikiName = Foswiki::Func::getWikiName();
   unless (Foswiki::Func::checkAccessPermission(
     'CHANGE', $wikiName, undef, $topic, $web)) {
-    Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 102, "Access denied", $id);
+    $this->printJSONRPC($response, 102, "Access denied", $id);
     return;
   }
 
   # check existence
   ($newWeb, $newTopic) = Foswiki::Func::normalizeWebTopicName($newWeb, $newTopic);
   unless (Foswiki::Func::topicExists($newWeb, $newTopic)) {
-    Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 101, "Topic $newWeb.$newTopic does not exist", $id);
+    $this->printJSONRPC($response, 101, "Topic $newWeb.$newTopic does not exist", $id);
     return;
   }
 
   # check null move
   if ($newWeb eq $web && $newTopic eq $topic) {
-    Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 108, "Won't copy attachment to itself", $id);
+    $this->printJSONRPC($response, 108, "Won't copy attachment to itself", $id);
     return;
   }
 
   # check permissions
   unless (Foswiki::Func::checkAccessPermission(
     'CHANGE', Foswiki::Func::getWikiName(), undef, $newTopic, $newWeb)) {
-    Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 102, "Access denied", $id);
+    $this->printJSONRPC($response, 102, "Access denied", $id);
     return;
   }
 
@@ -77,11 +81,11 @@ sub handle {
   my $error;
   foreach my $fileName (@{$params->{filenames}}) {
     next unless $fileName;
-    $fileName = Foswiki::Plugins::TopicInteractionPlugin::Core::sanitizeAttachmentName($fileName);
+    $fileName = $this->sanitizeAttachmentName($fileName);
 
     unless ($fromObj->hasAttachment($fileName)) {
-      Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("oops $fileName does not exist at $web.$topic");
-      #Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 104, "Attachment $fileName does not exist", $id);
+      $this->writeDebug("oops $fileName does not exist at $web.$topic");
+      #$this->printJSONRPC($response, 104, "Attachment $fileName does not exist", $id);
       #last;
       next;
     }
@@ -102,13 +106,13 @@ sub handle {
         $n++;
       }
 
-      Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("moving $web.$topic.$fileName to $newWeb.$newTopic.$toAttachment");
+      $this->writeDebug("moving $web.$topic.$fileName to $newWeb.$newTopic.$toAttachment");
 
       $fromObj->moveAttachment($fileName, $toObj, new_name => $toAttachment) unless DRY;
 
     } catch Error::Simple with {
       $error = shift->{-text};
-      Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("ERROR: $error");
+      $this->writeDebug("ERROR: $error");
     };
 
     last if $error;
@@ -124,9 +128,9 @@ sub handle {
   }
 
   if ($error) {
-    Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 1, $error, $id)
+    $this->printJSONRPC($response, 1, $error, $id)
   } else {
-    Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 0, '', $id);
+    $this->printJSONRPC($response, 0, '', $id);
   }
 }
 

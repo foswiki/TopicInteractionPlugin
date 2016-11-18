@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# Copyright (C) 2010-2015 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2016 Michael Daum, http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,22 +20,25 @@ use warnings;
 
 use Error qw( :try );
 use Foswiki::Func ();
-use Foswiki::Plugins::TopicInteractionPlugin::Core ();
-
+use Foswiki::Plugins::TopicInteractionPlugin::Action ();
+our @ISA = ('Foswiki::Plugins::TopicInteractionPlugin::Action');
 use constant DRY => 0;    # toggle me
 
 sub handle {
-  my ($response, $params) = @_;
+  my ($this, $response) = @_;
 
-  my $newFileName = Foswiki::Plugins::TopicInteractionPlugin::Core::sanitizeAttachmentName($params->{filename});
-  my $fileName = Foswiki::Plugins::TopicInteractionPlugin::Core::sanitizeAttachmentName($params->{origfilename});
+  my $params = $this->prepareAction($response);
+  return unless $params;
+
+  my $newFileName = $this->sanitizeAttachmentName($params->{filename});
+  my $fileName = $this->sanitizeAttachmentName($params->{origfilename});
 
   my $web = $params->{web};
   my $topic = $params->{topic};
   my $id = $params->{id};
 
   unless (Foswiki::Func::attachmentExists($web, $topic, $fileName)) {
-    Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 104, "Attachment $fileName does not exist", $id);
+    $this->printJSONRPC($response, 104, "Attachment $fileName does not exist", $id);
     return;
   }
 
@@ -43,7 +46,7 @@ sub handle {
   my $wikiName = Foswiki::Func::getWikiName();
   unless (Foswiki::Func::checkAccessPermission(
     'CHANGE', $wikiName, undef, $topic, $web)) {
-    Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 102, "Access denied", $id);
+    $this->printJSONRPC($response, 102, "Access denied", $id);
     return;
   }
 
@@ -61,7 +64,7 @@ sub handle {
   $isThumbnail = 'off' unless defined $isThumbnail && $isThumbnail eq 'on';
   $isThumbnail = $isThumbnail eq 'on' ? 1 : 0;
 
-  Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("fileName=$fileName, newFileName=$newFileName, comment=$fileComment, hide=$fileHide, createlink=$fileCreateLink, isThumbnail=$isThumbnail");
+  $this->writeDebug("fileName=$fileName, newFileName=$newFileName, comment=$fileComment, hide=$fileHide, createlink=$fileCreateLink, isThumbnail=$isThumbnail");
 
   my $error;
   try {
@@ -83,18 +86,18 @@ sub handle {
       );
 
       my ($meta) = Foswiki::Func::readTopic($web, $topic);
-      Foswiki::Plugins::TopicInteractionPlugin::Core::setThumbnail($meta, $newFileName, $isThumbnail);
+      $this->setThumbnail($meta, $newFileName, $isThumbnail);
     }
   }
   catch Error::Simple with {
     $error = shift->{-text};
-    Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("ERROR: $error");
+    $this->riteDebug("ERROR: $error");
   };
 
   if ($error) {
-    Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 1, $error, $id);
+    $this->printJSONRPC($response, 1, $error, $id);
   } else {
-    Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 0, undef, $id);
+    $this->printJSONRPC($response, 0, undef, $id);
   }
 }
 

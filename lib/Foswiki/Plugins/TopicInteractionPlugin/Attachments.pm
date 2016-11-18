@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# Copyright (C) 2005-2015 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2005-2016 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,6 +19,7 @@ use warnings;
 
 use POSIX ();
 use Encode ();
+use Error qw(:try);
 
 #use Data::Dump qw(dump);
 
@@ -63,6 +64,7 @@ sub handle {
   my $theSkip = $params->{skip} || 0;
   #my $theWarn = Foswiki::Func::isTrue($params->{warn}, 1); 
   my $theInclude = $params->{include};
+  my $theExclude = $params->{exclude};
   my $theCase = Foswiki::Func::isTrue($params->{casesensitive}, 1);
 
   $theLimit =~ s/[^\d]//go;
@@ -111,6 +113,9 @@ sub handle {
   } elsif ($theSort eq 'comment:name') {
     %sorting = map {$_ => lc($_->{comment}||$_->{name})} @attachments;
     $isNumeric = 0;
+  } elsif ($theSort eq 'random') {
+    %sorting = map {$_ => rand()} @attachments;
+    $isNumeric = 1;
   }
   if (defined $isNumeric) {
     if ($isNumeric) {
@@ -121,6 +126,31 @@ sub handle {
   }
   @attachments = reverse @attachments if $theReverse;
 
+  # pre-compile regexes
+  my $error;
+  my $namePattern;
+  my $attrPattern;
+  my $includePattern;
+  my $excludePattern;
+  my $commentPattern;
+  my $userPattern;
+  
+  try {
+    $namePattern = qr/$theNames/;
+    $attrPattern = qr/$theAttr/;
+    $commentPattern = qr/$theComment/;
+    $userPattern = qr/^($theUser)$/;
+    $includePattern = $theCase?qr/$theInclude/:qr/$theInclude/i
+      if defined $theInclude;
+    $excludePattern = $theCase?qr/$theExclude/:qr/$theExclude/i
+      if defined $theExclude;
+  } catch Error::Simple with {
+    $error = shift->stringify();
+    $error =~ s/ at .*$//;
+    $error = "<div class='foswikiAlert'><literal>$error</literal></div>";
+  };
+  return $error if $error;
+
   # collect result
   my @result;
 
@@ -129,31 +159,30 @@ sub handle {
   foreach my $attachment (@attachments) {
     my $info = getAttachmentInfo($attachment);
 
-    next unless $info->{name} =~ /^($theNames)$/;
-    next unless $info->{attr} =~ /^($theAttr)$/;
+    next unless $info->{name} =~ $namePattern;
+    next unless $info->{attr} =~ $attrPattern;
     next if $theAutoAttached == 0 && $info->{autoattached} != 0;
     next if $theAutoAttached == 1 && $info->{autoattached} != 1;
     next if $theMinDate && $info->{date} < $theMinDate;
     next if $theMaxDate && $info->{date} > $theMaxDate;
-    next unless $info->{user} =~ /^($theUser)$/;
+    next unless $info->{user} =~ $userPattern;
     next if $theMinSize && $info->{size} < $theMinSize;
     next if $theMaxSize && $info->{size} > $theMaxSize;
-    next unless $info->{comment} =~ /^($theComment)$/;
+    next unless $info->{comment} =~ $commentPattern;
 
-    if ($theInclude) {
-      if ($theCase) {
-        next unless
-          $info->{name} =~ /^($theInclude)$/ ||
-          $info->{user} =~ /^($theInclude)$/ ||
-          $info->{comment} =~ /^($theInclude)$/ ||
-          $info->{attr} =~ /^($theInclude)$/;
-      } else {
-        next unless
-          $info->{name} =~ /^($theInclude)$/i ||
-          $info->{user} =~ /^($theInclude)$/i ||
-          $info->{comment} =~ /^($theInclude)$/i ||
-          $info->{attr} =~ /^($theInclude)$/i;
-      }
+    if ($includePattern) {
+      next unless
+        $info->{name} =~ $includePattern ||
+        $info->{user} =~ $includePattern ||
+        $info->{comment} =~ $includePattern ||
+        $info->{attr} =~ $includePattern;
+    }
+    if ($excludePattern) {
+      next if
+        $info->{name} =~ $excludePattern ||
+        $info->{user} =~ $excludePattern ||
+        $info->{comment} =~ $excludePattern ||
+        $info->{attr} =~ $excludePattern;
     }
 
     $index++;
@@ -242,8 +271,10 @@ sub handle {
     $text =~ s/\$name\b/$info->{name}/g;
     $text =~ s/\$path\b/$info->{path}/g;
     $text =~ s/\$size\b/$info->{size}/g;
-    $text =~ s/\$sizeK\b/$info->{sizeK}K/g;
-    $text =~ s/\$sizeM\b/$info->{sizeM}M/g;
+    $text =~ s/\$sizeH\b/$info->{sizeH}/g;
+    $text =~ s/\$sizeK\b/$info->{sizeK}/g;
+    $text =~ s/\$sizeM\b/$info->{sizeM}/g;
+    $text =~ s/\$sizeG\b/$info->{sizeG}/g;
     $text =~ s/\$url\b/$url/g;
     $text =~ s/\$urlpath\b/$urlPath/g;
     $text =~ s/\$user\b/$info->{userTopic}/g;
@@ -278,8 +309,10 @@ sub urlEncode {
   my ($info, $property) = @_;
 
   my $text = defined($property)?$info->{$property}:$info;
+  return $text unless $text;
+
   $text = Encode::encode_utf8($text) if $Foswiki::UNICODE;
-  $text =~ s/([^0-9a-zA-Z-_.:~!*\/])/'%'.sprintf('%02X',ord($1))/ge;
+  $text =~ s/([^0-9a-zA-Z-_.:~!*\/])/sprintf('%%<nop>%02X',ord($1))/ge;
 
   return $text;
 }
@@ -298,8 +331,10 @@ sub getAttachmentInfo {
     date => $attachment->{date},
     user => ($attachment->{user} || $attachment->{author} || 'UnknownUser'),
     size => $size,
-    sizeK => sprintf("%.2f", $size / 1024),
-    sizeM => sprintf("%.2f", $size / (1024 * 1024)),
+    sizeH => _humanizeBytes($size),
+    sizeK => _humanizeBytes($size, 'KB'),
+    sizeM => _humanizeBytes($size, 'MB'),
+    sizeG => _humanizeBytes($size, 'GB'),
     comment => (defined $attachment->{comment}) ? $attachment->{comment} : '',
     path => ($attachment->{path} || ''),
     version => ($attachment->{version} || 1),
@@ -312,6 +347,25 @@ sub getAttachmentInfo {
   ($info{userWeb}, $info{userTopic}) = Foswiki::Func::normalizeWebTopicName('', $info{user});
 
   return \%info;
+}
+
+our @BYTE_SUFFIX = ('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB');
+sub _humanizeBytes {
+  my ($bytes, $max) = @_;
+
+  $max ||= '';
+
+  my $magnitude = 0;
+  my $suffix;
+  while ($magnitude < scalar(@BYTE_SUFFIX)) {
+    $suffix = $BYTE_SUFFIX[$magnitude];
+    last if $bytes < 1024;
+    last if $max eq $suffix;
+    $bytes /= 1024;
+    $magnitude++;
+  };
+
+  return sprintf("%.2f", $bytes) . ' '. $suffix;
 }
 
 ##############################################################################

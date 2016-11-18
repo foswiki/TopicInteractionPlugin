@@ -14,8 +14,6 @@ TARGET= \
   jquery.uploader.js \
   jquery.uploader.css
 
-SUBDIRS=i18n
-
 -include $(FOSWIKI_ROOT)/pub/System/JQueryPlugin/Makefile.include
 
 DEBUG=false

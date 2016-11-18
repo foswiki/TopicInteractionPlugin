@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2015 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2016 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,11 +20,15 @@ use warnings;
 
 use Error qw( :try );
 use Foswiki::Func ();
-use Foswiki::Plugins::TopicInteractionPlugin::Core ();
+use Foswiki::Plugins::TopicInteractionPlugin::Action ();
+our @ISA = ('Foswiki::Plugins::TopicInteractionPlugin::Action');
 use constant DRY => 0; # toggle me
 
 sub handle {
-  my ($response, $params) = @_;
+  my ($this, $response) = @_;
+  
+  my $params = $this->prepareAction($response);
+  return unless $params;
 
   my $web = $params->{web};
   my $topic = $params->{topic};
@@ -34,14 +38,14 @@ sub handle {
   my $wikiName = Foswiki::Func::getWikiName();
   unless (Foswiki::Func::checkAccessPermission(
     'CHANGE', $wikiName, undef, $topic, $web)) {
-    Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 102, "Access denied", $id);
+    $this->printJSONRPC($response, 102, "Access denied", $id);
     return;
   }
 
   my $origName = $params->{filename};
-  my $fileName = Foswiki::Plugins::TopicInteractionPlugin::Core::sanitizeAttachmentName($origName);
+  my $fileName = $this->sanitizeAttachmentName($origName);
 
-  Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("'$origName' has been renamed to '$fileName'")
+  $this->writeDebug("'$origName' has been renamed to '$fileName'")
     unless $fileName eq $origName;
   
   # read additional params
@@ -61,7 +65,7 @@ sub handle {
   my $fileComment = $params->{filecomment};
   $fileComment = '' unless defined $fileComment;
 
-  Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("receiving file $fileName, chunk $chunk of $nrChunks, id=$id".($isMultiPart?' in multipart mode':' in normal mode'));
+  $this->writeDebug("receiving file $fileName, chunk $chunk of $nrChunks, id=$id".($isMultiPart?' in multipart mode':' in normal mode'));
 
   # read application/octet-stream, can't use CGI.pm means
   my $tmpDir = Foswiki::Func::getWorkArea("TopicInteractionPlugin");
@@ -72,7 +76,7 @@ sub handle {
   if ($isMultiPart) {
     my $stream = $request->upload('file');
     unless (defined $stream) {
-      Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 110, "Stream not found for '$fileName'", $id);
+      $this->printJSONRPC($response, 110, "Stream not found for '$fileName'", $id);
       return;
     }
     my $r;
@@ -80,7 +84,7 @@ sub handle {
     while ($r = sysread($stream, $transfer, 0x80000)) {
       if (!defined $r) {
         next if ($! == Errno::EINTR);
-        Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 1, "System read error: $!", $id);
+        $this->printJSONRPC($response, 1, "System read error: $!", $id);
         return;
       }
       $data .= $transfer;
@@ -90,11 +94,11 @@ sub handle {
   }
 
   if (-e $tmpFileName && $chunk <= $nrChunks) {
-    Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("appending to $tmpFileName");
-    appendFile($tmpFileName, $data);
+    $this->writeDebug("appending to $tmpFileName");
+    $this->appendFile($tmpFileName, $data);
   } else {
-    Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("saving to $tmpFileName");
-    saveFile($tmpFileName, $data);
+    $this->writeDebug("saving to $tmpFileName");
+    $this->saveFile($tmpFileName, $data);
   }
 
   # end of transaction
@@ -104,7 +108,7 @@ sub handle {
     rename $tmpFileName, $newFileName 
       if $tmpFileName ne $newFileName;
 
-    Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("finished uploading $newFileName");
+    $this->writeDebug("finished uploading $newFileName");
     my ($meta, $text) = Foswiki::Func::readTopic($web, $topic);
     my $prevHide = '';
     my $prevComment = '';;
@@ -112,9 +116,9 @@ sub handle {
     if($prevAttachment) {
       $prevComment = $prevAttachment->{comment} || '';
       $prevHide = ($prevAttachment->{attr} =~ /h/)?1:0;
-      Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("prevComment=$prevComment, prevHide=$prevHide");
+      $this->writeDebug("prevComment=$prevComment, prevHide=$prevHide");
     } else {
-      Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("no previous FILEATTACHMENT for $fileName");
+      $this->writeDebug("no previous FILEATTACHMENT for $fileName");
     }
 
     my @stats = stat $newFileName;
@@ -124,7 +128,7 @@ sub handle {
     $fileHide = $prevHide unless $fileHide;
 
     unless ($fileSize) {
-      Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 111, "Zero-sized file upload of '$fileName'", $id);
+      $this->printJSONRPC($response, 111, "Zero-sized file upload of '$fileName'", $id);
       return; 
     }
 
@@ -133,16 +137,16 @@ sub handle {
     $maxSize = 0 unless ($maxSize =~ /([0-9]+)/o);
     $maxSize =~ s/[^\d]//g;
 
-    Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("fileSize=$fileSize, maxSize=$maxSize, fileDate=$fileDate, fileComment=$fileComment, fileHide=$fileHide, fileCreateLink=$fileCreateLink");
+    $this->writeDebug("fileSize=$fileSize, maxSize=$maxSize, fileDate=$fileDate, fileComment=$fileComment, fileHide=$fileHide, fileCreateLink=$fileCreateLink");
 
     if ($maxSize && $fileSize > $maxSize * 1024) {
-      Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 109, "Oversized upload of '$fileName'", $id);
+      $this->printJSONRPC($response, 109, "Oversized upload of '$fileName'", $id);
       return;
     }
 
     my $error;
     try {
-      Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("attaching $fileName to $web.$topic");
+      $this->writeDebug("attaching $fileName to $web.$topic");
       unless (DRY) {
         $error = Foswiki::Func::saveAttachment(
           $web, $topic, $fileName, {
@@ -156,27 +160,27 @@ sub handle {
             filedate    => $fileDate,
           });
       }
-      Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("removing temp file $newFileName");
+      $this->writeDebug("removing temp file $newFileName");
       unlink $newFileName if -e $newFileName;
 
       sleep(1); # sleep for a while to prevent a firing hurdle of events on save handlers in other extensions
 
     } catch Error::Simple with {
       $error = shift->{-text};
-      Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("ERROR: $error");
+      $this->writeError("ERROR: $error");
     };
 
     if ($error) {
-      Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 1, $error, $id);
+      $this->printJSONRPC($response, 1, $error, $id);
       return;
     }
   }
 
-  Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 0, {$origName => $fileName}, $id);
+  $this->printJSONRPC($response, 0, {$origName => $fileName}, $id);
 }
 
 sub appendFile {
-  my ($name, $text) = @_;
+  my ($this, $name, $text) = @_;
   my $FILE;
   unless (open($FILE, '>>', $name)) {
     die "Can't append to $name - $!\n";
@@ -187,7 +191,7 @@ sub appendFile {
 }
 
 sub saveFile {
-  my ($name, $text) = @_;
+  my ($this, $name, $text) = @_;
   my $FILE;
   unless (open($FILE, '>', $name)) {
     die "Can't create file $name - $!\n";

@@ -1,7 +1,7 @@
 /**
  * jquery.uploader.js
  *
- * Copyright 2010-2015, Michael Daum http://michaeldaumconsulting.com
+ * Copyright 2010-2016, Michael Daum http://michaeldaumconsulting.com
  *
  * based on jquery.plupload.queue.js  Copyright 2009, Moxiecode Systems AB
  *
@@ -21,7 +21,7 @@
       defaults = {
         dragdrop: true,
         chunk_size: "10MB", // upload chuncked by default to work around request length and timeout limitations
-        max_file_size: (foswiki.getPreference("TopicInteractionPlugin.attachFileSizeLimit") || 0)*1024,
+        max_file_size: (foswiki.getPreference("TopicInteractionPlugin").attachFileSizeLimit || 0)*1024,
         multipart: true,
         urlstream_upload: true, // SMELL: required by flash backend. you get a flash io error #2038 for some reasons otherwise
         file_data_name: "file",
@@ -37,10 +37,10 @@
           {title: "Text files", extensions: "txt"},
           {title: "Video files", extensions: "3gp,axv,dl,dif,dv,fli,gl,mpeg,mpg,mpe,mp4,m4v,qt,mov,ogv,mxu,flv,lsf,lsx,mng,asf,asx,wm,wmv,wmx,wvx,avi,movie,mpv"}
         ],
-        runtimes: foswiki.getPreference("TopicInteractionPlugin.Runtimes"),
-        flash_swf_url: foswiki.getPreference("TopicInteractionPlugin.flashUrl"),
-        silverlight_xap_url: foswiki.getPreference("TopicInteractionPlugin.silverlightUrl"),
-        url: foswiki.getPreference("SCRIPTURL")+"/rest/TopicInteractionPlugin/upload",
+        runtimes: foswiki.getPreference("TopicInteractionPlugin").runtimeEngines,
+        flash_swf_url: foswiki.getPreference("TopicInteractionPlugin").flashUrl,
+        silverlight_xap_url: foswiki.getPreference("TopicInteractionPlugin").silverlightUrl,
+        url: foswiki.getScriptUrl("rest", "TopicInteractionPlugin", "upload"),
         fileList: ".jqUploaderFiles",
         browseButton:  ".jqUploaderBrowse",
         startButton:  ".jqUploaderStart",
@@ -170,27 +170,18 @@
 
         if (msg === undefined) {
           var uploaded = uploader.total.uploaded +1, 
-              failed = uploader.total.failed,
               bytesPerSec = uploader.total.bytesPerSec,
               nrFiles = uploader.files.length;
 
           if (uploaded > nrFiles) {
             uploaded = nrFiles;
           }
-          if (failed > nrFiles) {
-            failed = nrFiles;
-          }
 
-          msg = "Uploading ";
-
-          msg += uploaded+" of "+nrFiles+" file(s)";
-          if (failed) {
-            msg += ", "+failed+" failed";
-          }
-
-          if (bytesPerSec) {
-            msg += " with "+plupload.formatSize(bytesPerSec)+"/s";
-          }
+          msg = $.i18n("Uploading %files% of %total% file(s) with %bps%/s", {
+            files: uploaded,
+            total: nrFiles,
+            bps: plupload.formatSize(bytesPerSec)
+          });
         }
 
         return messageContainer.text(msg).show();

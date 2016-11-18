@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2015 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2016 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,11 +20,15 @@ use warnings;
 
 use Error qw( :try );
 use Foswiki::Func ();
-use Foswiki::Plugins::TopicInteractionPlugin::Core ();
+use Foswiki::Plugins::TopicInteractionPlugin::Action ();
+our @ISA = ('Foswiki::Plugins::TopicInteractionPlugin::Action');
 use constant DRY => 0; # toggle me
 
 sub handle {
-  my ($response, $params) = @_;
+  my ($this, $response) = @_;
+
+  my $params = $this->prepareAction($response);
+  return unless $params;
 
   my $web = $params->{web};
   my $topic = $params->{topic};
@@ -34,7 +38,7 @@ sub handle {
   my $wikiName = Foswiki::Func::getWikiName();
   unless (Foswiki::Func::checkAccessPermission(
     'CHANGE', $wikiName, undef, $topic, $web)) {
-    Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 102, "Access denied", $id);
+    $this->printJSONRPC($response, 102, "Access denied", $id);
     return;
   }
 
@@ -51,18 +55,18 @@ sub handle {
   my $thumbnail;
   foreach my $fileName (@{$params->{filenames}}) {
     next unless $fileName;
-    $fileName = Foswiki::Plugins::TopicInteractionPlugin::Core::sanitizeAttachmentName($fileName);
+    $fileName = $this->sanitizeAttachmentName($fileName);
 
     my $attachment = $meta->get("FILEATTACHMENT", $fileName);
     unless ($attachment) {
-      Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 102, "Attachment $fileName does not exist", $id);
+      $this->printJSONRPC($response, 102, "Attachment $fileName does not exist", $id);
       return;
     }
 
     my %attrs = map {$_ => 1} split(//, ($attachment->{attr} || ''));
     next if $attrs{h}; # already hidden
 
-    Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("hiding fileName=$fileName, web=$web, topic=$topic");
+    $this->writeDebug("hiding fileName=$fileName, web=$web, topic=$topic");
 
     try {
       unless (DRY) {
@@ -75,7 +79,7 @@ sub handle {
       }
     } catch Error::Simple with {
       $error = shift->{-text};
-      Foswiki::Plugins::TopicInteractionPlugin::Core::writeDebug("ERROR: $error");
+      $this->writeDebug("ERROR: $error");
     };
 
     last if $error;
@@ -83,7 +87,7 @@ sub handle {
     $thumbnail = $fileName if $attrs{t};
   }
   ($meta) = Foswiki::Func::readTopic($web, $topic);
-  Foswiki::Plugins::TopicInteractionPlugin::Core::setThumbnail($meta, $thumbnail) if $thumbnail && !DRY;
+  $this->setThumbnail($meta, $thumbnail) if $thumbnail && !DRY;
 
   if ($dbCacheEnabled) {
     # enabling dbcache handlers again
@@ -94,9 +98,9 @@ sub handle {
   }
 
   if ($error) {
-    Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 1, $error, $id);
+    $this->printJSONRPC($response, 1, $error, $id);
   } else {
-    Foswiki::Plugins::TopicInteractionPlugin::Core::printJSONRPC($response, 0, undef, $id);
+    $this->printJSONRPC($response, 0, undef, $id);
   }
 }
 

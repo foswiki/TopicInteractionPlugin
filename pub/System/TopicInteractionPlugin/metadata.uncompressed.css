@@ -68,7 +68,6 @@
 }
 .foswikiAttachmentsContainer {
   border-top:1px solid #ddd;
-  overflow:hidden;
 }
 .foswikiAttachments .current {
   background:#aaa;
@@ -216,6 +215,10 @@
 }
 
 /* dialogs */
+.foswikiPreviewContainer {
+  overflow:hidden;
+  height:100%;
+}
 #foswikiAttachmentConfirmDelete .foswikiFormStep {
   overflow:hidden;
 }
