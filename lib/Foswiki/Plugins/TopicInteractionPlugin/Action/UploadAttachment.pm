@@ -55,10 +55,6 @@ sub handle {
   my $fileCreateLink = $params->{createlink} || '0';
   $fileCreateLink = $fileCreateLink eq 'on' ? 1:0;
 
-  my $fileHide = $params->{hidefile};
-  $fileHide = 'off' unless defined $fileHide;
-  $fileHide = $fileHide eq 'on' ? 1:0;
-
   # loop thru all uploads
   my $uploads = $request->uploads();
   my @result = ();
@@ -96,15 +92,23 @@ sub handle {
       return;
     }
 
+    my $prevAttachment;
     my $fileComment = $params->{filecomment};
     unless (defined $fileComment) {
-      #$this->writeDebug("filecomment not found in query ... reading from topic");
       # get prev comment as we override it otherwise
-      my $attrs = $meta->get( 'FILEATTACHMENT', $fileName );
-      $fileComment = $attrs->{comment} // '';
+      $prevAttachment = $meta->get('FILEATTACHMENT', $fileName) || {};
+      $fileComment = $prevAttachment->{comment} // '';
     }
 
-    $this->writeDebug("web=$web, topic=$topic, fileName=$fileName, origName=$origName, tmpFileName=$tmpFileName, fileComment=$fileComment");
+    my $fileHide = $params->{hidefile};
+    unless (defined $fileHide) {
+      # get prev hide attr as we override it otherwise
+      $prevAttachment = $meta->get('FILEATTACHMENT', $fileName) unless defined $prevAttachment;
+      $fileHide = ($prevAttachment->{attr} && $prevAttachment->{attr} =~ /h/)?'on':'off';
+    }
+    $fileHide = $fileHide eq 'on' ? 1:0;
+
+    $this->writeDebug("web=$web, topic=$topic, fileName=$fileName, origName=$origName, tmpFileName=$tmpFileName, fileComment=$fileComment, fileHide=$fileHide");
 
     my $error;
     try {
@@ -112,6 +116,8 @@ sub handle {
         $web, $topic, $fileName, {
           dontlog     => !$Foswiki::cfg{Log}{upload},
           comment     => $fileComment,
+          hide        => $fileHide,
+          createlink  => $fileCreateLink,
           stream      => $stream,
           filesize    => $fileSize,
           filedate    => $fileDate,
