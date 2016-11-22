@@ -239,7 +239,7 @@ As per the GPL, removal of this notice is prohibited.
     }
 
     args = $.makeArray(arguments);
-    args.unshift("FoswikiAttachments:");
+    args.unshift("FA:");
     console.log.apply(console, args);
   };
 
@@ -247,7 +247,7 @@ As per the GPL, removal of this notice is prohibited.
   FoswikiAttachments.prototype.init = function () { 
     var self = this, tabpane;
 
-    //self.log("called init()");
+    self.log("called init()");
 
     self.container = self.elem.parent();
     self.optionsButton = self.elem.find(".foswikiAttachmentsOptionsToggle");
@@ -283,9 +283,9 @@ As per the GPL, removal of this notice is prohibited.
 
     // add listener for refresh event
     self.elem.bind("refresh", function(e, files) {
-      //self.log("got refresh event");
+      self.log("got refresh event");
       if (files) {
-        //self.log("refreshing from files");
+        self.log("refreshing from files",files);
         self.clearSelection();
         $.each(files, function(i, file) {
           if (typeof(file) === 'string') {
@@ -886,6 +886,8 @@ As per the GPL, removal of this notice is prohibited.
     var self = this, 
         url, thisParams = {};
 
+    self.log("called load()");
+
     $.each(params, function(key, val) {
       thisParams["attachments_"+key] = val;  
     });
@@ -907,7 +909,7 @@ As per the GPL, removal of this notice is prohibited.
     }, thisParams);
 
     $.each(self.selection, function(i, item) {
-      params["attachments_selection"].push(item.replace(/\\\./, '.'));
+      params["attachments_selection"].push(encodeURIComponent(item.replace(/\\\./, '.')));
     });
 
     //self.log("params=",params);

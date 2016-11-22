@@ -37,7 +37,7 @@
     dropZone.appendTo("body");
 
     self.fileElem.fileupload({
-      url: foswiki.getScriptUrl("rest", "JQFileUploadPlugin", "upload", {
+      url: foswiki.getScriptUrl("rest", "TopicInteractionPlugin", "upload", {
         topic: self.opts.topic
       }),
       dataType: 'json',
@@ -51,6 +51,7 @@
       },
       add: function(e, data) {
         data.formData = self.opts;
+        data.formData.id = Math.ceil(Math.random()*1000);
         data.submit();
       },
       start: function() {
@@ -87,7 +88,8 @@
         self.dragoverTimer = null;
         $("body").removeClass("jqFileUploadDragging");
       },
-      done: function(e, data) {
+      done: function(e, xhr) {
+        var data = xhr.result;
         $.map(data.result, function(val) {
           self.uploadedFiles.push(val.fileName);
         });

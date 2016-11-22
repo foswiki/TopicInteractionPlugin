@@ -39,7 +39,10 @@ sub handle {
 }
 
 sub prepareAction {
-  my ($this, $response) = @_;
+  my ($this, $response, $opts) = @_;
+
+  $opts ||= {};
+  $opts->{requireFileName} = 1 unless defined $opts->{requireFileName};
 
   $this->writeDebug("*** called handleRest()");
 
@@ -89,7 +92,7 @@ sub prepareAction {
   }
 
   my $fileName = $params->{name} || $params->{filename} || '';
-  unless ($fileName) {
+  if ($opts->{requireFileName} && !$fileName) {
     $this->printJSONRPC($response, 103, "No filename", $id);
     return;
   }
