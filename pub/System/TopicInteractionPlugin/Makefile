@@ -2,39 +2,34 @@ FOSWIKI_ROOT?=~/foswiki/trunk/core
 TARGET= \
   metadata.js \
   metadata.css \
-  gears.init.js \
-  browserplus.init.js \
-  plupload.browserplus.js \
-  plupload.flash.js \
-  plupload.gears.js \
-  plupload.html4.js \
-  plupload.html5.js \
-  plupload.silverlight.js \
-  plupload.js \
-  jquery.uploader.js \
-  jquery.uploader.css
+  uploader.js \
+  uploader.css
+
+UPLOADER_SOURCE= \
+  jquery.fileupload.uncompressed.js \
+  jquery.fileupload-process.js \
+  foswiki.fileupload.uncompressed.js  
+
+METADATA_SOURCE= \
+  detectos.uncompressed.js \
+  webdav.uncompressed.js \
+  foswiki.attachments.uncompressed.js
 
 -include $(FOSWIKI_ROOT)/pub/System/JQueryPlugin/Makefile.include
 
-DEBUG=false
+.PRECIOUS: %.uncompressed.js
 
-to-git: 
-	cp plupload.browserplus.uncompressed.js git/src/javascript/plupload.browserplus.js
-	cp plupload.flash.swf git/bin/plupload.flash.swf
-	cp plupload.flash.uncompressed.js git/src/javascript/plupload.flash.js
-	cp plupload.gears.uncompressed.js git/src/javascript/plupload.gears.js
-	cp plupload.html4.uncompressed.js git/src/javascript/plupload.html4.js
-	cp plupload.html5.uncompressed.js git/src/javascript/plupload.html5.js
-	cp plupload.silverlight.uncompressed.js git/src/javascript/plupload.silverlight.js
-	cp plupload.uncompressed.js git/src/javascript/plupload.js
+uploader.uncompressed.js: $(UPLOADER_SOURCE)
+	cat $^ > $@
 
-from-git:
-	cp git/src/javascript/plupload.browserplus.js plupload.browserplus.uncompressed.js 
-	#cp git/bin/plupload.flash.swf plupload.flash.swf 
-	cp git/src/javascript/plupload.flash.js plupload.flash.uncompressed.js 
-	cp git/src/javascript/plupload.gears.js plupload.gears.uncompressed.js 
-	cp git/src/javascript/plupload.html4.js plupload.html4.uncompressed.js 
-	cp git/src/javascript/plupload.html5.js plupload.html5.uncompressed.js 
-	cp git/src/javascript/plupload.silverlight.js plupload.silverlight.uncompressed.js 
-	cp git/src/javascript/plupload.js plupload.uncompressed.js 
+metadata.uncompressed.js: $(METADATA_SOURCE)
+	cat $^ > $@
+
+clean:
+	rm -f $(TARGET) *.gz igp_* genpdf_*
+
+ifneq (,$(wildcard dist))
+%.uncompressed.js: dist/js/%.js
+	cp $< $@
+endif
 

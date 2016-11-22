@@ -49,14 +49,14 @@ sub new {
     $class->SUPER::new(
       $Foswiki::Plugins::SESSION,
       name => 'Uploader',
-      version => '1.3.1',
+      version => '2.00',
       author => 'Michael Daum',
       homepage => 'http://foswiki.org/Externsions/TopicInteractionPlugin',
       puburl => '%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin',
       documentation => "$Foswiki::cfg{SystemWebName}.TopicInteractionPlugin",
-      javascript => ['jquery.uploader.js'],
-      css => ['jquery.uploader.css'],
-      dependencies => ['blockui', 'scrollto', 'button', 'livequery', 'metadata', 'ui::dialog', 'pnotify', 'form', 'JavascriptFiles/foswikiPref', 'JQUERYPLUGIN::UPLOADER::ENGINES'],
+      javascript => ['uploader.js'],
+      css => ['uploader.css'],
+      dependencies => ['blockui', 'scrollto', 'button', 'livequery', 'metadata', 'ui::dialog', 'pnotify', 'form', 'i18n', 'JavascriptFiles/foswikiPref'],
       i18n => $Foswiki::cfg{SystemWebName} . "/TopicInteractionPlugin/i18n",
       @_
     ),
@@ -64,33 +64,6 @@ sub new {
   );
 
   return $this;
-}
-
-=begin TML
-
----++ ClassMethod init( $this )
-
-Initialize this plugin by adding the required static files to the page
-
-=cut
-
-sub init {
-  my $this = shift;
-
-  $this->SUPER::init();
-
-  my $js = $this->renderJS("plupload.js");
-
-  # get js for runtime engines
-  foreach my $engine (split(/\s*,\s*/, $Foswiki::cfg{TopicInteractionPlugin}{UploadEngines} || 'html5, flash, silverlight, gears, browserplus, html4')) {
-    $js .= $this->renderJS("$engine.init.js") if
-      Foswiki::Plugins::TopicInteractionPlugin::Core::isEngineEnabled("browserplus") ||
-      Foswiki::Plugins::TopicInteractionPlugin::Core::isEngineEnabled("gears");
-
-    $js .= $this->renderJS("plupload.$engine.js");
-  }
-
-  Foswiki::Func::addToZone("script", "JQUERYPLUGIN::UPLOADER::ENGINES", $js, 'JQUERYPLUGIN::UPLOADER::META');
 }
 
 1;

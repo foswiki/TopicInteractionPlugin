@@ -55,9 +55,6 @@ sub new {
       prefs => {
         officeSuite => Foswiki::Func::getPreferencesValue("WEBDAV_OFFICE_SUITE") || $Foswiki::cfg{TopicInteractionPlugin}{DefaultOfficeSuite} || '',
         attachFileSizeLimit => Foswiki::Func::getPreferencesValue("ATTACHFILESIZELIMIT") || 0,
-        runtimeEngines => $Foswiki::cfg{TopicInteractionPlugin}{UploadEngines} || 'html5, html4',
-        flashUrl => isEngineEnabled("flash")?"%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/plupload.flash.swf":undef,
-        silverlightUrl => isEngineEnabled("silverlight")?"%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/plupload.silverlight.xap":undef, 
       },
       @_,
     },
@@ -69,20 +66,6 @@ sub new {
   Foswiki::Func::addToZone("script", "JQUERYPLUGIN::UPLOADER::META", $content, "JQUERYPLUGIN::FOSWIKI::PREFERENCES");
 
   return $this;
-}
-
-##############################################################################
-our %_enabledEngines;
-sub isEngineEnabled {
-  my $engine = shift;
-
-  unless (keys %_enabledEngines) {
-    %_enabledEngines = 
-      map {lc($_), 1} 
-      split(/\s*,\s*/, $Foswiki::cfg{TopicInteractionPlugin}{UploadEngines} || 'html5, html4');
-  }
-
-  return $_enabledEngines{$engine};
 }
 
 ##############################################################################

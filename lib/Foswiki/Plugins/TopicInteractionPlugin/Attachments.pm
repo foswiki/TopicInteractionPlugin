@@ -390,7 +390,7 @@ sub renderPager {
   my $result = '';
   if ($currentPage > 0) {
     my $skip = ($currentPage - 1) * $entriesPerPage;
-    $result .= "<a href='#skip$skip' class='foswikiAttachmentsPagerPrev {skip:$skip}'>%MAKETEXT{\"Previous\"}%</a>";
+    $result .= "<a href='#skip$skip' class='foswikiAttachmentsPagerPrev' data-skip='$skip'>%MAKETEXT{\"Previous\"}%</a>";
   } else {
     $result .= "<span class='foswikiAttachmentsPagerPrev foswikiGrayText'>%MAKETEXT{\"Previous\"}%</span>";
   }
@@ -408,7 +408,7 @@ sub renderPager {
   $endPage = $lastPage if $endPage > $lastPage;
 
   if ($startPage > 0) {
-    $result .= "<a href='#' class='{skip:0}'>1</a>";
+    $result .= "<a href='#' data-skip='0'>1</a>";
   }
 
   if ($startPage > 1) {
@@ -420,7 +420,7 @@ sub renderPager {
   for (my $i = $startPage; $i <= $endPage; $i++) {
     $marker = $i == $currentPage?'current':'';
     my $skip = $i * $entriesPerPage;
-    $result .= "<a href='#skip$skip' class='$marker {skip:$skip}'>".($i+1)."</a>";
+    $result .= "<a href='#skip$skip' class='$marker' data-skip='$skip'>".($i+1)."</a>";
     $count++;
   }
 
@@ -431,12 +431,12 @@ sub renderPager {
   if ($endPage < $lastPage) {
     $marker = $currentPage == $lastPage?'current':'';
     my $skip = $lastPage * $entriesPerPage;
-    $result .= "<a href='#skip$skip' class='$marker {skip:$skip}'>".($lastPage+1)."</a>";
+    $result .= "<a href='#skip$skip' class='$marker' data-skip='$skip'>".($lastPage+1)."</a>";
   }
 
   if ($currentPage < $lastPage) {
     my $skip = ($currentPage + 1) * $entriesPerPage;
-    $result .= "<a href='#skip$skip' class='foswikiAttachmentsPagerNext {skip:$skip}'>%MAKETEXT{\"Next\"}%</a>";
+    $result .= "<a href='#skip$skip' class='foswikiAttachmentsPagerNext' data-skip='$skip'>%MAKETEXT{\"Next\"}%</a>";
   } else {
     $result .= "<span class='foswikiAttachmentsPagerNext foswikiGrayText'>%MAKETEXT{\"Next\"}%</span>";
   }

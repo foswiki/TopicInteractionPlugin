@@ -1,0 +1,65 @@
+/* css definitions for jquery.empty plugin */
+
+.jqFileUploadButton {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+.jqFileUploadButton input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  opacity: 0;
+  -ms-filter: 'alpha(opacity=0)';
+  font-size: 200px !important;
+  direction: ltr;
+  cursor: pointer;
+}
+
+.jqFileUploadMsg {
+  width:40%;
+  left:30%;
+  background-color:#b0d0ef;
+}
+
+.jqFileUploadProgressBar {
+  font-size:1.3em;
+  color:#fff;
+  padding:0.5em 1em;
+  background-color:#3a81f0;
+  white-space:nowrap;
+  box-sizing:border-box;
+  display:none;
+}
+.jqFileUploadMsg .jqFileUploadProgressBar {
+  display:block;
+}
+.jqFileUploadProgressInfo {
+  font-size:0.77em;
+}
+
+.jqFileUploadDropZone {
+  display:none;
+}
+.jqFileUploadDropZone span {
+  position:relative;
+  text-align:center;
+  top:50%;
+  left:50%;
+  font-size:200%;
+  font-weight:bold;
+}
+.jqFileUploadDragging .jqFileUploadDropZone {
+  display:block;
+  box-sizing:border-box;
+  opacity: 0.5;
+  background:#fff;
+  position:fixed;
+  top:0;
+  left:0;
+  height:100%;
+  width:100%;
+  z-index:9999999999999;
+  border:5px solid #900;
+}

@@ -61,7 +61,7 @@
 %JQREQUIRE{"ui::tooltip, ui, uploader, twisty, mediaelement" warn="off"}%<!-- -->
 %ADDTOZONE{"script" 
   id="METADATA::JS" 
-  requires="JQUERYPLUGIN::LIVEQUERY, JQUERYPLUGIN::UI, JQUERYPLUGIN::UPLOAD" 
+  requires="JQUERYPLUGIN::LIVEQUERY, JQUERYPLUGIN::UI, JQUERYPLUGIN::UPLOADER" 
   text="<script type='text/javascript' src='%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/metadata.js'></script>"
 }%<!-- -->%TMPL:END%
 
@@ -92,7 +92,7 @@
 %TMPL:DEF{"comments::tab"}%<!-- -->
 %TAB{"%MAKETEXT{"Comments [_1]" args="<span class='foswikiCommentsCount'>%METACOMMENTS{limit="1" format="($count)" singular="$count" plural="$count"}%</span>"}%" 
   id="comments" 
-  url="%SCRIPTURL{"rest"}%/RenderPlugin/template?name=metacomments;expand=metacomments;topic=%WEB%.%TOPIC%;render=on;%GMTIME{"$epoch"}%"
+  url="%SCRIPTURL{"rest"}%/RenderPlugin/template?name=metacomments;expand=metacomments;topic=%WEB%.%TOPIC%;render=on;_t=%GMTIME{"$epoch"}%"
 }%<div class='foswikiFormSteps foswikiAttachmentsProcess'><span class='jqAjaxLoader'>&nbsp;</span></div>
 %ENDTAB%
 %TMPL:P{"metadata::css"}%%TMPL:P{"metadata::javascript"}%<!-- -->
@@ -118,7 +118,7 @@
               icon=\"application_form_edit\" 
               class=\"simple\" 
               style=\"margin-right:20px\"
-              target=\"%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%;action=form\"
+              target=\"%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?_t=%GMTIME{"$epoch"}%;action=form\"
             }$percnt
             %CLEAR%
           </div>
@@ -136,7 +136,14 @@
 }%<!-- -->%TMPL:END%
 
 %{ ################################################################################ }%
-%TMPL:DEF{"attachments::tab"}%<!-- -->
+%TMPL:DEF{"attachments::tab"}%<!-- -->%TMPL:P{"metadata::css"}%%TMPL:P{"metadata::javascript"}%
+%TAB{"%MAKETEXT{"Attachments [_1]" args="<span class='foswikiAttachmentsCount' style='display:none'>($count)</span>"}%" 
+  id="attachments" 
+  url="%SCRIPTURL{"rest"}%/RenderPlugin/template?name=metadata;expand=attachments;topic=%WEB%.%TOPIC%;render=on;_t=%GMTIME{"$epoch"}%"
+}%<div class='foswikiFormSteps foswikiAttachmentsProcess'><span class='jqAjaxLoader'>&nbsp;</span></div>
+%ENDTAB%<!-- -->%TMPL:END%
+
+%TMPL:DEF{"attachments::tab_old"}%<!-- -->
 %ATTACHMENTS{
   hidenull="on"
   warn="off"
@@ -144,7 +151,7 @@
   header="$percntTAB{
     \"%MAKETEXT{"Attachments [_1]" args="<span class='foswikiAttachmentsCount'>($count)</span>"}%\" 
     id=\"attachments\" 
-    url=\"%SCRIPTURL{"rest"}%/RenderPlugin/template?name=metadata;expand=attachments;topic=%WEB%.%TOPIC%;render=on;%GMTIME{"$epoch"}%\"
+    url=\"%SCRIPTURL{"rest"}%/RenderPlugin/template?name=metadata;expand=attachments;topic=%WEB%.%TOPIC%;render=on;_t=%GMTIME{"$epoch"}%\"
   }$percnt
   <div class='foswikiFormSteps foswikiAttachmentsProcess'><span class='jqAjaxLoader'>&nbsp;</span></div>
   $percntENDTAB$percnt"
@@ -177,7 +184,6 @@
 }%%TMPL:END%
 %TMPL:DEF{"attachments::hidden"}%%URLPARAM{"attachments_hidden" default="off"}%%TMPL:END%
 %TMPL:DEF{"attachments::showoptions"}%%URLPARAM{"attachments_showoptions" default="off"}%%TMPL:END%
-%TMPL:DEF{"attachments::showuploader"}%%URLPARAM{"attachments_showuploader" default="off"}%%TMPL:END%
 %TMPL:DEF{"attachments::filter"}%%URLPARAM{"attachments_filter" encode="quote"}%%TMPL:END%
 %TMPL:DEF{"attachments::selection"}%%URLPARAM{"attachments_selection" multiple="on" separator=","}%%TMPL:END%
 %TMPL:DEF{"attachments::skip"}%%URLPARAM{"attachments_skip" default="0"}%%TMPL:END%
@@ -186,30 +192,12 @@
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments"}%<!-- -->
 <noautolink>
-<div class="foswikiFormSteps foswikiAttachments foswikiAttachmentsCols%TMPL:P{"attachments::cols"}% {hidden:'%TMPL:P{"attachments::hidden"}%', sort:'%TMPL:P{"attachments::sort"}%', reverse:'%TMPL:P{"attachments::reverse"}%', topic:'%ENCODE{"%WEB%.%TOPIC%"}%', filter:'%TMPL:P{"attachments::filter"}%', selection:'%TMPL:P{"attachments::selection"}%', limit:'%TMPL:P{"attachments::limit"}%', skip:%TMPL:P{"attachments::skip"}%, showOptions:'%TMPL:P{"attachments::showoptions"}%', showUploader:'%TMPL:P{"attachments::showuploader"}%', cols:%TMPL:P{"attachments::cols"}%}">
+<div class='foswikiAttachments foswikiFormSteps foswikiAttachmentsCols%TMPL:P{"attachments::cols"}%"' data-hidden='%TMPL:P{"attachments::hidden"}%' data-sort='%TMPL:P{"attachments::sort"}%' data=reverse='%TMPL:P{"attachments::reverse"}%' data-topic='%ENCODE{"%WEB%.%TOPIC%"}%' data-filter='%TMPL:P{"attachments::filter"}%' data-selection='%TMPL:P{"attachments::selection"}%' data-limit='%TMPL:P{"attachments::limit"}%' data- skip='%TMPL:P{"attachments::skip"}%'  data-show-options='%TMPL:P{"attachments::showoptions"}%' data-cols='%TMPL:P{"attachments::cols"}%'>
 %IF{"'%URLPARAM{"attachments_sort"}%'!=''" then="$percntSESSION_VARIABLE{\"_attachments_sort\" set=\"%TMPL:P{"attachments::sort"}%\"}$percnt"}%<!-- -->
 %IF{"'%URLPARAM{"attachments_reverse"}%'!=''" then="$percntSESSION_VARIABLE{\"_attachments_reverse\" set=\"%TMPL:P{"attachments::reverse"}%\"}$percnt"}%<!-- -->
 %IF{"'%URLPARAM{"attachments_limit"}%'!=''" then="$percntSESSION_VARIABLE{\"_attachments_limit\" set=\"%TMPL:P{"attachments::limit"}%\"}$percnt"}%<!-- -->
 <div class="foswikiFormStep foswikiFormFirst jqUITooltip" data-theme='info' data-position='top' data-arrow='true'>
-%BUTTON{"%MAKETEXT{"Attach files"}%" 
-  title="%MAKETEXT{"Upload files and images to this topic"}%" 
-  icon="fa-paperclip" 
-  class="simple foswikiAttachmentsUploadToggle foswikiMetaDataEdit"
-}%
-%BUTTON{
-  "%IF{"'%TMPL:P{"attachments::showoptions"}%'='on'" 
-    then="%MAKETEXT{"Hide options"}%" 
-    else="%MAKETEXT{"Show options"}%" 
-  }%"
-  title="%MAKETEXT{"Show/hide advanced options"}%" 
-  icon="fa-wrench" 
-  class="simple foswikiAttachmentsOptionsToggle" 
-  data="showText:\"%MAKETEXT{"Show options"}%\", hideText:\"%MAKETEXT{"Hide options"}%\""
-}%
-%CLEAR%
-<div class="foswikiAttachmentsUploadToggleContainer" %IF{"'%TMPL:P{"attachments::showuploader"}%'='on'" then="style='display:block'"}%>
-%TMPL:P{"uploadform"}%
-</div>
+%TMPL:P{"uploadbutton"}%%TMPL:P{"optionsbutton"}%<!-- -->
 <div class="foswikiAttachmentsOptionsToggleContainer" %IF{"'%TMPL:P{"attachments::showoptions"}%'='on'" then="style='display:block'"}%>
   <div class="foswikiFormSteps foswikiAttachmentsOptions">
     <span class='foswikiFilter'>
@@ -235,7 +223,7 @@
         <option class="foswikiOption" value="all" %IF{"'%TMPL:P{"attachments::limit"}%'='all'" then="selected"}%>%MAKETEXT{"all"}%</option>
       </select>
     </span>
-    <span class='foswikiDisplayHidden %IF{"'%ATTACHMENTS{attr=".*h.*" header="$count" format="" limit="1"}%'='0'" then="jqUploaderHidden"}%'>
+    <span class='foswikiDisplayHidden %IF{"'%ATTACHMENTS{attr=".*h.*" header="$count" format="" limit="1"}%'='0'" then="foswikiHidden"}%'>
       <label title="%MAKETEXT{"Enable/disable displaying hidden attachments"}%">
         <b>%MAKETEXT{"Display hidden"}%:</b>
         <input type='checkbox' class='foswikiCheckbox' %IF{"'%TMPL:P{"attachments::hidden"}%'='on'" then="checked='checked'"}% value='on' />
@@ -252,8 +240,7 @@
   casesensitive="off"
   format="<input type='hidden' name='allattachments' value='$name' class='foswikiAttachmentsAll' />"
   separator="$n"
-}%<!-- -->
-%ATTACHMENTS{
+}%%ATTACHMENTS{
   warn="off"
   attr="%IF{"'%TMPL:P{"attachments::hidden"}%'!='on'" then="^[^h]*$"}%"
   sort="%TMPL:P{"attachments::sort"}%"
@@ -262,10 +249,10 @@
   skip="%TMPL:P{"attachments::skip"}%"
   include="%FORMATLIST{"%TMPL:P{"attachments::filter"}%" split="\s+" header=".*" format="$1" separator=".*" footer=".*"}%"
   casesensitive="off"
-  header="<div class='foswikiAttachmentsPager foswikiAttachmentsPagerTop {count:$count}'>$pager</div>
+  header="<div class='foswikiAttachmentsPager foswikiAttachmentsPagerTop' data-count='$count'>$pager</div>
     <div class=\"foswikiAttachmentsContainer $percntTMPL:P{\"metadata::lightbox::parameter\"}$percnt jqUITooltip\" data-theme='info' data-position='top' data-arrow='true'>"
   footer="%CLEAR%</div><div class='foswikiAttachmentsPager foswikiAttachmentsPagerBottom'>$pager</div>"
-  format="<div class='foswikiAttachment {filename:\"$encode(name)\", filecomment:\"$encode(comment)\", fileattr:\"$attr\"}' id='$encode(name)'>
+  format="<div class='foswikiAttachment' data-filename='$encode(name)' data-filecomment='$encode(comment)' data-fileattr='$attr' id='$encode(name)'>
       <div class='foswikiAttachmentContainer'>
         <div class='foswikiThumbnail foswikiLeft'>
         $percntIF{
@@ -294,7 +281,6 @@
           $percntIF{\"(context DocumentViewerPluginEnabled and '$name'=~'\.(pdf|odt|odp|ods|odc|odf|odi)$') or 
                       (context MediaElementPluginEnabled and '$name'=~'\.(flv|swf|mp4|mov|mpe?g|av|webm|ogv$)') or
                       (context VisioPluginEnabled and '$name'=~'vsd')\" 
-
             then=\"<a href='#' class='foswikiAttachmentPreviewButton' title='%MAKETEXT{"Preview this attachment"}%' rel='nofollow'>%JQICON{"fa-eye"}%</a>\"
             else=\"<!-- -->\"
           }$percnt
@@ -307,7 +293,7 @@
         </div>
         <div class='foswikiAttachmentInfo' >
           <div class='foswikiAttachmentName'>
-            <a href='$url?t=%GMTIME{"$epoch"}%'>$name</a> 
+            <a href='$url?_t=%GMTIME{"$epoch"}%'>$name</a> 
             $percntIF{\"'$size'!='0'\"
               then=\"<span class='foswikiGrayText'>($sizeH)</span>\"
               else=\"<!-- no size attr -->\"
@@ -374,7 +360,7 @@
   </tr>
   </table>
   <div class="foswikiAttachmentsSelect jqUITooltip" data-theme='info' data-position='top' data-arrow='true'>
-    %BUTTON{"%MAKETEXT{"Select all"}%" icon="fa-plus-circle" class="simple foswikiRight foswikiAttachmentsSelectAll" title="%MAKETEXT{"select all attachments on this topic"}%"}%
+    %BUTTON{"%MAKETEXT{"Select all"}%" icon="fa-plus-circle" class="simple foswikiRight foswikiAttachmentsSelectAll" style="display:none" title="%MAKETEXT{"select all attachments on this topic"}%"}%
     %BUTTON{"%MAKETEXT{"Clear all"}%" icon="fa-minus-circle" class="simple foswikiRight foswikiAttachmentsClearAll" title="%MAKETEXT{"unselect all previously select attachments"}%"}%
     %CLEAR%
   </div>
@@ -591,92 +577,26 @@
 <!-- -->%TMPL:END%
 
 %{ ################################################################################ }%
-%TMPL:DEF{"uploadform"}%<!-- -->
-%TMPL:P{"uploadform::formstart"}%<!-- -->
-%TMPL:P{"uploadform::filesstep"}%<!-- -->
-%TMPL:P{"uploadform::messagestep"}%<!-- -->
-%TMPL:P{"uploadform::optionsstep"}%<!-- -->
-%TMPL:P{"uploadform::buttonsstep"}%<!-- -->
-%TMPL:P{"uploadform::formend"}%<!-- -->
-<!-- -->%TMPL:END%
+%TMPL:DEF{"uploadbutton"}%%TMPL:P{"uploadbutton::start"}%%TMPL:P{"uploadbutton::input"}%%TMPL:P{"uploadbutton::progress"}%%TMPL:P{"uploadbutton::dropzone"}%%TMPL:P{"uploadbutton::end"}%%TMPL:END%
+
+%TMPL:DEF{"uploadbutton::start"}%<span class='jqButton jqButtonSimple jqFileUploadButton' data-topic='%WEB%.%TOPIC%'>%TMPL:P{"uploadbutton::icon"}%<span class='jqButtonText'>%TMPL:P{"uploadbutton::label"}%</span>%TMPL:END%
+%TMPL:DEF{"uploadbutton::input"}%<input type="file" name="files[]" multiple />%TMPL:END%
+%TMPL:DEF{"uploadbutton::progress"}%<div class="jqFileUploadProgressBar" style="display:none">%TMPL:P{"uploadbutton::progress::label"}%<span class="jqFileUploadProgressInfo"></span></div>%TMPL:END%
+%TMPL:DEF{"uploadbutton::dropzone"}%<div class="jqFileUploadDropZone"><span>%MAKETEXT{"Drag files here"}%</span></div>%TMPL:END%
+%TMPL:DEF{"uploadbutton::end"}%</span>%TMPL:END%
+
+%TMPL:DEF{"uploadbutton::icon"}%<i class='jqButtonIcon fa-fw fa fa-upload'></i>%TMPL:END%
+%TMPL:DEF{"uploadbutton::label"}%%MAKETEXT{"Attach files"}%%TMPL:END%
+%TMPL:DEF{"uploadbutton::progress::label"}%%MAKETEXT{"Uploading ..."}%%TMPL:END%
 
 %{ ################################################################################ }%
-%TMPL:DEF{"uploadform::formstart"}%<!-- -->
-<form class="jqUploader {success: function(uploader, files) {uploader.parents('.foswikiAttachments:first').trigger('Refresh', [files]);}}">
-  <div class="foswikiFormSteps">
-<!-- -->%TMPL:END%
-
-%{ ################################################################################ }%
-%TMPL:DEF{"uploadform::filesstep"}%<!-- -->
-<div class="foswikiFormStep">
-  <div class="jqUploaderFilesContainer">
-    <div class="jqUploaderDropText">%MAKETEXT{"Drag files here"}%</div>
-    <table class="jqUploaderFiles"></table>
-  </div>
-</div>
-<!-- -->%TMPL:END%
-
-%{ ################################################################################ }%
-%TMPL:DEF{"uploadform::messagestep"}%<!-- -->
-    <div class="jqUploaderMessage foswikiFormStep"></div>
-<!-- -->%TMPL:END%
-
-%{ ################################################################################ }%
-%TMPL:DEF{"uploadform::optionsstep"}%<!-- -->
-<div class="foswikiFormStep">
-  <h3>%MAKETEXT{"Comment"}%:</h3>
-  <input type="text" size="50" class="foswikiInputField jqUploaderComment" name="filecomment" />
-  <div class="foswikiFormDescription">
-    %MAKETEXT{"This comment will be added to every uploaded file."}%
-  </div>
-</div>
-<div class="foswikiFormStep">
-  <h3>%MAKETEXT{"Options"}%:</h3>
-  <div class="foswikiFormOptions">
-    <label>
-      <input type="checkbox" class="foswikiCheckbox jqUploaderCreateLink" name="createlink" %ATTACHLINKBOX% /> 
-      %MAKETEXT{"Create a <b>link</b> to the attached files at the end of the topic."}%
-    </label> %BR%
-    <label>
-      <input type="checkbox" class="foswikiCheckbox jqUploaderHideFile" name="hidefile" /> 
-      %MAKETEXT{"<b>Hide</b> the files in the attachment list."}%
-    </label>
-  </div>
-</div>
-<hr />
-<!-- -->%TMPL:END%
-
-%{ ################################################################################ }%
-%TMPL:DEF{"uploadform::buttonsstep"}%<!-- -->
-<div class="foswikiFormStep">
-  %TMPL:P{"uploadform::buttonsstep::addbutton"}%
-  %TMPL:P{context="TopicInteractionPlugin_autostart" else="uploadform::buttonsstep::startbutton"}%<!-- -->
-  %TMPL:P{"uploadform::buttonsstep::cancelbutton"}%<!-- -->
-  %TMPL:P{context="TopicInteractionPlugin_autostart" then="uploadform::buttonsstep::autostart"}%<!-- -->
-  %TMPL:P{context="TopicInteractionPlugin_autostart" else="uploadform::buttonsstep::manualstart"}%<!-- -->
-  %CLEAR%
-</div>
-<!-- -->%TMPL:END%
-
-%TMPL:DEF{"uploadform::buttonsstep::startbutton"}%%BUTTON{"%MAKETEXT{"Start upload"}%" icon="fa-check" class="jqUploaderStart"}%%TMPL:END%
-%TMPL:DEF{"uploadform::buttonsstep::addbutton"}%%BUTTON{"%MAKETEXT{"Choose files"}%" icon="fa-folder-o" class="jqUploaderBrowse"}%%TMPL:END%
-%TMPL:DEF{"uploadform::buttonsstep::cancelbutton"}%%BUTTON{"%MAKETEXT{"Cancel upload"}%" icon="fa-times" class="jqUploaderStop jqUploaderHidden"}%%TMPL:END%
-
-%TMPL:DEF{"uploadform::buttonsstep::autostart"}%<!-- -->
-<input type="hidden" class="jqUploaderAutoStart" name="autostart" value="true" /> 
-<!-- -->%TMPL:END%
-
-%TMPL:DEF{"uploadform::buttonsstep::manualstart"}%%TMPL:P{context="TopicInteractionPlugin_noautostart" else="uploadform::buttonsstep::autostartcheckbox"}%<!-- -->%TMPL:END%
-
-%TMPL:DEF{"uploadform::buttonsstep::autostartcheckbox"}%<!-- -->
-<label style="line-height:23px">
-  <input type="checkbox" class="foswikiCheckbox jqUploaderAutoStart" name="autostart" /> 
-  %MAKETEXT{"Start upload immediately"}%
-</label>
-<!-- -->%TMPL:END%
-
-%{ ################################################################################ }%
-%TMPL:DEF{"uploadform::formend"}%<!-- -->
-  </div>
-</form>
-<!-- -->%TMPL:END%
+%TMPL:DEF{"optionsbutton"}%%BUTTON{
+  "%IF{"'%TMPL:P{"attachments::showoptions"}%'='on'" 
+    then="%MAKETEXT{"Hide options"}%" 
+    else="%MAKETEXT{"Show options"}%" 
+  }%"
+  title="%MAKETEXT{"Show/hide advanced options"}%" 
+  icon="fa-wrench" 
+  class="simple foswikiAttachmentsOptionsToggle" 
+  data="showText:\"%MAKETEXT{"Show options"}%\", hideText:\"%MAKETEXT{"Hide options"}%\""
+}%%TMPL:END%
