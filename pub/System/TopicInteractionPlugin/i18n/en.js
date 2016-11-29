@@ -8,7 +8,7 @@
    "IO error.": "IO error.",
    "N/A" : "N/A",
    "Security error.": "Security error.",
-   "Uploading %files% of %total% file(s) with %bps%/s": "Uploading %files% of %total% file(s) with %bps%/s",
+   "Uploading ...": "Uploading ...",
    "Deleting %file% ...": "Deleting %file% ...",
    "Edit failed": "Edit failed",
    "Error during '%action%'": "Error during '%action%'",
@@ -17,4 +17,6 @@
    "Move failed": "Move failed",
    "Moving attachment(s) ...": "Moving attachment(s) ...",
    "Saving changes ...": "Saving changes ..."
+   "Show options": "Show options",
+   "Hide options": "Hide options"
 }

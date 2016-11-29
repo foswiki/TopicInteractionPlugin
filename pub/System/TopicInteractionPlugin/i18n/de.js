@@ -8,7 +8,7 @@
    "IO error.": "I/O-Fehler.",
    "N/A" : "Nicht verfügbar",
    "Security error.": "Sicherheits-Fehler.",
-   "Uploading %files% of %total% file(s) with %bps%/s": "Lade %files% von %total% Datei(en) hoch mit %bps%/s",
+   "Uploading ...": "Lade ...",
    "Deleting %file% ...": "Lösche %file% ...",
    "Edit failed": "Editieren fehlgeschlagen",
    "Error during '%action%'": "Fehler während '%action%'",
@@ -16,5 +16,7 @@
    "Loading preview ...": "Lade Vorschau ...",
    "Move failed": "Verschieben fehlgeschlagen",
    "Moving attachment(s) ...": "Verschiebe Anhänge ...",
-   "Saving changes ...": "Speichere Änderungen ..."
+   "Saving changes ...": "Speichere Änderungen ...",
+   "Show options": "Optionen anzeigen",
+   "Hide options": "Optionen verbergen"
 }

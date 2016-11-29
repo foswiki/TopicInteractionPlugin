@@ -984,6 +984,7 @@
                 fileSet,
                 i,
                 j = 0;
+
             if (!filesLength) {
                 return false;
             }

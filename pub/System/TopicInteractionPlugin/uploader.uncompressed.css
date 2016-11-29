@@ -1,11 +1,11 @@
-/* css definitions for jquery.empty plugin */
+/* css definitions for the foswiki upload plugin */
 
-.jqFileUploadButton {
+.jqUploadButton {
   position: relative;
   overflow: hidden;
   display: inline-block;
 }
-.jqFileUploadButton input {
+.jqUploadButton input {
   position: absolute;
   top: 0;
   right: 0;
@@ -17,13 +17,13 @@
   cursor: pointer;
 }
 
-.jqFileUploadMsg {
+.jqUploadMsg {
   width:40%;
   left:30%;
   background-color:#b0d0ef;
 }
 
-.jqFileUploadProgressBar {
+.jqUploadProgressBar {
   font-size:1.3em;
   color:#fff;
   padding:0.5em 1em;
@@ -32,17 +32,17 @@
   box-sizing:border-box;
   display:none;
 }
-.jqFileUploadMsg .jqFileUploadProgressBar {
+.jqUploadMsg .jqUploadProgressBar {
   display:block;
 }
-.jqFileUploadProgressInfo {
+.jqUploadProgressInfo {
   font-size:0.77em;
 }
 
-.jqFileUploadDropZone {
+.jqUploadDropZone {
   display:none;
 }
-.jqFileUploadDropZone span {
+.jqUploadDropZone span {
   position:relative;
   text-align:center;
   top:50%;
@@ -50,7 +50,7 @@
   font-size:200%;
   font-weight:bold;
 }
-.jqFileUploadDragging .jqFileUploadDropZone {
+.jqUploadDragging .jqUploadDropZone {
   display:block;
   box-sizing:border-box;
   opacity: 0.5;

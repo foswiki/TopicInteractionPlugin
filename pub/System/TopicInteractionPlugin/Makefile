@@ -7,7 +7,6 @@ TARGET= \
 
 UPLOADER_SOURCE= \
   jquery.fileupload.uncompressed.js \
-  jquery.fileupload-process.js \
   foswiki.fileupload.uncompressed.js  
 
 METADATA_SOURCE= \

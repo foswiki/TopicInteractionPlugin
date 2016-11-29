@@ -1,4 +1,4 @@
-Foswiki::Contrib::JQPrettyPhotoContrib,>=1.10,perl,Optional
+Foswiki::Contrib::JQPhotoSwipeContrib,>=1.00,perl,Optional
 Foswiki::Plugins::FilterPlugin,>=2.07,perl,Required
 Foswiki::Plugins::FlexFormPlugin,>=2.40,perl,Required
 Foswiki::Plugins::DocumentViewerPlugin,>=1.0,perl,Optional

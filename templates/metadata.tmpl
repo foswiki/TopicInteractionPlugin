@@ -1,18 +1,19 @@
 %{ ################################################################################ }%
-%TMPL:DEF{"metadata"}%<!-- -->
-%TMPL:P{"metadata::start"}%
+%TMPL:DEF{"metadata"}%%TMPL:P{"metadata::start"}%
 %TMPL:P{"metadata::form"}%<!-- -->
 %TMPL:P{"metadata::attachments"}%<!-- -->
 %TMPL:P{"metadata::comments"}%<!-- -->
-%TMPL:P{"metadata::end"}%
-<!-- -->%TMPL:END%
+%TMPL:P{"metadata::end"}%<!-- -->%TMPL:END%
 
 %{ ################################################################################ }%
 %TMPL:DEF{"metadata::start"}%<!-- -->
-%CLEAR%
+%CLEAR%%TMPL:P{"metadata::css"}%%TMPL:P{"metadata::javascript"}%<!-- -->
+%TMPL:P{"uploadbutton::progress"}%%TMPL:P{"uploadbutton::dropzone"}%<!-- -->
 <div class="foswikiMetaData foswikiHideOnPrint %IF{"not '%WEB%.%TOPIC%' allows 'change'" then="foswikiMetaDataNotAllowed"}%">
-%TABPANE{select="%URLPARAM{"metadata_tab"}%" animate="on" class="plain"}%
-<!-- -->%TMPL:END%
+%TABPANE{select="%URLPARAM{"metadata_tab"}%" animate="on" class="plain"}%%TMPL:END%
+
+%{ ################################################################################ }%
+%TMPL:DEF{"metadata::end"}%%ENDTABPANE%</div>%TMPL:END%
 
 %{ ################################################################################ }%
 %TMPL:DEF{"metadata::form"}%%TMPL:P{"form"}%%TMPL:END%
@@ -29,11 +30,6 @@
   else="<!-- -->"
 }%%TMPL:END%
 
-%{ ################################################################################ }%
-%TMPL:DEF{"metadata::end"}%<!-- -->
-%ENDTABPANE% 
-</div>
-<!-- -->%TMPL:END%
 
 %{ ################################################################################ }%
 %TMPL:DEF{"metadata::lightbox"}%%IF{
@@ -58,7 +54,7 @@
 %{ ################################################################################ }%
 %TMPL:DEF{"metadata::javascript"}%<!-- -->
 %TMPL:P{"metadata::lightbox"}%<!-- -->
-%JQREQUIRE{"ui::tooltip, ui, uploader, twisty, mediaelement" warn="off"}%<!-- -->
+%JQREQUIRE{"ui::tooltip, ui, uploader, twisty, mediaelement, loader" warn="off"}%<!-- -->
 %ADDTOZONE{"script" 
   id="METADATA::JS" 
   requires="JQUERYPLUGIN::LIVEQUERY, JQUERYPLUGIN::UI, JQUERYPLUGIN::UPLOADER" 
@@ -92,11 +88,11 @@
 %TMPL:DEF{"comments::tab"}%<!-- -->
 %TAB{"%MAKETEXT{"Comments [_1]" args="<span class='foswikiCommentsCount'>%METACOMMENTS{limit="1" format="($count)" singular="$count" plural="$count"}%</span>"}%" 
   id="comments" 
-  url="%SCRIPTURL{"rest"}%/RenderPlugin/template?name=metacomments;expand=metacomments;topic=%WEB%.%TOPIC%;render=on;_t=%GMTIME{"$epoch"}%"
-}%<div class='foswikiFormSteps foswikiAttachmentsProcess'><span class='jqAjaxLoader'>&nbsp;</span></div>
-%ENDTAB%
-%TMPL:P{"metadata::css"}%%TMPL:P{"metadata::javascript"}%<!-- -->
-<!-- -->%TMPL:END%
+  url="%SCRIPTURL{"rest"}%/RenderPlugin/template?name=metacomments;expand=metacomments;topic=%WEB%.%TOPIC%;render=on;%GMTIME{"$epoch"}%"
+}%
+<div class='foswikiFormSteps foswikiAttachmentsProcess'><span class='jqAjaxLoader'>&nbsp;</span></div>
+</div>
+%ENDTAB%<!-- -->%TMPL:END%
 
 %{ ################################################################################ }%
 %TMPL:DEF{"dataform::tab"}%<!-- -->
@@ -130,35 +126,18 @@
     <th class='foswikiTableFirstCol'><nop>$title: </th>
     <td class='foswikiFormValue'> $value </td>
     </tr>"
-  footer="</table></div></div>$percntENDTAB$percnt
-    $percntTMPL:P{\"metadata::css\"}$percnt
-    $percntTMPL:P{\"metadata::javascript\"}$percnt"
+  footer="</table></div></div>$percntENDTAB$percnt"
 }%<!-- -->%TMPL:END%
 
 %{ ################################################################################ }%
-%TMPL:DEF{"attachments::tab"}%<!-- -->%TMPL:P{"metadata::css"}%%TMPL:P{"metadata::javascript"}%
-%TAB{"%MAKETEXT{"Attachments [_1]" args="<span class='foswikiAttachmentsCount' style='display:none'>($count)</span>"}%" 
+%TMPL:DEF{"attachments::tab_DIS"}%%TAB{"%MAKETEXT{"Attachments [_1]" args="<span class='foswikiAttachmentsCount'>($count)</span>"}%" 
   id="attachments" 
   url="%SCRIPTURL{"rest"}%/RenderPlugin/template?name=metadata;expand=attachments;topic=%WEB%.%TOPIC%;render=on;_t=%GMTIME{"$epoch"}%"
-}%<div class='foswikiFormSteps foswikiAttachmentsProcess'><span class='jqAjaxLoader'>&nbsp;</span></div>
-%ENDTAB%<!-- -->%TMPL:END%
+}%%ENDTAB%%TMPL:END%
 
-%TMPL:DEF{"attachments::tab_old"}%<!-- -->
-%ATTACHMENTS{
-  hidenull="on"
-  warn="off"
-  attr="^[^h]*$"
-  header="$percntTAB{
-    \"%MAKETEXT{"Attachments [_1]" args="<span class='foswikiAttachmentsCount'>($count)</span>"}%\" 
-    id=\"attachments\" 
-    url=\"%SCRIPTURL{"rest"}%/RenderPlugin/template?name=metadata;expand=attachments;topic=%WEB%.%TOPIC%;render=on;_t=%GMTIME{"$epoch"}%\"
-  }$percnt
-  <div class='foswikiFormSteps foswikiAttachmentsProcess'><span class='jqAjaxLoader'>&nbsp;</span></div>
-  $percntENDTAB$percnt"
-  limit="1"
-  format=""
-  footer="$percntTMPL:P{\"metadata::css\"}$percnt$percntTMPL:P{\"metadata::javascript\"}$percnt"
-}%<!-- -->%TMPL:END%
+%TMPL:DEF{"attachments::tab"}%%TAB{"%MAKETEXT{"Attachments [_1]" args="<span class='foswikiAttachmentsCount'>($count)</span>"}%" 
+  id="attachments" 
+}%%TMPL:P{"attachments"}%%ENDTAB%%TMPL:END%
 
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments::sort"}%%URLPARAM{
@@ -577,12 +556,12 @@
 <!-- -->%TMPL:END%
 
 %{ ################################################################################ }%
-%TMPL:DEF{"uploadbutton"}%%TMPL:P{"uploadbutton::start"}%%TMPL:P{"uploadbutton::input"}%%TMPL:P{"uploadbutton::progress"}%%TMPL:P{"uploadbutton::dropzone"}%%TMPL:P{"uploadbutton::end"}%%TMPL:END%
+%TMPL:DEF{"uploadbutton"}%%TMPL:P{"uploadbutton::start"}%%TMPL:P{"uploadbutton::input"}%%TMPL:P{"uploadbutton::end"}%%TMPL:END%
 
-%TMPL:DEF{"uploadbutton::start"}%<span class='jqButton jqButtonSimple jqFileUploadButton' data-topic='%WEB%.%TOPIC%'>%TMPL:P{"uploadbutton::icon"}%<span class='jqButtonText'>%TMPL:P{"uploadbutton::label"}%</span>%TMPL:END%
+%TMPL:DEF{"uploadbutton::start"}%<span class='jqButton jqButtonSimple jqUploadButton' data-topic='%WEB%.%TOPIC%'>%TMPL:P{"uploadbutton::icon"}%<span class='jqButtonText'>%TMPL:P{"uploadbutton::label"}%</span>%TMPL:END%
 %TMPL:DEF{"uploadbutton::input"}%<input type="file" name="files[]" multiple />%TMPL:END%
-%TMPL:DEF{"uploadbutton::progress"}%<div class="jqFileUploadProgressBar" style="display:none">%TMPL:P{"uploadbutton::progress::label"}%<span class="jqFileUploadProgressInfo"></span></div>%TMPL:END%
-%TMPL:DEF{"uploadbutton::dropzone"}%<div class="jqFileUploadDropZone"><span>%MAKETEXT{"Drag files here"}%</span></div>%TMPL:END%
+%TMPL:DEF{"uploadbutton::progress"}%<div class="jqUploadProgressBar">%TMPL:P{"uploadbutton::progress::label"}% <span class="jqUploadProgressInfo"></span></div>%TMPL:END%
+%TMPL:DEF{"uploadbutton::dropzone"}%<div class="jqUploadDropZone"><span>%MAKETEXT{"Drag files here"}%</span></div>%TMPL:END%
 %TMPL:DEF{"uploadbutton::end"}%</span>%TMPL:END%
 
 %TMPL:DEF{"uploadbutton::icon"}%<i class='jqButtonIcon fa-fw fa fa-upload'></i>%TMPL:END%
@@ -597,6 +576,5 @@
   }%"
   title="%MAKETEXT{"Show/hide advanced options"}%" 
   icon="fa-wrench" 
-  class="simple foswikiAttachmentsOptionsToggle" 
-  data="showText:\"%MAKETEXT{"Show options"}%\", hideText:\"%MAKETEXT{"Hide options"}%\""
+  class="simple foswikiAttachmentsOptionsToggle i18n" 
 }%%TMPL:END%

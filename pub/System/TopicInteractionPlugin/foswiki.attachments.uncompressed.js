@@ -862,18 +862,10 @@ As per the GPL, removal of this notice is prohibited.
   };
 
   /***********************************************************************/
-  FoswikiAttachments.prototype.hideAttachmentsTab = function() {
-  };
-
-  /***********************************************************************/
-  FoswikiAttachments.prototype.showAttachmentsTab = function() {
-  };
-
-  /***********************************************************************/
   FoswikiAttachments.prototype.hideOptionsContainer = function() {
     var self = this;
 
-    self.optionsLabel.html(self.toggleOpts.showText);
+    self.optionsLabel.html($.i18n("Show options"));
     self.toggleContainer.slideUp({easing:'easeInOutQuad', duration:'fast'});
     self.opts.showOptions = 'off';
   };
@@ -882,7 +874,7 @@ As per the GPL, removal of this notice is prohibited.
   FoswikiAttachments.prototype.showOptionsContainer = function() {
     var self = this;
 
-    self.optionsLabel.html(self.toggleOpts.hideText);
+    self.optionsLabel.html($.i18n("Hide options"));
     self.toggleContainer.slideDown({easing:'easeInOutQuad', duration:'fast'});
     self.opts.showOptions = 'on';
   };

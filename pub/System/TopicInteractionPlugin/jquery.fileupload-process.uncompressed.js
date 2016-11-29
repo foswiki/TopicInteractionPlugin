@@ -11,7 +11,6 @@
 
 /* jshint nomen:false */
 /* global define, require, window */
-
 ;(function (factory) {
     'use strict';
     if (typeof define === 'function' && define.amd) {
