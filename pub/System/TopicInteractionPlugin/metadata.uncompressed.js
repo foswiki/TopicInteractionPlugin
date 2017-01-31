@@ -1,3 +1,4 @@
+/* WARNING: THIS IS A DERIVED FILE. DON'T MODIFIY. */
 /*
 
 Foswiki - The Free and Open Source Wiki, http://foswiki.org/
@@ -187,7 +188,119 @@ As per the GPL, removal of this notice is prohibited.
 
 Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 
-(c)opyright 2010-2016 Michael Daum http://michaeldaumconsulting.com
+(c)opyright 2017 Michael Daum http://michaeldaumconsulting.com
+
+are listed in the AUTHORS file in the root of this distribution.
+NOTE: Please extend that file, not this notice.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version. For
+more details read LICENSE in the root of this distribution.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+As per the GPL, removal of this notice is prohibited.
+
+*/
+
+/*eslint-disable no-console */
+
+"use strict";
+var Dialog;
+
+(function($) {
+
+  var defaults = {
+    "template": "metadata",
+    "debug": false
+  };
+
+  /* constructor **********************************************************/
+  Dialog = function(opts) {
+    var self = this;
+
+    self.opts = $.extend({}, defaults, opts);
+  };
+
+  /* shortcut *************************************************************/
+  Dialog.load = function(opts) {
+    var dialog = new Dialog(opts);
+    return dialog.load();
+  };
+
+  /* logger ***************************************************************/
+  Dialog.prototype.log = function() {
+    var self = this, args;
+
+    if (!console || !self.opts.debug) {
+      return;
+    }
+
+    args = $.makeArray(arguments);
+    args.unshift("DIALOG:");
+    console.log.apply(console, args);
+  };
+
+
+  /* load *****************************************************************/
+  Dialog.prototype.load = function(params) {
+    var self = this, 
+        opts = $.extend({}, self.opts, params),
+        $dialog = typeof(opts.id) === 'undefined'?undefined:$(opts.id),
+        data, 
+        dfd = $.Deferred();
+
+    self.log("called load() opts=",opts);
+
+    function callback(elem) {
+      if (typeof(opts.init) === 'function') {
+        opts.init.call(elem);
+      }
+    }
+
+    if ($dialog && $dialog.length) {
+      $dialog.dialog("open");
+      $dialog.find("form").resetForm();
+      callback($dialog);
+      dfd.resolve($dialog);
+    } else {
+
+      data = $.extend({}, opts.data, {
+        name: opts.template,
+        expand: opts.expand,
+        topic: foswiki.getPreference("WEB")+"."+foswiki.getPreference("TOPIC")
+      });
+
+      $.ajax({
+        url: foswiki.getScriptUrl("rest", "RenderPlugin", "template"),
+        data: data,
+        dataType: 'html',
+        success: function(data) {
+          var $dialog = $(data);
+          $dialog.on("dialogopen", function() {
+            callback($dialog);
+            dfd.resolve($dialog);
+          });
+          $dialog.appendTo("body");
+        },
+        error: function(xhr, status, err) {
+          dfd.reject($dialog, status, err);
+        }
+      });
+    }
+
+    return dfd.promise();
+  };
+})(jQuery);
+/*
+
+Foswiki - The Free and Open Source Wiki, http://foswiki.org/
+
+(c)opyright 2010-2017 Michael Daum http://michaeldaumconsulting.com
 
 are listed in the AUTHORS file in the root of this distribution.
 NOTE: Please extend that file, not this notice.
@@ -211,12 +324,13 @@ As per the GPL, removal of this notice is prohibited.
 (function($) {
 
   var defaults = {
-    "hidden": "off",
+    "showHidden": false,
+    "showOptions": false,
+    "showEmpty": false,
     "sort": "name",
     "filter": "",
     "limit": 6,
     "skip": 0,
-    "showOptions": "off",
     "cols": 1,
     "debug": false
   };
@@ -265,11 +379,13 @@ As per the GPL, removal of this notice is prohibited.
       tabpane = $(this).data("tabPane");
     });
 
-    if (self.getCount() > 0) {
+    if (self.opts.showEmpty || self.getCount() > 0) {
       self.elem.find(".foswikiAttachmentsSelectAll").show();
       if (tabpane) {
         tabpane.showTab(".attachments");
-        tabpane.switchTab(".attachments");
+        if (tabpane.elem.find(">.jqTab").length === 1) {
+          tabpane.switchTab(".attachments");
+        }
       }
     } else {
       if (tabpane) {
@@ -312,6 +428,7 @@ As per the GPL, removal of this notice is prohibited.
     // add display hidden behaviour
     self.elem.find(".foswikiDisplayHidden input").change(function() {
       self.load({
+        "showempty": true,
         "hidden": $(this).prop('checked')?'on':'off'
       });
       return false;
@@ -327,6 +444,7 @@ As per the GPL, removal of this notice is prohibited.
           val = '';
         } 
         self.load({
+          "showempty": true,
           "filter": val
         });
         event.preventDefault();
@@ -435,8 +553,8 @@ As per the GPL, removal of this notice is prohibited.
         fadeOut: 0
       });
 
-      self.loadDialog({
-        template: "attachments::previewer::"+previewType, 
+      Dialog.load({
+        expand: "attachments::previewer::"+previewType, 
         data: {
           filename: decodeURIComponent(attachmentOpts.filename)
         }
@@ -455,10 +573,10 @@ As per the GPL, removal of this notice is prohibited.
           attachmentOpts = $attachment.data(),
           thumbnail = $attachment.find(".foswikiThumbnail").clone().removeClass("foswikiLeft");
 
-      self.loadDialog({
+      Dialog.load({
         id:"#foswikiAttachmentConfirmDelete", 
-        template:"attachments::confirmdelete",
-        callback: function() {
+        expand:"attachments::confirmdelete",
+        init: function() {
           var $this = this;
 
           $this.find("#deleteAttachment").text(decodeURIComponent(attachmentOpts.filename));
@@ -487,10 +605,10 @@ As per the GPL, removal of this notice is prohibited.
           thumbnail = $attachment.find(".foswikiThumbnail").clone().removeClass("foswikiLeft");
 
 
-      self.loadDialog({
+      Dialog.load({
         id:"#foswikiAttachmentEditor", 
-        template:"attachments::editor", 
-        callback: function() {
+        expand:"attachments::editor", 
+        init: function() {
           var $this = this;
 
           var $hideFile = $this.find("input[name=hidefile]"),
@@ -532,10 +650,10 @@ As per the GPL, removal of this notice is prohibited.
           attachmentOpts = $attachment.data(),
           thumbnail = $attachment.find(".foswikiThumbnail").clone().removeClass("foswikiLeft");
 
-      self.loadDialog({
+      Dialog.load({
         id: "#foswikiAttachmentMove", 
-        template: "attachments::moveattachment",
-        callback: function() {
+        expand: "attachments::moveattachment",
+        init: function() {
           var $this = this;
 
           $this.find("input[name=filename]").val(decodeURIComponent(attachmentOpts.filename));
@@ -584,10 +702,10 @@ As per the GPL, removal of this notice is prohibited.
       }
 
       if (action !== "move") {
-        self.loadDialog({
+        Dialog.load({
           id: "#foswikiAttachmentConfirmBulk", 
-          template: "attachments::confirmbulkaction",
-          callback: function() {
+          expand: "attachments::confirmbulkaction",
+          init: function() {
             var $this = this,
                 $form = $this.find("form");
 
@@ -606,10 +724,10 @@ As per the GPL, removal of this notice is prohibited.
 
       } else {
         // move attachments 
-        self.loadDialog({
+        Dialog.load({
           id: "#foswikiAttachmentMove", 
-          template: "attachments::moveattachment",
-          callback: function() {
+          expand: "attachments::moveattachment",
+          init: function() {
             var $this = this,
                 $form = $this.find("form");
 
@@ -897,13 +1015,14 @@ As per the GPL, removal of this notice is prohibited.
       "render": "on",
       "topic": self.opts.topic,
       "expand": "attachments",
-      "attachments_hidden": self.opts.hidden,
+      "attachments_showhidden": self.opts.showHidden,
+      "attachments_showoptions": self.opts.showOptions,
+      "attachments_showempty": self.opts.showEmpty,
       "attachments_sort": self.opts.sort,
-      "attachments_reverse": self.opts.sort === 'date' ? 'on': 'off',
+      "attachments_reverse": self.opts.sort === 'date' ? true: false,
       "attachments_filter": encodeURI(self.opts.filter),
       "attachments_limit": self.opts.limit,
       "attachments_skip": self.getSkip(),
-      "attachments_showoptions": self.opts.showOptions,
       "attachments_cols": self.opts.cols,
       "attachments_selection": []
     }, thisParams);
@@ -1052,7 +1171,7 @@ As per the GPL, removal of this notice is prohibited.
 
     self.optionsLabel.html($.i18n("Show options"));
     self.toggleContainer.slideUp({easing:'easeInOutQuad', duration:'fast'});
-    self.opts.showOptions = 'off';
+    self.opts.showOptions = false;
   };
 
   /***********************************************************************/
@@ -1061,55 +1180,7 @@ As per the GPL, removal of this notice is prohibited.
 
     self.optionsLabel.html($.i18n("Hide options"));
     self.toggleContainer.slideDown({easing:'easeInOutQuad', duration:'fast'});
-    self.opts.showOptions = 'on';
-  };
-
-  /* *********************************************************************/
-  FoswikiAttachments.prototype.loadDialog = function(params) {
-    var self = this, 
-        $dialog = typeof(params.id) !== 'undefined'?$(params.id):undefined,
-        data, 
-        dfd = $.Deferred();
-
-    self.log("called loadDialog() params=",params);
-
-    function callback(elem) {
-      if (typeof(params.callback) === 'function') {
-        params.callback.call(elem);
-      }
-    }
-
-    if ($dialog && $dialog.length) {
-      $dialog.find("form").resetForm();
-      callback($dialog);
-      dfd.resolve($dialog);
-    } else {
-
-      data = $.extend({}, params.data, {
-        name: 'metadata',
-        expand: params.template,
-        topic: foswiki.getPreference("WEB")+"."+foswiki.getPreference("TOPIC")
-      });
-
-      $.ajax({
-        url: foswiki.getScriptUrl("rest", "RenderPlugin", "template"),
-        data: data,
-        dataType: 'html',
-        success: function(data) {
-          var $dialog = $(data);
-          $dialog.on("dialogopen", function() {
-            callback($dialog);
-            dfd.resolve($dialog);
-          });
-          $dialog.appendTo("body");
-        },
-        error: function(xhr, status, err) {
-          dfd.reject($dialog, status, err);
-        }
-      });
-    }
-
-    return dfd.promise();
+    self.opts.showOptions = true;
   };
 
   /* init attachments tab *************************************************/

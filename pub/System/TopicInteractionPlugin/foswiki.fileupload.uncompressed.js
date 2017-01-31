@@ -1,7 +1,7 @@
 /*
  * foswiki file upload plugin 1.0
  *
- * Copyright (c) 2016 Michael Daum http://michaeldaumconsulting.com
+ * Copyright (c) 2016-2017 Michael Daum http://michaeldaumconsulting.com
  *
  * Licensed GPL http://www.gnu.org/licenses/gpl.html
  *
@@ -53,6 +53,21 @@
         data.formData = self.opts;
         data.formData.id = Math.ceil(Math.random()*1000);
         data.submit();
+      },
+      paste: function(e, data) {
+        var fileName = prompt($.i18n("Please enter a filename"), "clipboard");
+
+        if (!fileName) {
+          return false;
+        }
+
+        if (data.files.length > 1) {
+          $.each(data.files, function(index, file) {
+            file.uploadName = fileName + index;
+          });
+        } else {
+            data.files[0].uploadName = fileName;
+        }
       },
       start: function() {
         self.uploadedFiles = [];

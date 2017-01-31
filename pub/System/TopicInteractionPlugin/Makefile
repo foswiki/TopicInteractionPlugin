@@ -12,6 +12,7 @@ UPLOADER_SOURCE= \
 METADATA_SOURCE= \
   detectos.uncompressed.js \
   webdav.uncompressed.js \
+  dialog.uncompressed.js \
   foswiki.attachments.uncompressed.js
 
 -include $(FOSWIKI_ROOT)/pub/System/JQueryPlugin/Makefile.include
@@ -19,10 +20,10 @@ METADATA_SOURCE= \
 .PRECIOUS: %.uncompressed.js
 
 uploader.uncompressed.js: $(UPLOADER_SOURCE)
-	cat $^ > $@
+	@echo creating $@ from $^; echo "/* WARNING: THIS IS A DERIVED FILE. DON'T MODIFIY. */" > $@; $(CAT) $^ >> $@
 
 metadata.uncompressed.js: $(METADATA_SOURCE)
-	cat $^ > $@
+	@echo creating $@ from $^; echo "/* WARNING: THIS IS A DERIVED FILE. DON'T MODIFIY. */" > $@; $(CAT) $^ >> $@
 
 clean:
 	rm -f $(TARGET) *.gz igp_* genpdf_*

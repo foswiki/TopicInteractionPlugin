@@ -158,11 +158,12 @@
   "attachments_reverse" 
   default="%IF{"'%SESSION_VARIABLE{"_attachments_reverse"}%'!=''" 
     then="%SESSION_VARIABLE{"_attachments_reverse"}%" 
-    else="%ATTACHDEFAULTREVERSE{default="off"}%"
+    else="%ATTACHDEFAULTREVERSE{default="false"}%"
   }%"
 }%%TMPL:END%
-%TMPL:DEF{"attachments::hidden"}%%URLPARAM{"attachments_hidden" default="off"}%%TMPL:END%
-%TMPL:DEF{"attachments::showoptions"}%%URLPARAM{"attachments_showoptions" default="off"}%%TMPL:END%
+%TMPL:DEF{"attachments::showhidden"}%%URLPARAM{"attachments_showhidden" default="false"}%%TMPL:END%
+%TMPL:DEF{"attachments::showoptions"}%%URLPARAM{"attachments_showoptions" default="false"}%%TMPL:END%
+%TMPL:DEF{"attachments::showempty"}%%URLPARAM{"attachments_showempty" default="false"}%%TMPL:END%
 %TMPL:DEF{"attachments::filter"}%%URLPARAM{"attachments_filter" encode="quote"}%%TMPL:END%
 %TMPL:DEF{"attachments::selection"}%%URLPARAM{"attachments_selection" multiple="on" separator=","}%%TMPL:END%
 %TMPL:DEF{"attachments::skip"}%%URLPARAM{"attachments_skip" default="0"}%%TMPL:END%
@@ -171,13 +172,13 @@
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments"}%<!-- -->
 <noautolink>
-<div class='foswikiAttachments foswikiFormSteps foswikiAttachmentsCols%TMPL:P{"attachments::cols"}%"' data-hidden='%TMPL:P{"attachments::hidden"}%' data-sort='%TMPL:P{"attachments::sort"}%' data=reverse='%TMPL:P{"attachments::reverse"}%' data-topic='%ENCODE{"%WEB%.%TOPIC%"}%' data-filter='%TMPL:P{"attachments::filter"}%' data-selection='%TMPL:P{"attachments::selection"}%' data-limit='%TMPL:P{"attachments::limit"}%' data- skip='%TMPL:P{"attachments::skip"}%'  data-show-options='%TMPL:P{"attachments::showoptions"}%' data-cols='%TMPL:P{"attachments::cols"}%'>
+<div class='foswikiAttachments foswikiFormSteps foswikiAttachmentsCols%TMPL:P{"attachments::cols"}%"' data-show-empty='%TMPL:P{"attachments::showempty"}%' data-show-hidden='%TMPL:P{"attachments::showhidden"}%' data-show-options='%TMPL:P{"attachments::showoptions"}%' data-sort='%TMPL:P{"attachments::sort"}%' data=reverse='%TMPL:P{"attachments::reverse"}%' data-topic='%ENCODE{"%WEB%.%TOPIC%"}%' data-filter='%TMPL:P{"attachments::filter"}%' data-selection='%TMPL:P{"attachments::selection"}%' data-limit='%TMPL:P{"attachments::limit"}%' data-skip='%TMPL:P{"attachments::skip"}%'  data-cols='%TMPL:P{"attachments::cols"}%'>
 %IF{"'%URLPARAM{"attachments_sort"}%'!=''" then="$percntSESSION_VARIABLE{\"_attachments_sort\" set=\"%TMPL:P{"attachments::sort"}%\"}$percnt"}%<!-- -->
 %IF{"'%URLPARAM{"attachments_reverse"}%'!=''" then="$percntSESSION_VARIABLE{\"_attachments_reverse\" set=\"%TMPL:P{"attachments::reverse"}%\"}$percnt"}%<!-- -->
 %IF{"'%URLPARAM{"attachments_limit"}%'!=''" then="$percntSESSION_VARIABLE{\"_attachments_limit\" set=\"%TMPL:P{"attachments::limit"}%\"}$percnt"}%<!-- -->
 <div class="foswikiFormStep foswikiFormFirst jqUITooltip" data-theme='info' data-position='top' data-arrow='true'>
 %TMPL:P{"uploadbutton"}%%TMPL:P{"optionsbutton"}%<!-- -->
-<div class="foswikiAttachmentsOptionsToggleContainer" %IF{"'%TMPL:P{"attachments::showoptions"}%'='on'" then="style='display:block'"}%>
+<div class="foswikiAttachmentsOptionsToggleContainer" %IF{"'%TMPL:P{"attachments::showoptions"}%'='true'" then="style='display:block'"}%>
   <div class="foswikiFormSteps foswikiAttachmentsOptions">
     <span class='foswikiFilter'>
       <b>%MAKETEXT{"Search"}%:</b>
@@ -205,7 +206,7 @@
     <span class='foswikiDisplayHidden %IF{"'%ATTACHMENTS{attr=".*h.*" header="$count" format="" limit="1"}%'='0'" then="foswikiHidden"}%'>
       <label title="%MAKETEXT{"Enable/disable displaying hidden attachments"}%">
         <b>%MAKETEXT{"Display hidden"}%:</b>
-        <input type='checkbox' class='foswikiCheckbox' %IF{"'%TMPL:P{"attachments::hidden"}%'='on'" then="checked='checked'"}% value='on' />
+        <input type='checkbox' class='foswikiCheckbox' %IF{"'%TMPL:P{"attachments::showhidden"}%'='true'" then="checked='checked'"}% value='on' />
       </label>
     </span>
   </div>
@@ -214,14 +215,14 @@
 <div class="foswikiFormStep">
 %ATTACHMENTS{
   warn="off"
-  attr="%IF{"'%TMPL:P{"attachments::hidden"}%'!='on'" then="^[^h]*$"}%"
+  attr="%IF{"'%TMPL:P{"attachments::showhidden"}%'!='true'" then="^[^h]*$"}%"
   include="%FORMATLIST{"%TMPL:P{"attachments::filter"}%" split="\s+" header=".*" format="$1" separator=".*" footer=".*"}%"
   casesensitive="off"
   format="<input type='hidden' name='allattachments' value='$name' class='foswikiAttachmentsAll' />"
   separator="$n"
 }%%ATTACHMENTS{
   warn="off"
-  attr="%IF{"'%TMPL:P{"attachments::hidden"}%'!='on'" then="^[^h]*$"}%"
+  attr="%IF{"'%TMPL:P{"attachments::showhidden"}%'!='true'" then="^[^h]*$"}%"
   sort="%TMPL:P{"attachments::sort"}%"
   reverse="%TMPL:P{"attachments::reverse"}%"
   limit="%TMPL:P{"attachments::limit"}%"
@@ -235,7 +236,7 @@
       <div class='foswikiAttachmentContainer'>
         <div class='foswikiThumbnail foswikiLeft'>
         $percntIF{
-          \"lc('$name')=~'.*\.(gif|jpe?g|png|bmp|svg|ico|tiff?|xcf|psd)$' and context ImagePluginEnabled\"
+          \"lc('$name')=~'.*\.(gif|jpe?g|png|bmp|svg|ico|xcf|psd)$' and context ImagePluginEnabled\"
 	  then=\"$dollarpercntTMPL:P{\\"attachments::thumbnail\\" filename=\\"$name\\" url=\\"$url\\"}$dollarpercnt\"
           else=\"<a href='$url'>$percntMIMEICON{\"$name\" size=\"48\"}$percnt</a>\"
         }$percnt
@@ -375,7 +376,7 @@
 
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments::previewer::start"}%<!-- -->
-<div class="jqUIDialog {modal:true, resizable:true, width:'%width%', height:'%height%', draggable:true, autoOpen:true}" title="%MAKETEXT{"Preview"}%">
+<div class="jqUIDialog" data-modal="true" data-resizable="true" data-width="%width%" data-height="%height%" data-draggable="true" data-auto-open="true" title="%MAKETEXT{"Preview"}%">
   <div class="foswikiPreviewContainer">
 <!-- -->%TMPL:END%
 
@@ -426,7 +427,7 @@
 
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments::editor"}%<!-- -->
-<div id="foswikiAttachmentEditor" class="jqUIDialog foswikiFormSteps {width:485, modal:true, resizable:false, draggable:true, autoOpen:true}" title="%MAKETEXT{"Edit attachment"}%" style="display:none">
+<div id="foswikiAttachmentEditor" class="jqUIDialog foswikiFormSteps"  data-width="485" data-modal="true" data-resizable="false" data-draggable="true" data-auto-open="true" title="%MAKETEXT{"Edit attachment"}%" style="display:none">
   <form id="foswikiAttachmentEditorForm" name="attach" action="%SCRIPTURL{"rest"}%/TopicInteractionPlugin/changeproperties" method="post">
     <input type="hidden" name="id" value="save" />
     <input type="hidden" name="origfilename" value="" />
@@ -461,7 +462,7 @@
 
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments::moveattachment"}%<!-- -->
-<div id="foswikiAttachmentMove" class="jqUIDialog foswikiFormSteps {modal:true, resizable:false, draggable:true, width:485, autoOpen:true}" title="%MAKETEXT{"Move attachment(s) to a different topic"}%" style="display:none">
+<div id="foswikiAttachmentMove" class="jqUIDialog foswikiFormSteps" data-width="485" data-modal="true" data-resizable="false" data-draggable="true" data-auto-open="true" title="%MAKETEXT{"Move attachment(s) to a different topic"}%" style="display:none">
   <form id="foswikiAttachmentMoveForm" name="move" action="%SCRIPTURL{"rest"}%/TopicInteractionPlugin/move" method="post">
     <input type="hidden" name="id" value="move" />
     <input type="hidden" name="filename" value="" />
@@ -487,7 +488,7 @@
 
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments::confirmdelete"}%<!-- -->
-<div id="foswikiAttachmentConfirmDelete" class="jqUIDialog foswikiFormSteps {modal:true, draggable:true, width:350, maxWidth:600, maxHeight:480, autoOpen:true}" title="%MAKETEXT{"Delete attachment?"}%" style="display:none">
+<div id="foswikiAttachmentConfirmDelete" class="jqUIDialog foswikiFormSteps" data-modal="true" data-draggable="true" data-width="350" data-max-width="600" data-max-height="480" data-auto-open="true" title="%MAKETEXT{"Delete attachment?"}%" style="display:none">
   <form id="foswikiAttachmentConfirmDeleteForm" action="%SCRIPTURLPATH{"rest"}%/TopicInteractionPlugin/delete" method="post">
     <input type="hidden" name="id" value="delete" />
     <input type="hidden" name="filename" value="" />
@@ -505,7 +506,7 @@
 
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments::confirmbulkaction"}%<!-- -->
-<div id="foswikiAttachmentConfirmBulk" class="jqUIDialog foswikiFormSteps {modal:true, draggable:true, width:350, autoOpen:true}" title="%MAKETEXT{"Confirmation required"}%" style="display:none">
+<div id="foswikiAttachmentConfirmBulk" class="jqUIDialog foswikiFormSteps" data-modal="true" data-draggable="true" data-width="350" data-auto-open="true" title="%MAKETEXT{"Confirmation required"}%" style="display:none">
   <form id="foswikiAttachmentConfirmBulkForm" method="post">
     <input type="hidden" name="id" value="bulkaction" />
     <input type="hidden" name="filename" value="" />
@@ -570,7 +571,7 @@
 
 %{ ################################################################################ }%
 %TMPL:DEF{"optionsbutton"}%%BUTTON{
-  "%IF{"'%TMPL:P{"attachments::showoptions"}%'='on'" 
+  "%IF{"'%TMPL:P{"attachments::showoptions"}%'='true'" 
     then="%MAKETEXT{"Hide options"}%" 
     else="%MAKETEXT{"Show options"}%" 
   }%"

@@ -271,9 +271,10 @@ sub handle {
     $text =~ s/\$name\b/$info->{name}/g;
     $text =~ s/\$path\b/$info->{path}/g;
     $text =~ s/\$size\b/$info->{size}/g;
-    $text =~ s/\$sizeH\b/$info->{sizeH}/g;
-    $text =~ s/\$sizeK\b/$info->{sizeK}/g;
-    $text =~ s/\$sizeM\b/$info->{sizeM}/g;
+    $text =~ s/\$sizeH\b/_humanizeBytes($info->{size})/ge;
+    $text =~ s/\$sizeK\b/_humanizeBytes($info->{size}, 'KB')/ge;
+    $text =~ s/\$sizeM\b/_humanizeBytes($info->{size}, 'MB')/ge;
+    $text =~ s/\$sizeG\b/_humanizeBytes($info->{size}, 'GB')/ge;
     $text =~ s/\$sizeG\b/$info->{sizeG}/g;
     $text =~ s/\$url\b/$url/g;
     $text =~ s/\$urlpath\b/$urlPath/g;
@@ -323,18 +324,13 @@ sub getAttachmentInfo {
 
   #print STDERR dump($attachment)."\n";
 
-  my $size = $attachment->{size} || 0;
   my %info = (
     name => $attachment->{name},
     attr => ($attachment->{attr} || ''),
     autoattached => $attachment->{autoattached} || 0,
     date => $attachment->{date},
     user => ($attachment->{user} || $attachment->{author} || 'UnknownUser'),
-    size => $size,
-    sizeH => _humanizeBytes($size),
-    sizeK => _humanizeBytes($size, 'KB'),
-    sizeM => _humanizeBytes($size, 'MB'),
-    sizeG => _humanizeBytes($size, 'GB'),
+    size => $attachment->{size} || 0,
     comment => (defined $attachment->{comment}) ? $attachment->{comment} : '',
     path => ($attachment->{path} || ''),
     version => ($attachment->{version} || 1),
