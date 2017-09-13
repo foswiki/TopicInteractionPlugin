@@ -15,7 +15,6 @@
    "Move failed": "Verschieben fehlgeschlagen",
    "Moving attachment(s) ...": "Verschiebe Anhänge ...",
    "N/A" : "Nicht verfügbar",
-   "Please enter a filename": "Bitte geben Sie einen Dateinamen an",
    "Saving changes ...": "Speichere Änderungen ...",
    "Security error.": "Sicherheits-Fehler.",
    "Show options": "Optionen anzeigen",

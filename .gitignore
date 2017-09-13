@@ -18,3 +18,4 @@ pub/System/TopicInteractionPlugin/uploader.js
 /TopicInteractionPlugin.zip
 /TopicInteractionPlugin_installer
 /TopicInteractionPlugin_installer.pl
+locale/**/*.mo

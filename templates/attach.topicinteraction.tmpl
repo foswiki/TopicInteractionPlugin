@@ -1,8 +1,8 @@
 %TMPL:INCLUDE{"attach"}%
 %TMPL:INCLUDE{"metadata"}%
 
-%TMPL:DEF{"attachments::hidden"}%%URLPARAM{"attachments_hidden" default="on"}%%TMPL:END%
-%TMPL:DEF{"attachments::showuploader"}%%URLPARAM{"attachments_showuploader" default="on"}%%TMPL:END%
+%TMPL:DEF{"attachments::showhidden"}%%URLPARAM{"attachments_showhidden" default="true"}%%TMPL:END%
+%TMPL:DEF{"attachments::showuploader"}%%URLPARAM{"attachments_showuploader" default="true"}%%TMPL:END%
 
 %TMPL:DEF{"content"}%<!-- content -->
 <div class="foswikiMetaData %IF{"not '%WEB%.%TOPIC%' allows 'change'" then="foswikiMetaDataNotAllowed"}%">

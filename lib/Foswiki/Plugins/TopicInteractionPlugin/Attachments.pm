@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# Copyright (C) 2005-2016 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2005-2017 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -219,7 +219,7 @@ sub handle {
     my $thisWebDavUrl = $webDavUrl;
     $thisWebDavUrl =~ s/\$attachment/$encName/g;
 
-    my $webDavAction = '<a rel="nofollow" href="' . $thisWebDavUrl . '" ' . 'title="%MATETEXT{"Edit this attachment" args="<nop>' . $info->{name} . '"}%">' . '%MAKETEXT{"edit"}%</a>';
+    my $webDavAction = '<a rel="nofollow" href="' . $thisWebDavUrl . '" ' . 'title="%MAKETEXT{"Edit this attachment" args="<nop>' . $info->{name} . '"}%">' . '%MAKETEXT{"edit"}%</a>';
 
     my $propsUrl = '%SCRIPTURLPATH{"attach"}%/' . $thisWeb . '/' . $thisTopic . '?filename=' . $encName . '&revInfo=1';
     my $propsAction = '<a rel="nofollow" href="' . $propsUrl . '" ' . 'title="%MAKETEXT{"Manage properties of [_1]" args="<nop>' . $info->{name} . '"}%">' . '%MAKETEXT{"props"}%</a>';
@@ -313,7 +313,7 @@ sub urlEncode {
   return $text unless $text;
 
   $text = Encode::encode_utf8($text) if $Foswiki::UNICODE;
-  $text =~ s/([^0-9a-zA-Z-_.:~!*\/])/sprintf('%%<nop>%02X',ord($1))/ge;
+  $text =~ s/([^0-9a-zA-Z-_.:~!*\/])/sprintf('%%%02X',ord($1))/ge;
 
   return $text;
 }

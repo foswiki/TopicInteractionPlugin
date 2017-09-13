@@ -3,7 +3,7 @@
 
 Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 
-(c)opyright 2010-2016 Michael Daum http://michaeldaumconsulting.com
+(c)opyright 2010-2017 Michael Daum http://michaeldaumconsulting.com
 
 are listed in the AUTHORS file in the root of this distribution.
 NOTE: Please extend that file, not this notice.
@@ -50,7 +50,7 @@ As per the GPL, removal of this notice is prohibited.
 
 Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 
-(c)opyright 2010-2016 Michael Daum http://michaeldaumconsulting.com
+(c)opyright 2010-2017 Michael Daum http://michaeldaumconsulting.com
 
 are listed in the AUTHORS file in the root of this distribution.
 NOTE: Please extend that file, not this notice.
@@ -394,7 +394,6 @@ As per the GPL, removal of this notice is prohibited.
     }
 
     self.displayAttachmentsCount();
-    self.dynCols();
     self.showSelection();
 
     // add listener for refresh event
@@ -429,7 +428,7 @@ As per the GPL, removal of this notice is prohibited.
     self.elem.find(".foswikiDisplayHidden input").change(function() {
       self.load({
         "showempty": true,
-        "hidden": $(this).prop('checked')?'on':'off'
+        "showhidden": $(this).prop('checked')
       });
       return false;
     });
@@ -495,7 +494,8 @@ As per the GPL, removal of this notice is prohibited.
         $(this).removeClass("foswikiAttachmentHover");
       }
     ).click(function(e) {
-      var $attachment = $(this), id = decodeURIComponent($attachment.attr('id'));
+      var $attachment = $(this), 
+          id = decodeURIComponent($attachment.attr('id'));
 
       if (!$(e.target).is("a,img")) { // dont propagate the attachment clicks
         $attachment.toggleClass("foswikiAttachmentSelected");
@@ -763,9 +763,7 @@ As per the GPL, removal of this notice is prohibited.
         if($versionContainer.is(".foswikiVersionsContainerLoaded")) {
           $this.hide();
           $attachment.find(".foswikiHideVersions").show();
-          $versionContainer.slideDown("fast", function() {
-            self.dynCols();
-          });
+          $versionContainer.slideDown("fast");
         } else {
           $versionContainer.show();
           $versionContainer.load(url, function() {
@@ -773,7 +771,6 @@ As per the GPL, removal of this notice is prohibited.
             $attachment.effect("highlight");
             $this.hide();
             $attachment.find(".foswikiHideVersions").show();
-            self.dynCols();
           });
         }
         return false;
@@ -789,9 +786,7 @@ As per the GPL, removal of this notice is prohibited.
       $this.click(function() {
         $this.hide();
         $attachment.find(".foswikiShowVersions").show();
-        $versionContainer.slideUp("fast", function() {
-          self.dynCols();
-        });
+        $versionContainer.slideUp("fast");
         return false;
       });
     });
@@ -1051,55 +1046,6 @@ As per the GPL, removal of this notice is prohibited.
     });
   };
 
-  /* switch number of columns based on screen width **********************/
-  FoswikiAttachments.prototype.dynCols = function() {
-    var self = this,
-        width = self.elem.width(), 
-        newClass, maxHeight, height, 
-        $attachments = self.elem.find(".foswikiAttachment"),
-        nrAttachments = self.getCount();
-
-    if (width > 1300 && nrAttachments >= 3) {
-      newClass = "foswikiAttachmentsCols3";
-      self.opts.cols = 3;
-    } else if (width > 940 && nrAttachments >=2) {
-      newClass = "foswikiAttachmentsCols2";
-      self.opts.cols = 2;
-    } else {
-      //self.log("width="+width+" ... removing cols");
-      newClass = "foswikiAttachmentsCols1";
-      self.opts.cols = 1;
-    }
-
-    if (newClass && !self.elem.hasClass(newClass)) {
-      self.elem.removeClass("foswikiAttachmentsCols1 foswikiAttachmentsCols2 foswikiAttachmentsCols3");
-      self.elem.addClass(newClass);
-      //self.log("width="+width+" ... switching class="+newClass);
-    } else {
-      //self.log("width="+width+" ... no change");
-    }
-
-    // adjust bucket height to clean up differences causing probs when floating
-    if (self.opts.cols > 1) {
-      maxHeight = 0;
-      $attachments.css('height', 'auto').each(function() {
-        height = $(this).height();
-        if (height > maxHeight) {
-          maxHeight = height;
-        }
-      });
-      $attachments.height(maxHeight);
-    } else {
-      $attachments.height('auto');
-    }
-
-    window.setTimeout(function() {
-        $(window).one("resize.attachments", function() {
-          self.dynCols();
-        });
-    }, 300);
-  };
-
   /* mark current selection **********************************************/
   FoswikiAttachments.prototype.showSelection = function() {
     var self = this, i, id;
@@ -1109,6 +1055,7 @@ As per the GPL, removal of this notice is prohibited.
       for (i = 0; i < self.selection.length; i++) {
         id = encodeURIComponent(self.selection[i]);
         // jQuery can't handle id's with umlauts in it
+        //$("#"+id).addClass("foswikiAttachmentSelected");
         $(document.getElementById(id)).addClass("foswikiAttachmentSelected");
       }
       if (self.selection.length) {
@@ -1192,7 +1139,7 @@ As per the GPL, removal of this notice is prohibited.
         $this.data("foswikiAttachments", new FoswikiAttachments(this));
       }
 
-      $this.addClass(".foswikiInitedAttachments");
+      $this.addClass("foswikiInitedAttachments");
     }); /** end of livequery for foswikiAttachments **/
   });
 }(jQuery));

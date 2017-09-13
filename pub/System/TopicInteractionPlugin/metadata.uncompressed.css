@@ -61,6 +61,8 @@
 }
 .foswikiAttachmentsContainer {
   border-top:1px solid #ddd;
+  display:flex;
+  flex-wrap:wrap;
 }
 .foswikiAttachments .current {
   background:#aaa;
@@ -91,10 +93,16 @@
 }
 .foswikiAttachment {
   position:relative;
-  width:auto;
+  width:30em;
+  /*flex-basis:30em;*/
+  flex-grow:1;
+}
+.foswikiAttachmentName {
+  text-overflow:ellipsis;
+  overflow:hidden;
 }
 .foswikiAttachmentComment {
-  max-height:4em;
+  max-height:8em;
   overflow:auto;
 }
 .foswikiAttachmentSelected.foswikiAttachmentEdit,
@@ -104,14 +112,6 @@
 }
 .foswikiAttachmentContainer {
   padding:0.6923em 0.3846em; /* 9px 5px */
-}
-.foswikiAttachmentsCols2 .foswikiAttachment {
-  float:left;
-  width:50%;
-}
-.foswikiAttachmentsCols3 .foswikiAttachment {
-  float:left;
-  width:33%;
 }
 
 .foswikiAttachmentHover {

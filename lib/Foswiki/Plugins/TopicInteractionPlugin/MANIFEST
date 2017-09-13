@@ -1,3 +1,4 @@
+!noci
 data/System/TopicInteractionPlugin.txt 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin/Action/ChangeProperties.pm 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin/Action/CreateImageGallery.pm 0644

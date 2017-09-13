@@ -15,7 +15,6 @@
    "Move failed": "Move failed",
    "Moving attachment(s) ...": "Moving attachment(s) ...",
    "N/A" : "N/A",
-   "Please enter a filename": "Please enter a filename",
    "Saving changes ...": "Saving changes ...",
    "Security error.": "Security error.",
    "Show options": "Show options",

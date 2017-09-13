@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# Copyright (C) 2005-2016 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2005-2017 Michael Daum, http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ sub handle {
   $url =~ s/\$attachment/$encName/g;
 
 
-  my $result = '<a rel="nofollow" href="' . $url . '" ' . 'title="%MATETEXT{"Edit this attachment" args="<nop>' . $info->{name} . '"}%">' . '%MAKETEXT{"edit"}%</a>';
+  my $result = '<a rel="nofollow" href="' . $url . '" ' . 'title="%MAKETEXT{"Edit this attachment" args="<nop>' . $info->{name} . '"}%">' . '%MAKETEXT{"edit"}%</a>';
 
   return $result;
 }

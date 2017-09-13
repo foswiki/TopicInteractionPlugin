@@ -1539,18 +1539,32 @@
         data.submit();
       },
       paste: function(e, data) {
-        var fileName = prompt($.i18n("Please enter a filename"), "clipboard");
+        if (typeof(data.files) !== 'undefined' && data.files.length) {
+          Dialog.load({
+            id:"#foswikiAttachmentPaste", 
+            expand:"attachments::paste",
+            data: {
+              filename: "clipboard"
+            }
+          }).done(function($dialog) {
+            $dialog.find("form").submit(function() {  
+              fileName = $dialog.find("input[name='filename']").val();
 
-        if (!fileName) {
-          return false;
-        }
-
-        if (data.files.length > 1) {
-          $.each(data.files, function(index, file) {
-            file.uploadName = fileName + index;
+              if (fileName) {
+                if (data.files.length > 1) {
+                  $.each(data.files, function(index, file) {
+                    file.uploadName = fileName + index;
+                  });
+                } else {
+                    data.files[0].uploadName = fileName;
+                }
+                self.add(data);
+              }
+              $dialog.dialog("close");
+              return false;
+            });
           });
-        } else {
-            data.files[0].uploadName = fileName;
+          return false;
         }
       },
       start: function() {
@@ -1591,11 +1605,12 @@
           type: "success",
           delay: 1000 
         });
-        $(".foswikiAttachments, .foswikiAttachmentsLoader").trigger("refresh", [self.uploadedFiles]);
+        $(".foswikiAttachments").trigger("refresh", [self.uploadedFiles]); // legacy
+        self.elem.trigger("afterUpload", [self.uploadedFiles]);
       },
       fail: function(e, data) {
-        var response = data.jqXHR.responseJSON;
-        console.log("upload failed:",response.error.message);
+        var response = data.jqXHR.responseJSON || { error: { message: "unknown error"} };
+        //console.log("upload failed:",response.error.message);
         $.pnotify({
           text: $.i18n("Error: %msg%", {msg: response.error.message}),
           type: "error"

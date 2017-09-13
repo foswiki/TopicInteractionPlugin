@@ -64,6 +64,7 @@ limit the number of attachments to be listed.
 | ="&lt;topic>"= | topic whos attachments we want to query | 
 | =attr="..."= | match the attachments' attribute |
 | =autoattached="yes,no,undef"= | limit attachments to those that are (not) autoattached |
+| =casesensitive="on/off"= | specify string comparison mode when filtering attachments, defaults to =on= | 
 | =comment="..."= | match the attachments' comment |
 | =maxdate="..."= | specify latest attachment |
 | =maxsize="..."= | specify biggest attachment |
@@ -149,6 +150,7 @@ generates:
 
 ---++ Change History
 %TABLE{columnwidths="7em" tablewidth="100%"}%
+|  13 Sep 2017: | replace outdated plupload uploader with jquery-file-upload |
 |  18 Nov 2016: | oo-ified core; \
                   added humanized file size display, removed flash backend from default; \
                   improved webdav integration for one-click editing office documents; \
