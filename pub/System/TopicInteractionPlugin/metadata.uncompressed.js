@@ -3,7 +3,7 @@
 
 Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 
-(c)opyright 2010-2017 Michael Daum http://michaeldaumconsulting.com
+(c)opyright 2010-2018 Michael Daum http://michaeldaumconsulting.com
 
 are listed in the AUTHORS file in the root of this distribution.
 NOTE: Please extend that file, not this notice.
@@ -50,7 +50,7 @@ As per the GPL, removal of this notice is prohibited.
 
 Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 
-(c)opyright 2010-2017 Michael Daum http://michaeldaumconsulting.com
+(c)opyright 2010-2018 Michael Daum http://michaeldaumconsulting.com
 
 are listed in the AUTHORS file in the root of this distribution.
 NOTE: Please extend that file, not this notice.
@@ -188,7 +188,7 @@ As per the GPL, removal of this notice is prohibited.
 
 Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 
-(c)opyright 2017 Michael Daum http://michaeldaumconsulting.com
+(c)opyright 2017-2018 Michael Daum http://michaeldaumconsulting.com
 
 are listed in the AUTHORS file in the root of this distribution.
 NOTE: Please extend that file, not this notice.
@@ -281,7 +281,7 @@ var Dialog;
         dataType: 'html',
         success: function(data) {
           var $dialog = $(data);
-          $dialog.on("dialogopen", function() {
+          $dialog.one("dialogopen", function() {
             callback($dialog);
             dfd.resolve($dialog);
           });
@@ -300,7 +300,7 @@ var Dialog;
 
 Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 
-(c)opyright 2010-2017 Michael Daum http://michaeldaumconsulting.com
+(c)opyright 2010-2018 Michael Daum http://michaeldaumconsulting.com
 
 are listed in the AUTHORS file in the root of this distribution.
 NOTE: Please extend that file, not this notice.

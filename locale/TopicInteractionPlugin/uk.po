@@ -20,20 +20,20 @@ msgstr ""
 "X-Poedit-Country: UKRAINE\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: templates/metadata.tmpl:314
+#: templates/metadata.tmpl:307
 #, fuzzy
 msgid "%1 attachment(s)"
 msgstr "Скрыть прикрепленные файлы"
 
-#: templates/metadata.tmpl:346
+#: templates/metadata.tmpl:350
 msgid "<a href='%1'>Version %2</a> uploaded by %3 on %4"
 msgstr ""
 
-#: templates/metadata.tmpl:464
+#: templates/metadata.tmpl:468
 msgid "Are you sure that you want to delete %1?"
 msgstr ""
 
-#: templates/metadata.tmpl:477
+#: templates/metadata.tmpl:481
 msgid "Attach"
 msgstr "Додати файл"
 
@@ -45,20 +45,20 @@ msgstr "Додатки %1"
 msgid "Author"
 msgstr ""
 
-#: templates/metadata.tmpl:428 templates/metadata.tmpl:452
-#: templates/metadata.tmpl:478
+#: templates/metadata.tmpl:432 templates/metadata.tmpl:456
+#: templates/metadata.tmpl:482
 msgid "Cancel"
 msgstr "Скасувати"
 
-#: templates/metadata.tmpl:320
+#: templates/metadata.tmpl:313
 msgid "Clear all"
 msgstr "Очистити усе"
 
-#: templates/attach.topicinteraction.tmpl:10 templates/metadata.tmpl:358
+#: templates/attach.topicinteraction.tmpl:10 templates/metadata.tmpl:362
 msgid "Close"
 msgstr "Закрити"
 
-#: templates/metadata.tmpl:411
+#: templates/metadata.tmpl:415
 msgid "Comment"
 msgstr "Коментар"
 
@@ -67,22 +67,22 @@ msgstr "Коментар"
 msgid "Comments %1"
 msgstr "Коментарі:"
 
-#: templates/metadata.tmpl:483
+#: templates/metadata.tmpl:487
 #, fuzzy
 msgid "Confirmation required"
 msgstr "Увага! Потрібне підтвердження"
 
-#: templates/metadata.tmpl:304
+#: templates/metadata.tmpl:297
 #, fuzzy
 msgid "Create image gallery"
 msgstr "Створити нову таблицю"
 
-#: templates/metadata.tmpl:500
+#: templates/metadata.tmpl:504
 #, fuzzy
 msgid "Creating image gallery"
 msgstr "Створити нову таблицю"
 
-#: templates/metadata.tmpl:494
+#: templates/metadata.tmpl:498
 #, fuzzy
 msgid "Creating links"
 msgstr "Оновити посилання"
@@ -96,12 +96,12 @@ msgstr "Рядки даних"
 msgid "Date"
 msgstr "Дата"
 
-#: templates/metadata.tmpl:475
+#: templates/metadata.tmpl:479
 #, fuzzy
 msgid "Dateiname"
 msgstr "Перейменувати"
 
-#: templates/metadata.tmpl:310
+#: templates/metadata.tmpl:303
 msgid "Delete"
 msgstr "Вилучити"
 
@@ -110,17 +110,17 @@ msgstr "Вилучити"
 msgid "Delete %1"
 msgstr "Вилучити"
 
-#: templates/metadata.tmpl:457
+#: templates/metadata.tmpl:461
 #, fuzzy
 msgid "Delete attachment?"
 msgstr "Вилучити додаток %1"
 
-#: templates/metadata.tmpl:250
+#: templates/metadata.tmpl:243
 #, fuzzy
 msgid "Delete this attachment"
 msgstr "Вилучити додаток %1"
 
-#: templates/metadata.tmpl:524
+#: templates/metadata.tmpl:528
 #, fuzzy
 msgid "Deleting"
 msgstr "Вилучити"
@@ -129,46 +129,46 @@ msgstr "Вилучити"
 msgid "Display hidden"
 msgstr ""
 
-#: templates/metadata.tmpl:498
+#: templates/metadata.tmpl:502
 msgid "Do you really want to create an image gallery for %1 attachment(s)?"
 msgstr ""
 
-#: templates/metadata.tmpl:492
+#: templates/metadata.tmpl:496
 msgid "Do you really want to create links to %1 attachment(s)?"
 msgstr ""
 
-#: templates/metadata.tmpl:522
+#: templates/metadata.tmpl:526
 #, fuzzy
 msgid "Do you really want to delete %1 attachment(s)?"
 msgstr "Перемісити чи вилучити додаток"
 
-#: templates/metadata.tmpl:504
+#: templates/metadata.tmpl:508
 msgid "Do you really want to download %1 attachment(s)?"
 msgstr ""
 
-#: templates/metadata.tmpl:510
+#: templates/metadata.tmpl:514
 #, fuzzy
 msgid "Do you really want to hide %1 attachment(s)?"
 msgstr "Додатково про приховування додатків"
 
-#: templates/metadata.tmpl:516
+#: templates/metadata.tmpl:520
 msgid "Do you really want to unhide %1 attachment(s)?"
 msgstr ""
 
-#: templates/metadata.tmpl:306
+#: templates/metadata.tmpl:299
 msgid "Download"
 msgstr ""
 
-#: templates/metadata.tmpl:506
+#: templates/metadata.tmpl:510
 #, fuzzy
 msgid "Downloading"
 msgstr "Включення"
 
-#: templates/metadata.tmpl:541
+#: templates/metadata.tmpl:545
 msgid "Drag files here"
 msgstr ""
 
-#: templates/metadata.tmpl:400
+#: templates/metadata.tmpl:404
 #, fuzzy
 msgid "Edit attachment"
 msgstr "Скрыть прикрепленные файлы"
@@ -178,7 +178,7 @@ msgstr "Скрыть прикрепленные файлы"
 msgid "Edit form"
 msgstr "редагувати форму"
 
-#: templates/metadata.tmpl:241
+#: templates/metadata.tmpl:234
 #, fuzzy
 msgid "Edit properties of this attachment"
 msgstr "Додатково про приховування додатків"
@@ -190,7 +190,7 @@ msgstr "Редагувати цю таблицю"
 
 #: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:222
 #: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:42
-#: templates/metadata.tmpl:239
+#: templates/metadata.tmpl:232
 #, fuzzy
 msgid "Edit this attachment"
 msgstr "Редагувати цю таблицю"
@@ -203,32 +203,32 @@ msgstr ""
 msgid "Enter a search pattern to filter the list of attachments"
 msgstr ""
 
-#: templates/metadata.tmpl:407
+#: templates/metadata.tmpl:411
 #, fuzzy
 msgid "File name"
 msgstr "Ім'я:"
 
-#: templates/metadata.tmpl:307
+#: templates/metadata.tmpl:300
 #, fuzzy
 msgid "Hide"
 msgstr "Приховати файл"
 
-#: templates/metadata.tmpl:418
+#: templates/metadata.tmpl:422
 #, fuzzy
 msgid "Hide attachment in normal topic view."
 msgstr "Додатки не будуть показані на сторінці перегляду теми."
 
-#: templates/metadata.tmpl:551
+#: templates/metadata.tmpl:555
 #, fuzzy
 msgid "Hide options"
 msgstr "Параметри пошуку"
 
-#: templates/metadata.tmpl:512
+#: templates/metadata.tmpl:516
 #, fuzzy
 msgid "Hiding"
 msgstr "Заголовок 1"
 
-#: templates/metadata.tmpl:302
+#: templates/metadata.tmpl:295
 #, fuzzy
 msgid "Insert links"
 msgstr "Вставити посилання"
@@ -238,16 +238,16 @@ msgstr "Вставити посилання"
 msgid "Manage properties of %1"
 msgstr "Змінити лише властивості"
 
-#: templates/metadata.tmpl:301
+#: templates/metadata.tmpl:294
 #, fuzzy
 msgid "More actions"
 msgstr "Додаткові дії теми"
 
-#: templates/metadata.tmpl:309 templates/metadata.tmpl:451
+#: templates/metadata.tmpl:302 templates/metadata.tmpl:455
 msgid "Move"
 msgstr "Перемістити"
 
-#: templates/metadata.tmpl:433
+#: templates/metadata.tmpl:437
 #, fuzzy
 msgid "Move attachment(s) to a different topic"
 msgstr "Перемістити файл до розділу:"
@@ -257,7 +257,7 @@ msgstr "Перемістити файл до розділу:"
 msgid "Move or delete %1"
 msgstr "Перемісити чи вилучити прикріплені файли"
 
-#: templates/metadata.tmpl:249
+#: templates/metadata.tmpl:242
 #, fuzzy
 msgid "Move this attachment to a different topic"
 msgstr "Копіювати цю тему (та всі додатки) до нової теми."
@@ -267,24 +267,24 @@ msgstr "Копіювати цю тему (та всі додатки) до но�
 msgid "Name"
 msgstr "Ім'я:"
 
-#: templates/metadata.tmpl:468 templates/metadata.tmpl:528
+#: templates/metadata.tmpl:472 templates/metadata.tmpl:532
 msgid "No, thanks"
 msgstr ""
 
-#: templates/metadata.tmpl:415
+#: templates/metadata.tmpl:419
 msgid "Options"
 msgstr "Варіанти"
 
-#: templates/metadata.tmpl:473
+#: templates/metadata.tmpl:477
 #, fuzzy
 msgid "Paste attachment"
 msgstr "Скрыть прикрепленные файлы"
 
-#: templates/metadata.tmpl:353
+#: templates/metadata.tmpl:357
 msgid "Preview"
 msgstr "Попередній перегляд"
 
-#: templates/metadata.tmpl:245 templates/metadata.tmpl:247
+#: templates/metadata.tmpl:238 templates/metadata.tmpl:240
 #, fuzzy
 msgid "Preview this attachment"
 msgstr "Перемістити доданий файл"
@@ -294,7 +294,7 @@ msgstr "Перемістити доданий файл"
 msgid "Results per page"
 msgstr "Результати з розділу %1"
 
-#: templates/metadata.tmpl:427
+#: templates/metadata.tmpl:431
 msgid "Save"
 msgstr "Зберегти"
 
@@ -302,17 +302,17 @@ msgstr "Зберегти"
 msgid "Search"
 msgstr "Пошук"
 
-#: templates/metadata.tmpl:319
+#: templates/metadata.tmpl:312
 #, fuzzy
 msgid "Select all"
 msgstr "Встановити все"
 
-#: templates/metadata.tmpl:552
+#: templates/metadata.tmpl:556
 #, fuzzy
 msgid "Show options"
 msgstr "Параметри пошуку"
 
-#: templates/metadata.tmpl:554
+#: templates/metadata.tmpl:558
 #, fuzzy
 msgid "Show/hide advanced options"
 msgstr "Параметри пошуку"
@@ -326,51 +326,51 @@ msgstr "Розмір"
 msgid "Sort by"
 msgstr "Сортувати результати за:"
 
-#: templates/metadata.tmpl:448
+#: templates/metadata.tmpl:452
 msgid "The new topic chosen must already exist."
 msgstr "Вибирана нова тема повинна існувати."
 
-#: templates/metadata.tmpl:445
+#: templates/metadata.tmpl:449
 msgid "To topic"
 msgstr "До теми"
 
-#: templates/metadata.tmpl:441
+#: templates/metadata.tmpl:445
 msgid "To web"
 msgstr "У розділ"
 
-#: templates/metadata.tmpl:308
+#: templates/metadata.tmpl:301
 msgid "Unhide"
 msgstr ""
 
-#: templates/metadata.tmpl:518
+#: templates/metadata.tmpl:522
 msgid "Unhiding"
 msgstr ""
 
-#: templates/metadata.tmpl:545
+#: templates/metadata.tmpl:549
 #, fuzzy
 msgid "Upload files"
 msgstr "Завантажити файл"
 
-#: templates/metadata.tmpl:546
+#: templates/metadata.tmpl:550
 #, fuzzy
 msgid "Uploading ..."
 msgstr "Завантажити файл"
 
-#: templates/metadata.tmpl:423
-msgid "Use this image as a thumbnail for the page."
+#: templates/metadata.tmpl:427
+msgid "Use as a thumbnail for the page."
 msgstr ""
 
-#: templates/metadata.tmpl:270
+#: templates/metadata.tmpl:264
 #, fuzzy
 msgid "Version %1"
 msgstr "Версія"
 
-#: templates/metadata.tmpl:467
+#: templates/metadata.tmpl:471
 #, fuzzy
 msgid "Yes, delete"
 msgstr "(видалити)"
 
-#: templates/metadata.tmpl:527
+#: templates/metadata.tmpl:531
 msgid "Yes, please"
 msgstr ""
 
@@ -389,20 +389,20 @@ msgstr "(видалити)"
 msgid "edit"
 msgstr "редагувати"
 
-#: templates/metadata.tmpl:262
+#: templates/metadata.tmpl:255
 msgid "hidden"
 msgstr ""
 
-#: templates/metadata.tmpl:286
+#: templates/metadata.tmpl:280
 #, fuzzy
 msgid "hide other revisions"
 msgstr "Новіша редакція:"
 
-#: templates/metadata.tmpl:286
+#: templates/metadata.tmpl:280
 msgid "less"
 msgstr ""
 
-#: templates/metadata.tmpl:286
+#: templates/metadata.tmpl:280
 #, fuzzy
 msgid "more"
 msgstr "(більше)"
@@ -415,22 +415,21 @@ msgstr ""
 msgid "props"
 msgstr ""
 
-#: templates/metadata.tmpl:319
+#: templates/metadata.tmpl:312
 #, fuzzy
 msgid "select all attachments on this topic"
 msgstr "строго обмежити любий доступ до цієї теми"
 
-#: templates/metadata.tmpl:286
+#: templates/metadata.tmpl:280
 #, fuzzy
 msgid "show previous revisions"
 msgstr "Нема попередньої редакції."
 
-#: templates/metadata.tmpl:264
+#: templates/metadata.tmpl:257
 msgid "thumbnail"
 msgstr ""
 
-#: templates/metadata.tmpl:320
+#: templates/metadata.tmpl:313
 #, fuzzy
 msgid "unselect all previously select attachments"
 msgstr "Виберіть новий файл на своєму комп'ютері, щоб поновити додаток"
-

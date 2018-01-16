@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# Copyright (C) 2005-2017 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2005-2018 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@ sub handle {
   my $thisWeb = $params->{web} || $session->{webName};
 
   ($thisWeb, $thisTopic) = Foswiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
+  return "" unless Foswiki::Func::checkAccessPermission("VIEW", $session->{user}, undef, $thisTopic, $thisWeb);
 
   my $theNames = $params->{names} || $params->{name} || '.*';
   my $theAttr = $params->{attr} || '.*';
@@ -75,7 +76,7 @@ sub handle {
   $params->{limit} = $theLimit;
   $params->{skip} = $theSkip;
 
-  $theFormat = '| [[$url][$name]] |  $sizeK | <nobr>$date</nobr> | $wikiuser | $comment |'
+  $theFormat = '   * [[$url][$name]], $sizeK, <nobr>$date</nobr>, [[$wikiuser]], $comment'
     unless defined $theFormat;
   $theSeparator = $params->{sep} unless defined $theSeparator;
   $theSeparator = "\n" unless defined $theSeparator;
@@ -83,15 +84,6 @@ sub handle {
   # sort attachments
   my ($meta) = Foswiki::Func::readTopic($thisWeb, $thisTopic );
   my @attachments = $meta->find("FILEATTACHMENT");
-  unless (@attachments) {
-    return '' if $theHideNull;
-    my $text = $theNullHeader.$theNullFormat.$theNullFooter;
-    $text =~ s/\$web\b/$thisWeb/g;
-    $text =~ s/\$topic\b/$thisTopic/g;
-    return Foswiki::Func::decodeFormatTokens($text);
-  }
-
-  #%META:FILEATTACHMENT{name="cross06.jpg" attachment="cross06.jpg" attr="" comment="" date="1287484667" size="30247" user="micha" version="1"}%
 
   my $isNumeric;
   my %sorting = ();
@@ -187,6 +179,14 @@ sub handle {
 
     $index++;
     push @selectedAttachments, $attachment;
+  }
+
+  unless (@selectedAttachments) {
+    return '' if $theHideNull;
+    my $text = $theNullHeader.$theNullFormat.$theNullFooter;
+    $text =~ s/\$web\b/$thisWeb/g;
+    $text =~ s/\$topic\b/$thisTopic/g;
+    return Foswiki::Func::decodeFormatTokens($text);
   }
 
   $params->{_count} = $index;
@@ -313,7 +313,7 @@ sub urlEncode {
   return $text unless $text;
 
   $text = Encode::encode_utf8($text) if $Foswiki::UNICODE;
-  $text =~ s/([^0-9a-zA-Z-_.:~!*\/])/sprintf('%%%02X',ord($1))/ge;
+  $text =~ s/([^0-9a-zA-Z-_.:~!*\/])/sprintf('%%%02x',ord($1))/ge;
 
   return $text;
 }

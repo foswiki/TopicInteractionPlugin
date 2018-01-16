@@ -1485,7 +1485,7 @@
 /*
  * foswiki file upload plugin 1.0
  *
- * Copyright (c) 2016-2017 Michael Daum http://michaeldaumconsulting.com
+ * Copyright (c) 2016-2018 Michael Daum http://michaeldaumconsulting.com
  *
  * Licensed GPL http://www.gnu.org/licenses/gpl.html
  *
@@ -1540,25 +1540,36 @@
       },
       paste: function(e, data) {
         if (typeof(data.files) !== 'undefined' && data.files.length) {
+          self.currentData = data;
+
           Dialog.load({
             id:"#foswikiAttachmentPaste", 
             expand:"attachments::paste",
+            init: function() {
+              if (typeof(self.prevFileName) !== 'undefined') {
+                this.find("input[name='filename']").val(self.prevFileName);
+              }
+            },
             data: {
               filename: "clipboard"
             }
           }).done(function($dialog) {
-            $dialog.find("form").submit(function() {  
-              fileName = $dialog.find("input[name='filename']").val();
+            $dialog.find("form:not(.inited)").addClass("inited").submit(function() {
+              var fileName = $dialog.find("input[name='filename']").val();
 
               if (fileName) {
-                if (data.files.length > 1) {
-                  $.each(data.files, function(index, file) {
+                if (self.currentData.files.length > 1) {
+                  $.each(self.currentData.files, function(index, file) {
                     file.uploadName = fileName + index;
+                    self.prevFileName = file.uploadName;
                   });
                 } else {
-                    data.files[0].uploadName = fileName;
+                    self.currentData.files[0].uploadName = fileName;
+                    self.prevFileName = fileName;
                 }
-                self.add(data);
+                self.add(self.currentData);
+
+                self.currentData = undefined;
               }
               $dialog.dialog("close");
               return false;

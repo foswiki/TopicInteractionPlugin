@@ -155,7 +155,7 @@
 
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments"}%<noautolink>
-<div class='foswikiAttachments foswikiFormSteps foswikiAttachmentsCols%TMPL:P{"attachments::cols"}%"' data-show-empty='%TMPL:P{"attachments::showempty"}%' data-show-hidden='%TMPL:P{"attachments::showhidden"}%' data-show-options='%TMPL:P{"attachments::showoptions"}%' data-sort='%TMPL:P{"attachments::sort"}%' data-reverse='%TMPL:P{"attachments::reverse"}%' data-topic='%ENCODE{"%WEB%.%TOPIC%"}%' data-filter='%TMPL:P{"attachments::filter"}%' data-selection='%TMPL:P{"attachments::selection"}%' data-limit='%TMPL:P{"attachments::limit"}%' data-skip='%TMPL:P{"attachments::skip"}%'  data-cols='%TMPL:P{"attachments::cols"}%'>
+<div class='foswikiAttachments foswikiFormSteps foswikiAttachmentsCols%TMPL:P{"attachments::cols"}%' data-show-empty='%TMPL:P{"attachments::showempty"}%' data-show-hidden='%TMPL:P{"attachments::showhidden"}%' data-show-options='%TMPL:P{"attachments::showoptions"}%' data-sort='%TMPL:P{"attachments::sort"}%' data-reverse='%TMPL:P{"attachments::reverse"}%' data-topic='%ENCODE{"%WEB%.%TOPIC%"}%' data-filter='%TMPL:P{"attachments::filter"}%' data-selection='%TMPL:P{"attachments::selection"}%' data-limit='%TMPL:P{"attachments::limit"}%' data-skip='%TMPL:P{"attachments::skip"}%'  data-cols='%TMPL:P{"attachments::cols"}%'>
 %IF{"'%URLPARAM{"attachments_sort"}%'!=''" then="$percntSESSION_VARIABLE{\"_attachments_sort\" set=\"%TMPL:P{"attachments::sort"}%\"}$percnt"}%%{}%
 %IF{"'%URLPARAM{"attachments_reverse"}%'!=''" then="$percntSESSION_VARIABLE{\"_attachments_reverse\" set=\"%TMPL:P{"attachments::reverse"}%\"}$percnt"}%%{}%
 %IF{"'%URLPARAM{"attachments_limit"}%'!=''" then="$percntSESSION_VARIABLE{\"_attachments_limit\" set=\"%TMPL:P{"attachments::limit"}%\"}$percnt"}%%{}%
@@ -186,7 +186,7 @@
         <option class="foswikiOption" value="all" %IF{"'%TMPL:P{"attachments::limit"}%'='all'" then="selected"}%>%MAKETEXT{"all"}%</option>
       </select>
     </span>
-    <span class='foswikiDisplayHidden %IF{"'%ATTACHMENTS{attr=".*h.*" header="$count" format="" limit="1"}%'='0'" then="foswikiHidden"}%'>
+    <span class='foswikiDisplayHidden %IF{"'%WEB%.%TOPIC%'/attachments[attr='h']" else="foswikiHidden"}%'>
       <label title="%MAKETEXT{"Enable/disable displaying hidden attachments"}%">
         <b>%MAKETEXT{"Display hidden"}%:</b>
         <input type='checkbox' class='foswikiCheckbox' %IF{"'%TMPL:P{"attachments::showhidden"}%'='true'" then="checked='checked'"}% value='on' />
@@ -225,16 +225,9 @@
         }$percnt
         </div>
         <div class=\"foswikiAttachmentControl foswikiRight foswikiMetaDataEdit\">
-          $percntIF{\"context LikePluginEnabled\"
-            then=\"$dollarpercntLIKE{
-                type=\\"FILEATTACHMENT\\"
-                id=\\"$name\\" 
-                theme=\\"simple\\" 
-                showdislike=\\"off\\" 
-                showlabel=\\"off\\"
-                showcount=\\"off\\"
-                likeicon=\\"fa-thumbs-o-up fa-flip-horizontal\\"
-              }$dollarpercnt\"
+          $percntTMPL:P{context=\"LikePluginEnabled\" 
+            then=\"attachments::like\"
+            id=\"$name\"
           }$percnt$percntIF{\"'$webdavUrl'!=''\"
             then=\"<a href='$webdavUrl' class='jqWebDAVLink foswikiAttachmentEditButton' title='%MAKETEXT{"Edit this attachment"}%' rel='nofollow'>%JQICON{"fa-pencil"}%</a>\"
           }$percnt%{}%
@@ -266,6 +259,7 @@
               then=\"</span>\" 
             }$percnt%{}%
           </div>
+          <div class='foswikiAttachmentComment'>$comment</div>
           <span class='foswikiGrayText'>
             %{}% $date &#124; %MAKETEXT{"Version [_1]" args="$version"}% &#124; $percntSPACEOUT{$user}$percnt
             $percntIF{\"context LikePluginEnabled\"
@@ -286,7 +280,6 @@
             then=\"...&nbsp;<a href='#' class='foswikiShowVersions' title='%MAKETEXT{"show previous revisions"}%'>%MAKETEXT{"more"}%</a><a href='#' class='foswikiHideVersions' title='%MAKETEXT{"hide other revisions"}%' style='display:none'>%MAKETEXT{"less"}%</a>
                    <div class='foswikiVersionsContainer' style='display:none'><span class='jqAjaxLoader'>&nbsp;</span></div>\"
           }$percnt%{}%
-          <div class='foswikiAttachmentComment'>$comment</div>
         </div>
         %CLEAR%
       </div>
@@ -324,6 +317,17 @@
 </div>
 </div>
 </noautolink>%TMPL:END%
+
+%{ ################################################################################ }%
+%TMPL:DEF{"attachments::like"}%%LIKE{
+  type="FILEATTACHMENT"
+  id="%id%" 
+  theme="simple" 
+  showdislike="off" 
+  showlabel="off"
+  showcount="off"
+  likeicon="fa-thumbs-o-up fa-flip-horizontal"
+}%%TMPL:END%
 
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments::thumbnail"}%%IMAGE{
@@ -420,7 +424,7 @@
       <div class="foswikiThumbnailStep" style="display:none">
         <label>
           <input type="checkbox" class="foswikiCheckbox" name="isthumbnail" />
-          %MAKETEXT{"Use this image as a thumbnail for the page."}%
+          %MAKETEXT{"Use as a thumbnail for the page."}%
         </label>
       </div>
     </div>

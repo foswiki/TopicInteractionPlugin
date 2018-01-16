@@ -150,6 +150,7 @@ generates:
 
 ---++ Change History
 %TABLE{columnwidths="7em" tablewidth="100%"}%
+|  16 Jan 2018: | check access permissions in %ATTACHMENTS makro; fixed url encoding of unicode files |
 |  13 Sep 2017: | replace outdated plupload uploader with jquery-file-upload |
 |  18 Nov 2016: | oo-ified core; \
                   added humanized file size display, removed flash backend from default; \
@@ -201,7 +202,7 @@ generates:
 
 %META:FORM{name="PackageForm"}%
 %META:FIELD{name="Author" title="Author" value="Michael Daum"}%
-%META:FIELD{name="Copyright" title="Copyright" value="&copy; 2010-2016 Michael Daum http://michaeldaumconsulting.com"}%
+%META:FIELD{name="Copyright" title="Copyright" value="&copy; 2010-2018 Michael Daum http://michaeldaumconsulting.com"}%
 %META:FIELD{name="Description" title="Description" value="%25$SHORTDESCRIPTION%25"}%
 %META:FIELD{name="Home" title="Home" value="Foswiki:Extensions/%25TOPIC%25"}%
 %META:FIELD{name="License" title="License" value="[[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]]"}%

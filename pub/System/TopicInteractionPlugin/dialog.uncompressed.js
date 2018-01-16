@@ -2,7 +2,7 @@
 
 Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 
-(c)opyright 2017 Michael Daum http://michaeldaumconsulting.com
+(c)opyright 2017-2018 Michael Daum http://michaeldaumconsulting.com
 
 are listed in the AUTHORS file in the root of this distribution.
 NOTE: Please extend that file, not this notice.
@@ -95,7 +95,7 @@ var Dialog;
         dataType: 'html',
         success: function(data) {
           var $dialog = $(data);
-          $dialog.on("dialogopen", function() {
+          $dialog.one("dialogopen", function() {
             callback($dialog);
             dfd.resolve($dialog);
           });

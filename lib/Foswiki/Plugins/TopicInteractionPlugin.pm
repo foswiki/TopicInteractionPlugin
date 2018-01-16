@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2009-2017 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2009-2018 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,8 +18,8 @@ package Foswiki::Plugins::TopicInteractionPlugin;
 use strict;
 use warnings;
 
-our $VERSION = '6.00';
-our $RELEASE = '13 Sep 2017';
+our $VERSION = '7.00';
+our $RELEASE = '16 Jan 2018';
 our $SHORTDESCRIPTION = 'Improved interaction with attachments and !DataForms';
 our $NO_PREFS_IN_TOPIC = 1;
 our $core;

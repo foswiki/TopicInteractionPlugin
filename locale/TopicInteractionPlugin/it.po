@@ -18,20 +18,20 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2.4\n"
 
-#: templates/metadata.tmpl:314
+#: templates/metadata.tmpl:307
 #, fuzzy
 msgid "%1 attachment(s)"
 msgstr "Allegati"
 
-#: templates/metadata.tmpl:346
+#: templates/metadata.tmpl:350
 msgid "<a href='%1'>Version %2</a> uploaded by %3 on %4"
 msgstr ""
 
-#: templates/metadata.tmpl:464
+#: templates/metadata.tmpl:468
 msgid "Are you sure that you want to delete %1?"
 msgstr ""
 
-#: templates/metadata.tmpl:477
+#: templates/metadata.tmpl:481
 msgid "Attach"
 msgstr "Allega"
 
@@ -43,20 +43,20 @@ msgstr "Allegati %1"
 msgid "Author"
 msgstr ""
 
-#: templates/metadata.tmpl:428 templates/metadata.tmpl:452
-#: templates/metadata.tmpl:478
+#: templates/metadata.tmpl:432 templates/metadata.tmpl:456
+#: templates/metadata.tmpl:482
 msgid "Cancel"
 msgstr "Rinuncia"
 
-#: templates/metadata.tmpl:320
+#: templates/metadata.tmpl:313
 msgid "Clear all"
 msgstr "Pulisci tutto"
 
-#: templates/attach.topicinteraction.tmpl:10 templates/metadata.tmpl:358
+#: templates/attach.topicinteraction.tmpl:10 templates/metadata.tmpl:362
 msgid "Close"
 msgstr "Chiudi"
 
-#: templates/metadata.tmpl:411
+#: templates/metadata.tmpl:415
 msgid "Comment"
 msgstr "Commento"
 
@@ -65,22 +65,22 @@ msgstr "Commento"
 msgid "Comments %1"
 msgstr "Commenti:"
 
-#: templates/metadata.tmpl:483
+#: templates/metadata.tmpl:487
 #, fuzzy
 msgid "Confirmation required"
 msgstr "Attenzione! È richiesta una conferma"
 
-#: templates/metadata.tmpl:304
+#: templates/metadata.tmpl:297
 #, fuzzy
 msgid "Create image gallery"
 msgstr "Crea una nuova tabella"
 
-#: templates/metadata.tmpl:500
+#: templates/metadata.tmpl:504
 #, fuzzy
 msgid "Creating image gallery"
 msgstr "Crea una nuova tabella"
 
-#: templates/metadata.tmpl:494
+#: templates/metadata.tmpl:498
 #, fuzzy
 msgid "Creating links"
 msgstr "Aggiorna collegamenti"
@@ -94,12 +94,12 @@ msgstr "N° di righe"
 msgid "Date"
 msgstr "Data"
 
-#: templates/metadata.tmpl:475
+#: templates/metadata.tmpl:479
 #, fuzzy
 msgid "Dateiname"
 msgstr "Rinomina"
 
-#: templates/metadata.tmpl:310
+#: templates/metadata.tmpl:303
 msgid "Delete"
 msgstr "Elimina"
 
@@ -108,17 +108,17 @@ msgstr "Elimina"
 msgid "Delete %1"
 msgstr "Elimina"
 
-#: templates/metadata.tmpl:457
+#: templates/metadata.tmpl:461
 #, fuzzy
 msgid "Delete attachment?"
 msgstr "Elimina allegato %1"
 
-#: templates/metadata.tmpl:250
+#: templates/metadata.tmpl:243
 #, fuzzy
 msgid "Delete this attachment"
 msgstr "Elimina allegato %1"
 
-#: templates/metadata.tmpl:524
+#: templates/metadata.tmpl:528
 #, fuzzy
 msgid "Deleting"
 msgstr "Elimina"
@@ -127,46 +127,46 @@ msgstr "Elimina"
 msgid "Display hidden"
 msgstr ""
 
-#: templates/metadata.tmpl:498
+#: templates/metadata.tmpl:502
 msgid "Do you really want to create an image gallery for %1 attachment(s)?"
 msgstr ""
 
-#: templates/metadata.tmpl:492
+#: templates/metadata.tmpl:496
 msgid "Do you really want to create links to %1 attachment(s)?"
 msgstr ""
 
-#: templates/metadata.tmpl:522
+#: templates/metadata.tmpl:526
 #, fuzzy
 msgid "Do you really want to delete %1 attachment(s)?"
 msgstr "Sposta o cancella il file allegato"
 
-#: templates/metadata.tmpl:504
+#: templates/metadata.tmpl:508
 msgid "Do you really want to download %1 attachment(s)?"
 msgstr ""
 
-#: templates/metadata.tmpl:510
+#: templates/metadata.tmpl:514
 #, fuzzy
 msgid "Do you really want to hide %1 attachment(s)?"
 msgstr "Altro sugli allegati nascosti"
 
-#: templates/metadata.tmpl:516
+#: templates/metadata.tmpl:520
 msgid "Do you really want to unhide %1 attachment(s)?"
 msgstr ""
 
-#: templates/metadata.tmpl:306
+#: templates/metadata.tmpl:299
 msgid "Download"
 msgstr ""
 
-#: templates/metadata.tmpl:506
+#: templates/metadata.tmpl:510
 #, fuzzy
 msgid "Downloading"
 msgstr "Inclusione"
 
-#: templates/metadata.tmpl:541
+#: templates/metadata.tmpl:545
 msgid "Drag files here"
 msgstr ""
 
-#: templates/metadata.tmpl:400
+#: templates/metadata.tmpl:404
 #, fuzzy
 msgid "Edit attachment"
 msgstr "(rimuovi allegato)"
@@ -176,7 +176,7 @@ msgstr "(rimuovi allegato)"
 msgid "Edit form"
 msgstr "modulo di modifica"
 
-#: templates/metadata.tmpl:241
+#: templates/metadata.tmpl:234
 #, fuzzy
 msgid "Edit properties of this attachment"
 msgstr "Altro sugli allegati nascosti"
@@ -188,7 +188,7 @@ msgstr "Modifica questa tabella"
 
 #: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:222
 #: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:42
-#: templates/metadata.tmpl:239
+#: templates/metadata.tmpl:232
 #, fuzzy
 msgid "Edit this attachment"
 msgstr "Modifica questa tabella"
@@ -201,32 +201,32 @@ msgstr ""
 msgid "Enter a search pattern to filter the list of attachments"
 msgstr ""
 
-#: templates/metadata.tmpl:407
+#: templates/metadata.tmpl:411
 #, fuzzy
 msgid "File name"
 msgstr "Primo nome:"
 
-#: templates/metadata.tmpl:307
+#: templates/metadata.tmpl:300
 #, fuzzy
 msgid "Hide"
 msgstr "Nascondi il file"
 
-#: templates/metadata.tmpl:418
+#: templates/metadata.tmpl:422
 #, fuzzy
 msgid "Hide attachment in normal topic view."
 msgstr "L'allegato non verrà mostrato nella visualizzazione della pagina."
 
-#: templates/metadata.tmpl:551
+#: templates/metadata.tmpl:555
 #, fuzzy
 msgid "Hide options"
 msgstr "Opzioni di ricerca"
 
-#: templates/metadata.tmpl:512
+#: templates/metadata.tmpl:516
 #, fuzzy
 msgid "Hiding"
 msgstr "Testata 1"
 
-#: templates/metadata.tmpl:302
+#: templates/metadata.tmpl:295
 #, fuzzy
 msgid "Insert links"
 msgstr "Inserire un link"
@@ -236,16 +236,16 @@ msgstr "Inserire un link"
 msgid "Manage properties of %1"
 msgstr "Cambia solo le proprietà"
 
-#: templates/metadata.tmpl:301
+#: templates/metadata.tmpl:294
 #, fuzzy
 msgid "More actions"
 msgstr "Altre azioni sulla pagina"
 
-#: templates/metadata.tmpl:309 templates/metadata.tmpl:451
+#: templates/metadata.tmpl:302 templates/metadata.tmpl:455
 msgid "Move"
 msgstr "Sposta"
 
-#: templates/metadata.tmpl:433
+#: templates/metadata.tmpl:437
 #, fuzzy
 msgid "Move attachment(s) to a different topic"
 msgstr "Sposta l'allegato al web:"
@@ -255,7 +255,7 @@ msgstr "Sposta l'allegato al web:"
 msgid "Move or delete %1"
 msgstr "Sposta o cancella il file allegato"
 
-#: templates/metadata.tmpl:249
+#: templates/metadata.tmpl:242
 #, fuzzy
 msgid "Move this attachment to a different topic"
 msgstr ""
@@ -266,24 +266,24 @@ msgstr ""
 msgid "Name"
 msgstr "Nome:"
 
-#: templates/metadata.tmpl:468 templates/metadata.tmpl:528
+#: templates/metadata.tmpl:472 templates/metadata.tmpl:532
 msgid "No, thanks"
 msgstr ""
 
-#: templates/metadata.tmpl:415
+#: templates/metadata.tmpl:419
 msgid "Options"
 msgstr "Opzioni"
 
-#: templates/metadata.tmpl:473
+#: templates/metadata.tmpl:477
 #, fuzzy
 msgid "Paste attachment"
 msgstr "(rimuovi allegato)"
 
-#: templates/metadata.tmpl:353
+#: templates/metadata.tmpl:357
 msgid "Preview"
 msgstr "Anteprima"
 
-#: templates/metadata.tmpl:245 templates/metadata.tmpl:247
+#: templates/metadata.tmpl:238 templates/metadata.tmpl:240
 #, fuzzy
 msgid "Preview this attachment"
 msgstr "Sposta file allegato"
@@ -293,7 +293,7 @@ msgstr "Sposta file allegato"
 msgid "Results per page"
 msgstr "Risultati dal Web %1"
 
-#: templates/metadata.tmpl:427
+#: templates/metadata.tmpl:431
 msgid "Save"
 msgstr "Salva"
 
@@ -301,17 +301,17 @@ msgstr "Salva"
 msgid "Search"
 msgstr "Cerca"
 
-#: templates/metadata.tmpl:319
+#: templates/metadata.tmpl:312
 #, fuzzy
 msgid "Select all"
 msgstr "Definisci tutto"
 
-#: templates/metadata.tmpl:552
+#: templates/metadata.tmpl:556
 #, fuzzy
 msgid "Show options"
 msgstr "Opzioni di ricerca"
 
-#: templates/metadata.tmpl:554
+#: templates/metadata.tmpl:558
 #, fuzzy
 msgid "Show/hide advanced options"
 msgstr "Opzioni di ricerca"
@@ -325,51 +325,51 @@ msgstr "Dimensione"
 msgid "Sort by"
 msgstr "Ordina i risultati per:"
 
-#: templates/metadata.tmpl:448
+#: templates/metadata.tmpl:452
 msgid "The new topic chosen must already exist."
 msgstr "La nuova pagina scelta deve già esistere."
 
-#: templates/metadata.tmpl:445
+#: templates/metadata.tmpl:449
 msgid "To topic"
 msgstr "Alla pagina"
 
-#: templates/metadata.tmpl:441
+#: templates/metadata.tmpl:445
 msgid "To web"
 msgstr "Al Web"
 
-#: templates/metadata.tmpl:308
+#: templates/metadata.tmpl:301
 msgid "Unhide"
 msgstr ""
 
-#: templates/metadata.tmpl:518
+#: templates/metadata.tmpl:522
 msgid "Unhiding"
 msgstr ""
 
-#: templates/metadata.tmpl:545
+#: templates/metadata.tmpl:549
 #, fuzzy
 msgid "Upload files"
 msgstr "Carica file"
 
-#: templates/metadata.tmpl:546
+#: templates/metadata.tmpl:550
 #, fuzzy
 msgid "Uploading ..."
 msgstr "Carica file"
 
-#: templates/metadata.tmpl:423
-msgid "Use this image as a thumbnail for the page."
+#: templates/metadata.tmpl:427
+msgid "Use as a thumbnail for the page."
 msgstr ""
 
-#: templates/metadata.tmpl:270
+#: templates/metadata.tmpl:264
 #, fuzzy
 msgid "Version %1"
 msgstr "Versione"
 
-#: templates/metadata.tmpl:467
+#: templates/metadata.tmpl:471
 #, fuzzy
 msgid "Yes, delete"
 msgstr "(cancella)"
 
-#: templates/metadata.tmpl:527
+#: templates/metadata.tmpl:531
 msgid "Yes, please"
 msgstr ""
 
@@ -388,20 +388,20 @@ msgstr "(cancella)"
 msgid "edit"
 msgstr "modifica"
 
-#: templates/metadata.tmpl:262
+#: templates/metadata.tmpl:255
 msgid "hidden"
 msgstr ""
 
-#: templates/metadata.tmpl:286
+#: templates/metadata.tmpl:280
 #, fuzzy
 msgid "hide other revisions"
 msgstr "Ultima versione:"
 
-#: templates/metadata.tmpl:286
+#: templates/metadata.tmpl:280
 msgid "less"
 msgstr ""
 
-#: templates/metadata.tmpl:286
+#: templates/metadata.tmpl:280
 #, fuzzy
 msgid "more"
 msgstr "(in più...)"
@@ -414,22 +414,21 @@ msgstr ""
 msgid "props"
 msgstr ""
 
-#: templates/metadata.tmpl:319
+#: templates/metadata.tmpl:312
 #, fuzzy
 msgid "select all attachments on this topic"
 msgstr "nega rigorosamente qualsiasi accesso a questa pagina"
 
-#: templates/metadata.tmpl:286
+#: templates/metadata.tmpl:280
 #, fuzzy
 msgid "show previous revisions"
 msgstr "Non esistono versioni precedenti."
 
-#: templates/metadata.tmpl:264
+#: templates/metadata.tmpl:257
 msgid "thumbnail"
 msgstr ""
 
-#: templates/metadata.tmpl:320
+#: templates/metadata.tmpl:313
 #, fuzzy
 msgid "unselect all previously select attachments"
 msgstr "Seleziona un nuovo file locale per aggiornare l'allegato"
-
