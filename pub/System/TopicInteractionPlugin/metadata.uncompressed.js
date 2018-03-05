@@ -188,118 +188,6 @@ As per the GPL, removal of this notice is prohibited.
 
 Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 
-(c)opyright 2017-2018 Michael Daum http://michaeldaumconsulting.com
-
-are listed in the AUTHORS file in the root of this distribution.
-NOTE: Please extend that file, not this notice.
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version. For
-more details read LICENSE in the root of this distribution.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-As per the GPL, removal of this notice is prohibited.
-
-*/
-
-/*eslint-disable no-console */
-
-"use strict";
-var Dialog;
-
-(function($) {
-
-  var defaults = {
-    "template": "metadata",
-    "debug": false
-  };
-
-  /* constructor **********************************************************/
-  Dialog = function(opts) {
-    var self = this;
-
-    self.opts = $.extend({}, defaults, opts);
-  };
-
-  /* shortcut *************************************************************/
-  Dialog.load = function(opts) {
-    var dialog = new Dialog(opts);
-    return dialog.load();
-  };
-
-  /* logger ***************************************************************/
-  Dialog.prototype.log = function() {
-    var self = this, args;
-
-    if (!console || !self.opts.debug) {
-      return;
-    }
-
-    args = $.makeArray(arguments);
-    args.unshift("DIALOG:");
-    console.log.apply(console, args);
-  };
-
-
-  /* load *****************************************************************/
-  Dialog.prototype.load = function(params) {
-    var self = this, 
-        opts = $.extend({}, self.opts, params),
-        $dialog = typeof(opts.id) === 'undefined'?undefined:$(opts.id),
-        data, 
-        dfd = $.Deferred();
-
-    self.log("called load() opts=",opts);
-
-    function callback(elem) {
-      if (typeof(opts.init) === 'function') {
-        opts.init.call(elem);
-      }
-    }
-
-    if ($dialog && $dialog.length) {
-      $dialog.dialog("open");
-      $dialog.find("form").resetForm();
-      callback($dialog);
-      dfd.resolve($dialog);
-    } else {
-
-      data = $.extend({}, opts.data, {
-        name: opts.template,
-        expand: opts.expand,
-        topic: foswiki.getPreference("WEB")+"."+foswiki.getPreference("TOPIC")
-      });
-
-      $.ajax({
-        url: foswiki.getScriptUrl("rest", "RenderPlugin", "template"),
-        data: data,
-        dataType: 'html',
-        success: function(data) {
-          var $dialog = $(data);
-          $dialog.one("dialogopen", function() {
-            callback($dialog);
-            dfd.resolve($dialog);
-          });
-          $dialog.appendTo("body");
-        },
-        error: function(xhr, status, err) {
-          dfd.reject($dialog, status, err);
-        }
-      });
-    }
-
-    return dfd.promise();
-  };
-})(jQuery);
-/*
-
-Foswiki - The Free and Open Source Wiki, http://foswiki.org/
-
 (c)opyright 2010-2018 Michael Daum http://michaeldaumconsulting.com
 
 are listed in the AUTHORS file in the root of this distribution.
@@ -495,12 +383,12 @@ As per the GPL, removal of this notice is prohibited.
       }
     ).click(function(e) {
       var $attachment = $(this), 
-          id = decodeURIComponent($attachment.attr('id'));
+          id = $attachment.attr('id');
 
       if (!$(e.target).is("a,img")) { // dont propagate the attachment clicks
-        $attachment.toggleClass("foswikiAttachmentSelected");
+        $attachment.toggleClass("foswikiSelected");
 
-        if ($attachment.hasClass("foswikiAttachmentSelected")) {
+        if ($attachment.hasClass("foswikiSelected")) {
           self.select(id);
         } else {
           self.clear(id);
@@ -710,7 +598,8 @@ As per the GPL, removal of this notice is prohibited.
                 $form = $this.find("form");
 
             $form.find("input[type='hidden'][name='filename']").remove();
-            $.each(self.selection, function(i, val) {
+            $.each(self.selection, function(i, id) {
+              var val = decodeURIComponent($("#"+id).data("filename"));
               $("<input type='hidden' name='filename' />").val(val).prependTo($form);
             });
             $this.find("input[name='action']").val(action);
@@ -732,7 +621,8 @@ As per the GPL, removal of this notice is prohibited.
                 $form = $this.find("form");
 
             $form.find("input[type='hidden'][name='filename']").remove();
-            $.each(self.selection, function(i, val) {
+            $.each(self.selection, function(i, id) {
+              var val = decodeURIComponent($("#"+id).data("filename"));
               $("<input type='hidden' name='filename' />").val(val).prependTo($form);
             });
             $this.find(".foswikiAttachmentsCount").text(self.selection.length);
@@ -1022,8 +912,8 @@ As per the GPL, removal of this notice is prohibited.
       "attachments_selection": []
     }, thisParams);
 
-    $.each(self.selection, function(i, item) {
-      params["attachments_selection"].push(encodeURIComponent(item.replace(/\\\./, '.')));
+    $.each(self.selection, function(i, id) {
+      params["attachments_selection"].push(id);
     });
 
     //self.log("params=",params);
@@ -1050,13 +940,13 @@ As per the GPL, removal of this notice is prohibited.
   FoswikiAttachments.prototype.showSelection = function() {
     var self = this, i, id;
 
-    self.elem.find(".foswikiAttachmentSelected").removeClass("foswikiAttachmentSelected");
+    self.elem.find(".foswikiSelected").removeClass("foswikiSelected");
     if (self.selection) {
       for (i = 0; i < self.selection.length; i++) {
-        id = encodeURIComponent(self.selection[i]);
+        id = self.selection[i];
         // jQuery can't handle id's with umlauts in it
-        //$("#"+id).addClass("foswikiAttachmentSelected");
-        $(document.getElementById(id)).addClass("foswikiAttachmentSelected");
+        //$("#"+id).addClass("foswikiSelected");
+        $(document.getElementById(id)).addClass("foswikiSelected");
       }
       if (self.selection.length) {
         self.elem.find(".foswikiAttachmentsBulkAction, .foswikiAttachmentsClearAll").show();
@@ -1076,6 +966,8 @@ As per the GPL, removal of this notice is prohibited.
     if (!id) {
       return;
     }
+
+    id = id.replace(/[^0-9a-zA-Z_]/g, "_"); 
 
     //self.log(" select("+id+")");
     if (typeof(self.selection) === 'undefined') {

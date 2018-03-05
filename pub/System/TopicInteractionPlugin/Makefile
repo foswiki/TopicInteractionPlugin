@@ -3,16 +3,17 @@ TARGET= \
   metadata.js \
   metadata.css \
   uploader.js \
-  uploader.css
+  uploader.css 
 
 UPLOADER_SOURCE= \
+  dialog.uncompressed.js \
   jquery.fileupload.uncompressed.js \
-  foswiki.fileupload.uncompressed.js  
+  foswiki.fileupload.uncompressed.js \
+  legacy.fileupload.uncompressed.js 
 
 METADATA_SOURCE= \
   detectos.uncompressed.js \
   webdav.uncompressed.js \
-  dialog.uncompressed.js \
   foswiki.attachments.uncompressed.js
 
 -include $(FOSWIKI_ROOT)/pub/System/JQueryPlugin/Makefile.include
@@ -26,7 +27,7 @@ metadata.uncompressed.js: $(METADATA_SOURCE)
 	@echo creating $@ from $^; echo "/* WARNING: THIS IS A DERIVED FILE. DON'T MODIFIY. */" > $@; $(CAT) $^ >> $@
 
 clean:
-	rm -f $(TARGET) *.gz igp_* genpdf_*
+	rm -f $(TARGET) *.gz igp_* genpdf_* *.jslint metadata.uncompressed.js uploader.uncompressed.js
 
 ifneq (,$(wildcard dist))
 %.uncompressed.js: dist/js/%.js

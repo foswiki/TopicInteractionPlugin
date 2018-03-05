@@ -26,12 +26,16 @@ sub handle {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
   #writeDebug("called handleWEBDAVURL($theTopic, $theWeb)");
-  my $url = $Foswiki::cfg{TopicInteractionPlugin}{WebDAVUrl} || 'webdav://$host/dav/$web/$topic_files/$attachment';
+  my $url = $Foswiki::cfg{TopicInteractionPlugin}{WebDAVUrl} || 'webdav://$host/dav/$web/$topic/$attachment';
 
   my $host = Foswiki::Func::getUrlHost();
   $host =~ s/^https?:\/+//;
 
-  my $
+  my $thisTopic = $params->{topic} || $theTopic;
+  my $thisWeb = $params->{web} || $theWeb;
+  my $encName = urlEncode($info, 'name');
+
+  ($thisWeb, $thisTopic) = Foswiki::Func::normalizeWebTopicName($hisWeb, $thisTopic);
 
   $url =~ s/\$host/$host/g;
   $url =~ s/\$web/$thisWeb/g;

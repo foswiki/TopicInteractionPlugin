@@ -102,7 +102,7 @@ msgstr "Yeniden adlandır"
 msgid "Delete"
 msgstr "Sil"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:231
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:232
 #, fuzzy
 msgid "Delete %1"
 msgstr "Sil"
@@ -183,8 +183,8 @@ msgstr "(dosya ekini taşı)"
 msgid "Edit this !DataForm"
 msgstr "Tablo Düzenle"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:222
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:42
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:223
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:46
 #: templates/metadata.tmpl:232
 #, fuzzy
 msgid "Edit this attachment"
@@ -225,7 +225,7 @@ msgstr ""
 msgid "Insert links"
 msgstr ""
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:225
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:226
 msgid "Manage properties of %1"
 msgstr ""
 
@@ -242,7 +242,7 @@ msgstr "Taşı"
 msgid "Move attachment(s) to a different topic"
 msgstr ""
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:228
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:229
 msgid "Move or delete %1"
 msgstr ""
 
@@ -364,13 +364,13 @@ msgstr ""
 msgid "all"
 msgstr ""
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:231
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:232
 #, fuzzy
 msgid "delete"
 msgstr "(sil)"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:222
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:42
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:223
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:46
 msgid "edit"
 msgstr "düzenle"
 
@@ -391,11 +391,11 @@ msgstr ""
 msgid "more"
 msgstr ""
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:228
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:229
 msgid "move"
 msgstr ""
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:225
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:226
 msgid "props"
 msgstr ""
 

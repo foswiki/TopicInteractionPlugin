@@ -105,7 +105,7 @@ msgstr "改名"
 msgid "Delete"
 msgstr "删除"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:231
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:232
 #, fuzzy
 msgid "Delete %1"
 msgstr "删除"
@@ -187,8 +187,8 @@ msgstr "移动或删除附件"
 msgid "Edit this !DataForm"
 msgstr "编辑这个表格"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:222
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:42
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:223
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:46
 #: templates/metadata.tmpl:232
 #, fuzzy
 msgid "Edit this attachment"
@@ -230,7 +230,7 @@ msgstr ""
 msgid "Insert links"
 msgstr ""
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:225
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:226
 #, fuzzy
 msgid "Manage properties of %1"
 msgstr "只修改属性"
@@ -249,7 +249,7 @@ msgstr "移动"
 msgid "Move attachment(s) to a different topic"
 msgstr "移动附件到子网:"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:228
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:229
 #, fuzzy
 msgid "Move or delete %1"
 msgstr "移动或删除附件"
@@ -381,13 +381,13 @@ msgstr ""
 msgid "all"
 msgstr "设定所有"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:231
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:232
 #, fuzzy
 msgid "delete"
 msgstr "(删除)"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:222
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:42
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:223
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:46
 msgid "edit"
 msgstr "编辑"
 
@@ -409,11 +409,11 @@ msgstr ""
 msgid "more"
 msgstr "(更多)"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:228
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:229
 msgid "move"
 msgstr ""
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:225
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:226
 msgid "props"
 msgstr ""
 

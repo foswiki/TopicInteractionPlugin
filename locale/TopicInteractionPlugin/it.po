@@ -103,7 +103,7 @@ msgstr "Rinomina"
 msgid "Delete"
 msgstr "Elimina"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:231
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:232
 #, fuzzy
 msgid "Delete %1"
 msgstr "Elimina"
@@ -186,8 +186,8 @@ msgstr "Altro sugli allegati nascosti"
 msgid "Edit this !DataForm"
 msgstr "Modifica questa tabella"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:222
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:42
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:223
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:46
 #: templates/metadata.tmpl:232
 #, fuzzy
 msgid "Edit this attachment"
@@ -231,7 +231,7 @@ msgstr "Testata 1"
 msgid "Insert links"
 msgstr "Inserire un link"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:225
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:226
 #, fuzzy
 msgid "Manage properties of %1"
 msgstr "Cambia solo le proprietà"
@@ -250,7 +250,7 @@ msgstr "Sposta"
 msgid "Move attachment(s) to a different topic"
 msgstr "Sposta l'allegato al web:"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:228
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:229
 #, fuzzy
 msgid "Move or delete %1"
 msgstr "Sposta o cancella il file allegato"
@@ -378,13 +378,13 @@ msgstr ""
 msgid "all"
 msgstr "Definisci tutto"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:231
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:232
 #, fuzzy
 msgid "delete"
 msgstr "(cancella)"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:222
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:42
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:223
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:46
 msgid "edit"
 msgstr "modifica"
 
@@ -406,11 +406,11 @@ msgstr ""
 msgid "more"
 msgstr "(in più...)"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:228
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:229
 msgid "move"
 msgstr ""
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:225
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:226
 msgid "props"
 msgstr ""
 

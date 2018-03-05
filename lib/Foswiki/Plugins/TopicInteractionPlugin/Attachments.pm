@@ -214,6 +214,7 @@ sub handle {
     my $icon = '%ICON{"' . $info->{name} . '" alt="else"}%';
 
     my $encName = urlEncode($info, 'name');
+    my $id = encodeName($info->{name});
 
     # actions
     my $thisWebDavUrl = $webDavUrl;
@@ -269,6 +270,7 @@ sub handle {
     $text =~ s/\$date\b/defined($info->{date})?Foswiki::Func::formatTime($info->{date}):'???'/ge;
     $text =~ s/\$index\b/$index/g;
     $text =~ s/\$name\b/$info->{name}/g;
+    $text =~ s/\$id\b/$id/g;
     $text =~ s/\$path\b/$info->{path}/g;
     $text =~ s/\$size\b/$info->{size}/g;
     $text =~ s/\$sizeH\b/_humanizeBytes($info->{size})/ge;
@@ -313,7 +315,22 @@ sub urlEncode {
   return $text unless $text;
 
   $text = Encode::encode_utf8($text) if $Foswiki::UNICODE;
-  $text =~ s/([^0-9a-zA-Z-_.:~!*\/])/sprintf('%%%02x',ord($1))/ge;
+
+  # below encoding must be uppercase hex values to be compatible with 
+  # encodeURIComponent() in browsers
+  $text =~ s/([^0-9a-zA-Z-_.:~!*\/])/sprintf('%%%02X',ord($1))/ge; 
+
+  return $text;
+}
+
+##############################################################################
+sub encodeName {
+  my $text = shift;
+
+  return $text unless $text;
+
+  $text = Encode::encode_utf8($text) if $Foswiki::UNICODE;
+  $text =~ s/[^0-9a-zA-Z_]/_/g; 
 
   return $text;
 }

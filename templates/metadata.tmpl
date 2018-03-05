@@ -201,7 +201,7 @@
   attr="%IF{"'%TMPL:P{"attachments::showhidden"}%'!='true'" then="^[^h]*$"}%"
   include="%FORMATLIST{"%TMPL:P{"attachments::filter"}%" split="\s+" header=".*" format="$1" separator=".*" footer=".*"}%"
   casesensitive="off"
-  format="<input type='hidden' name='allattachments' value='$name' class='foswikiAttachmentsAll' />"
+  format="<input type='hidden' name='allattachments' value='$id' class='foswikiAttachmentsAll' />"
   separator="$n"
 }%%ATTACHMENTS{
   warn="off"
@@ -215,7 +215,7 @@
   header="<div class='foswikiAttachmentsPager foswikiAttachmentsPagerTop' data-count='$count'>$pager</div>
     <div class=\"foswikiAttachmentsContainer $percntTMPL:P{\"metadata::lightbox::parameter\"}$percnt jqUITooltip\" data-theme='info' data-position='top' data-arrow='true'>"
   footer="%CLEAR%</div><div class='foswikiAttachmentsPager foswikiAttachmentsPagerBottom'>$pager</div>"
-  format="<div class='foswikiAttachment' data-filename='$encode(name)' data-filecomment='$encode(comment)' data-fileattr='$attr' id='$encode(name)'>
+  format="<div class='foswikiAttachment' data-filename='$encode(name)' data-filecomment='$encode(comment)' data-fileattr='$attr' id='$id'>
       <div class='foswikiAttachmentContainer'>
         <div class='foswikiThumbnail foswikiLeft'>
         $percntIF{

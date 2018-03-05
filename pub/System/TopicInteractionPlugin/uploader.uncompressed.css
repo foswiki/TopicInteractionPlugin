@@ -4,6 +4,7 @@
   position: relative;
   overflow: hidden;
   display: inline-block;
+  vertical-align:middle;
 }
 .jqUploadButton input {
   position: absolute;

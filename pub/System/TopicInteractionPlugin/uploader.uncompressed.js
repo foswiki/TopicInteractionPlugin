@@ -1,5 +1,117 @@
 /* WARNING: THIS IS A DERIVED FILE. DON'T MODIFIY. */
 /*
+
+Foswiki - The Free and Open Source Wiki, http://foswiki.org/
+
+(c)opyright 2017-2018 Michael Daum http://michaeldaumconsulting.com
+
+are listed in the AUTHORS file in the root of this distribution.
+NOTE: Please extend that file, not this notice.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version. For
+more details read LICENSE in the root of this distribution.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+As per the GPL, removal of this notice is prohibited.
+
+*/
+
+/*eslint-disable no-console */
+
+"use strict";
+var Dialog;
+
+(function($) {
+
+  var defaults = {
+    "template": "metadata",
+    "debug": false
+  };
+
+  /* constructor **********************************************************/
+  Dialog = function(opts) {
+    var self = this;
+
+    self.opts = $.extend({}, defaults, opts);
+  };
+
+  /* shortcut *************************************************************/
+  Dialog.load = function(opts) {
+    var dialog = new Dialog(opts);
+    return dialog.load();
+  };
+
+  /* logger ***************************************************************/
+  Dialog.prototype.log = function() {
+    var self = this, args;
+
+    if (!console || !self.opts.debug) {
+      return;
+    }
+
+    args = $.makeArray(arguments);
+    args.unshift("DIALOG:");
+    console.log.apply(console, args);
+  };
+
+
+  /* load *****************************************************************/
+  Dialog.prototype.load = function(params) {
+    var self = this, 
+        opts = $.extend({}, self.opts, params),
+        $dialog = typeof(opts.id) === 'undefined'?undefined:$(opts.id),
+        data, 
+        dfd = $.Deferred();
+
+    self.log("called load() opts=",opts);
+
+    function callback(elem) {
+      if (typeof(opts.init) === 'function') {
+        opts.init.call(elem);
+      }
+    }
+
+    if ($dialog && $dialog.length) {
+      $dialog.dialog("open");
+      $dialog.find("form").resetForm();
+      callback($dialog);
+      dfd.resolve($dialog);
+    } else {
+
+      data = $.extend({}, opts.data, {
+        name: opts.template,
+        expand: opts.expand,
+        topic: foswiki.getPreference("WEB")+"."+foswiki.getPreference("TOPIC")
+      });
+
+      $.ajax({
+        url: foswiki.getScriptUrl("rest", "RenderPlugin", "template"),
+        data: data,
+        dataType: 'html',
+        success: function(data) {
+          var $dialog = $(data);
+          $dialog.one("dialogopen", function() {
+            callback($dialog);
+            dfd.resolve($dialog);
+          });
+          $dialog.appendTo("body");
+        },
+        error: function(xhr, status, err) {
+          dfd.reject($dialog, status, err);
+        }
+      });
+    }
+
+    return dfd.promise();
+  };
+})(jQuery);
+/*
  * jQuery File Upload Plugin
  * https://github.com/blueimp/jQuery-File-Upload
  *
@@ -1690,6 +1802,8 @@
     });
   };
 
+  /////////////////////////////////////////////////////////////////////////////
+
   // preventing against multiple instantiations 
   $.fn.uploadButton = function (opts) { 
     return this.each(function () { 
@@ -1698,6 +1812,7 @@
       } 
     }); 
   };
+
   $.fn.foswikiUploader = function (opts) { 
     return this.each(function () { 
       if (!foswiki.uploader) {
@@ -1719,3 +1834,89 @@
 
   });
 })(jQuery);
+/*
+ * foswiki legacy file upload plugin 1.0
+ *
+ * Copyright (c) 2018 Michael Daum http://michaeldaumconsulting.com
+ *
+ * Licensed GPL http://www.gnu.org/licenses/gpl.html
+ *
+ */
+"use strict";
+
+// plupload statics
+var plupload = {
+  STOPPED: 1,
+  STARTED: 2,
+  QUEUED: 1,
+  UPLOADING: 2,
+  FAILED: 4,
+  DONE: 5
+};
+
+(function($) {
+
+
+  // legacy uploader, wrapper around new implementation 
+  function LegacyUploader(elem, opts) {
+    var self = this,
+        wrapper = $(elem).wrap("<div />").parent().addClass("jqLegacyUploader jqUploadButton");
+
+    self.wrapper = wrapper;
+    self.elem = $(elem);
+    self.fileInput = $("<input />").attr("type", "file").appendTo(wrapper);
+    self.opts = $.extend({}, self.elem.data(), opts);
+    self.init();
+  };
+
+  LegacyUploader.prototype.init = function() {
+    var self = this;
+    
+    self.state = plupload.STOPPED;
+    self.files = [];
+    self.browseButton = $(self.opts.browseButton) || self.wrapper;
+    self.browseButton.uploadButton(self.opts).addClass("jqUploadButtonInited");
+
+    // we only simulate those events that we actually need in jquery.natedit
+    $("body").bind("fileuploadadd", function(e, data) {
+      self.files = data.files;
+      self.state = plupload.QUEUED;
+      self.trigger("QueueChange");
+    }).bind("fileuploadstart", function(e, data) {
+      self.state = plupload.STARTED;
+      self.files[0].percent = 0;
+      self.trigger("StateChanged");
+    }).bind("fileuploadstop", function(e, data) {
+      self.files = [];
+      self.state = plupload.STOPPED;
+    }).bind("fileuploaddone", function() {
+      self.state = plupload.STOPPED;
+      self.files[0].percent = 100;
+      self.trigger("StateChanged");
+    });
+  };
+
+  LegacyUploader.prototype.bind = function(signal, fn) {
+    var self = this;
+
+    self.elem.bind(signal, fn);
+  };
+
+  LegacyUploader.prototype.trigger = function(signal) {
+    var self = this;
+
+    return self.elem.trigger(signal);
+  };
+
+  // add to jquery
+  $.fn.uploader = function(opts) {
+    console.warn("this uploader api is deprecated, please switch to new fileupload api");
+    return this.each(function () { 
+      if (!$.data(this, "uploader")) { 
+        $.data(this, "uploader", new LegacyUploader(this, opts)); 
+      } 
+    });
+  };
+
+})(jQuery);
+

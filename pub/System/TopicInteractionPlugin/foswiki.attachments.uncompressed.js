@@ -197,12 +197,12 @@ As per the GPL, removal of this notice is prohibited.
       }
     ).click(function(e) {
       var $attachment = $(this), 
-          id = decodeURIComponent($attachment.attr('id'));
+          id = $attachment.attr('id');
 
       if (!$(e.target).is("a,img")) { // dont propagate the attachment clicks
-        $attachment.toggleClass("foswikiAttachmentSelected");
+        $attachment.toggleClass("foswikiSelected");
 
-        if ($attachment.hasClass("foswikiAttachmentSelected")) {
+        if ($attachment.hasClass("foswikiSelected")) {
           self.select(id);
         } else {
           self.clear(id);
@@ -412,7 +412,8 @@ As per the GPL, removal of this notice is prohibited.
                 $form = $this.find("form");
 
             $form.find("input[type='hidden'][name='filename']").remove();
-            $.each(self.selection, function(i, val) {
+            $.each(self.selection, function(i, id) {
+              var val = decodeURIComponent($("#"+id).data("filename"));
               $("<input type='hidden' name='filename' />").val(val).prependTo($form);
             });
             $this.find("input[name='action']").val(action);
@@ -434,7 +435,8 @@ As per the GPL, removal of this notice is prohibited.
                 $form = $this.find("form");
 
             $form.find("input[type='hidden'][name='filename']").remove();
-            $.each(self.selection, function(i, val) {
+            $.each(self.selection, function(i, id) {
+              var val = decodeURIComponent($("#"+id).data("filename"));
               $("<input type='hidden' name='filename' />").val(val).prependTo($form);
             });
             $this.find(".foswikiAttachmentsCount").text(self.selection.length);
@@ -724,8 +726,8 @@ As per the GPL, removal of this notice is prohibited.
       "attachments_selection": []
     }, thisParams);
 
-    $.each(self.selection, function(i, item) {
-      params["attachments_selection"].push(encodeURIComponent(item.replace(/\\\./, '.')));
+    $.each(self.selection, function(i, id) {
+      params["attachments_selection"].push(id);
     });
 
     //self.log("params=",params);
@@ -752,13 +754,13 @@ As per the GPL, removal of this notice is prohibited.
   FoswikiAttachments.prototype.showSelection = function() {
     var self = this, i, id;
 
-    self.elem.find(".foswikiAttachmentSelected").removeClass("foswikiAttachmentSelected");
+    self.elem.find(".foswikiSelected").removeClass("foswikiSelected");
     if (self.selection) {
       for (i = 0; i < self.selection.length; i++) {
-        id = encodeURIComponent(self.selection[i]);
+        id = self.selection[i];
         // jQuery can't handle id's with umlauts in it
-        //$("#"+id).addClass("foswikiAttachmentSelected");
-        $(document.getElementById(id)).addClass("foswikiAttachmentSelected");
+        //$("#"+id).addClass("foswikiSelected");
+        $(document.getElementById(id)).addClass("foswikiSelected");
       }
       if (self.selection.length) {
         self.elem.find(".foswikiAttachmentsBulkAction, .foswikiAttachmentsClearAll").show();
@@ -778,6 +780,8 @@ As per the GPL, removal of this notice is prohibited.
     if (!id) {
       return;
     }
+
+    id = id.replace(/[^0-9a-zA-Z_]/g, "_"); 
 
     //self.log(" select("+id+")");
     if (typeof(self.selection) === 'undefined') {

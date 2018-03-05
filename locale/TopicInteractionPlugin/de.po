@@ -1,5 +1,5 @@
 # TopicInteractionPlugin translations
-# Copyright (C) 2012-2017 Michael Daum
+# Copyright (C) 2012-2018 Michael Daum
 # This file is distributed under the same license as the EditChapterPlugin package.
 # Michael Daum <foswiki@michaeldaumconsulting.com>, 2014.
 msgid ""
@@ -93,7 +93,7 @@ msgstr "Filename"
 msgid "Delete"
 msgstr "Löschen"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:231
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:232
 msgid "Delete %1"
 msgstr "Lösche %1"
 
@@ -111,7 +111,7 @@ msgstr "Lösche"
 
 #: templates/metadata.tmpl:191
 msgid "Display hidden"
-msgstr "Anzeige abschalten"
+msgstr "Anzeige einblenden"
 
 #: templates/metadata.tmpl:502
 msgid "Do you really want to create an image gallery for %1 attachment(s)?"
@@ -165,8 +165,8 @@ msgstr "Eigenschaften dieses Anhangs bearbeiten"
 msgid "Edit this !DataForm"
 msgstr "Dieses Formular bearbeiten"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:222
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:42
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:223
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:46
 #: templates/metadata.tmpl:232
 msgid "Edit this attachment"
 msgstr "Anhang bearbeiten"
@@ -203,7 +203,7 @@ msgstr "Verstecke Dateien"
 msgid "Insert links"
 msgstr "Verweis einfügen"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:225
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:226
 msgid "Manage properties of %1"
 msgstr "Eigenschaften von %1 verwalten"
 
@@ -219,7 +219,7 @@ msgstr "Verschieben"
 msgid "Move attachment(s) to a different topic"
 msgstr "Verschiebe Dateien zu einem anderen Topic"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:228
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:229
 msgid "Move or delete %1"
 msgstr "Verschieben oder löschen von %1"
 
@@ -331,12 +331,12 @@ msgstr "Ja, bitte"
 msgid "all"
 msgstr "alles"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:231
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:232
 msgid "delete"
 msgstr "löschen"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:222
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:42
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:223
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:46
 msgid "edit"
 msgstr "bearbeiten"
 
@@ -356,11 +356,11 @@ msgstr "weniger"
 msgid "more"
 msgstr "mehr"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:228
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:229
 msgid "move"
 msgstr "verschieben"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:225
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:226
 msgid "props"
 msgstr "Eigensch."
 

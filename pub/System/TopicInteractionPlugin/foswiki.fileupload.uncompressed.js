@@ -206,6 +206,8 @@
     });
   };
 
+  /////////////////////////////////////////////////////////////////////////////
+
   // preventing against multiple instantiations 
   $.fn.uploadButton = function (opts) { 
     return this.each(function () { 
@@ -214,6 +216,7 @@
       } 
     }); 
   };
+
   $.fn.foswikiUploader = function (opts) { 
     return this.each(function () { 
       if (!foswiki.uploader) {

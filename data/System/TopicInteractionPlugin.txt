@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="micha" comment="gainedLibreOfficeWebDAV.reg" date="1470922302" format="1.1" version="2"}%
+%META:TOPICINFO{author="ProjectContributor" comment="" date="1518773290" format="1.1" version="1"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Description"}%
 
@@ -150,6 +150,8 @@ generates:
 
 ---++ Change History
 %TABLE{columnwidths="7em" tablewidth="100%"}%
+|  05 Mar 2018: | fixed selecting attachments with brackets in its filename |
+|  16 Feb 2018: | added a legacy uploader to be somewhat backwards compatible to the old plupload just enough to please natedit |
 |  16 Jan 2018: | check access permissions in %ATTACHMENTS makro; fixed url encoding of unicode files |
 |  13 Sep 2017: | replace outdated plupload uploader with jquery-file-upload |
 |  18 Nov 2016: | oo-ified core; \
@@ -210,9 +212,9 @@ generates:
 %META:FIELD{name="Repository" title="Repository" value="https://github.com/foswiki/%25TOPIC%25"}%
 %META:FIELD{name="Support" title="Support" value="Foswiki:Support/%25TOPIC%25"}%
 %META:FIELD{name="Version" title="Version" value="%25$VERSION%25"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap5.png" attachment="TopicInteractionPluginSnap5.png" attr="" comment="" date="1437154320" size="36218" user="ProjectContributor" version="1"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap4.png" attachment="TopicInteractionPluginSnap4.png" attr="" comment="" date="1437154320" size="45039" user="ProjectContributor" version="1"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap3.png" attachment="TopicInteractionPluginSnap3.png" attr="" comment="" date="1437154320" size="99574" user="ProjectContributor" version="1"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap2.png" attachment="TopicInteractionPluginSnap2.png" attr="" comment="" date="1437154320" size="111026" user="ProjectContributor" version="1"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap1.png" attachment="TopicInteractionPluginSnap1.png" attr="" comment="" date="1437154320" size="16199" user="ProjectContributor" version="1"}%
-%META:FILEATTACHMENT{name="LibreOfficeWebDAV.reg" attachment="LibreOfficeWebDAV.reg" attr="" comment="" date="1470917899" moveby="micha" movedto="System.TopicInteractionPlugin.LibreOfficeWebDAV.reg" movedwhen="1470922302" movefrom="Sandbox.OpenToEditTest.LibreOfficeWebDAV.reg" size="1126" user="micha" version="2"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap5.png" attachment="TopicInteractionPluginSnap5.png" attr="" comment="" date="1518773290" size="36218" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap4.png" attachment="TopicInteractionPluginSnap4.png" attr="" comment="" date="1518773290" size="45039" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap3.png" attachment="TopicInteractionPluginSnap3.png" attr="" comment="" date="1518773290" size="99574" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap2.png" attachment="TopicInteractionPluginSnap2.png" attr="" comment="" date="1518773290" size="111026" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap1.png" attachment="TopicInteractionPluginSnap1.png" attr="" comment="" date="1518773290" size="16199" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="LibreOfficeWebDAV.reg" attachment="LibreOfficeWebDAV.reg" attr="" comment="" date="1518773290" moveby="micha" movedto="System.TopicInteractionPlugin.LibreOfficeWebDAV.reg" movedwhen="1470922302" movefrom="Sandbox.OpenToEditTest.LibreOfficeWebDAV.reg" size="1126" user="ProjectContributor" version="1"}%

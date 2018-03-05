@@ -70,6 +70,7 @@ pub/System/TopicInteractionPlugin/icons/yellow-bulb.png 0644
 pub/System/TopicInteractionPlugin/jquery.fileupload-process.js 0644
 pub/System/TopicInteractionPlugin/jquery.fileupload-process.uncompressed.js 0644
 pub/System/TopicInteractionPlugin/jquery.fileupload.uncompressed.js 0644
+pub/System/TopicInteractionPlugin/legacy.fileupload.uncompressed.js 0644
 pub/System/TopicInteractionPlugin/LibreOfficeWebDAV.reg 0644
 pub/System/TopicInteractionPlugin/Makefile 0644
 pub/System/TopicInteractionPlugin/metadata.css 0644
