@@ -18,15 +18,14 @@ package Foswiki::Plugins::TopicInteractionPlugin;
 use strict;
 use warnings;
 
-our $VERSION = '7.10';
-our $RELEASE = '5 Mar 2018';
+our $VERSION = '8.00';
+our $RELEASE = '24 Oct 2018';
 our $SHORTDESCRIPTION = 'Improved interaction with attachments and !DataForms';
 our $NO_PREFS_IN_TOPIC = 1;
 our $core;
 
 use Foswiki::Func ();
 use Foswiki::Plugins::JQueryPlugin ();
-
 use Foswiki::Request();
 
 BEGIN {

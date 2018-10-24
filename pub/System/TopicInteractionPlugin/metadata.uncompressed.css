@@ -93,8 +93,7 @@
 }
 .foswikiAttachment {
   position:relative;
-  width:30em;
-  /*flex-basis:30em;*/
+  width:35em;
   flex-grow:1;
 }
 .foswikiAttachmentName {
@@ -115,18 +114,30 @@
 }
 
 .foswikiAttachmentControl {
-  display:none;
   position:absolute;
   right:0.6923em;
   top:0.6923em;
-  background-color:transparent;
+  background-color:#fff;
+}
+.foswikiSelected .foswikiAttachmentControl {
+  background-color:#efffd8;
+}
+.foswikiSelected .foswikiAttachmentControl a,
+.foswikiAttachmentHover.foswikiSelected .foswikiAttachmentControl a,
+.foswikiAttachment .foswikiAttachmentControl .foswikiAttachmentSelect {
+  display:none;
 }
 .foswikiAttachmentControl a {
+  display:none;
   margin-left:0.6923em;
 }
-.foswikiSelected .foswikiAttachmentControl,
-.foswikiAttachmentHover .foswikiAttachmentControl {
-  display:block;
+.foswikiSelected .foswikiAttachmentControl .foswikiAttachmentSelect,
+.foswikiAttachmentHover.foswikiSelected .foswikiAttachmentControl .foswikiAttachmentSelect,
+.foswikiAttachmentHover .foswikiAttachmentControl a {
+  display:inline;
+}
+.foswikiAttachmentHover {
+  cursor:pointer;
 }
 
 .foswikiAttachmentsPager .foswikiAttachmentsPagerPrev,
@@ -135,11 +146,11 @@
   margin:0px 1px;
   padding:0.1538em 0.3846em; /* 2px 5px */
   text-decoration:none;
+  float:left;
 }
 .foswikiAttachmentsPager a:hover,
 .foswikiAttachmentsPager a.current:visited,
 .foswikiAttachmentsPager a.current {
-  background:#0055B5;
   background:#bb2222;
   color:#fff;
   text-decoration:none;

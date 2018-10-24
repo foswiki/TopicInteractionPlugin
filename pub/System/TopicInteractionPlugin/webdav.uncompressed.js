@@ -126,7 +126,7 @@ As per the GPL, removal of this notice is prohibited.
           var $this = $(this), 
               url = getOfficeUrl($this.attr("href"), foswiki.getPreference("TopicInteractionPlugin").officeSuite || 'msoffice');
 
-          $("<iframe />").attr("src", url).appendTo("body");
+          $("<iframe />").hide().attr("src", url).appendTo("body");
 
           return false;
         });

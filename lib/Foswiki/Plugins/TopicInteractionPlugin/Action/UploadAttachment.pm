@@ -160,5 +160,4 @@ sub getSuffixOfMimeType {
   return $suffix;
 }
 
-
 1;

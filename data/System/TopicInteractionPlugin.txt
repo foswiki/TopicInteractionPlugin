@@ -1,8 +1,10 @@
-%META:TOPICINFO{author="ProjectContributor" comment="" date="1518773290" format="1.1" version="1"}%
+%META:TOPICINFO{author="ProjectContributor" comment="" date="1540399921" format="1.1" version="1"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Description"}%
 
 %TOC%
+
+---++ Description
 
 This plugin redesigns the way how users interact with topics and attachments in various ways:
 
@@ -21,6 +23,19 @@ Other features are:
    * filtering and pagination for topics with a lot of attachments
    * drag & drop upload for browsers supporting it (currently firefox and chrome only)
 
+---++ Screenshots
+
+<a href='%ATTACHURLPATH%/TopicInteractionPluginSnap1.png' class='foswikiImage'><img src='%ATTACHURLPATH%/TopicInteractionPluginSnap1.png' width='500' /></a>
+
+<a href='%ATTACHURLPATH%/TopicInteractionPluginSnap2.png' class='foswikiImage'><img src='%ATTACHURLPATH%/TopicInteractionPluginSnap2.png' width='500' /></a>
+
+<a href='%ATTACHURLPATH%/TopicInteractionPluginSnap3.png' class='foswikiImage'><img src='%ATTACHURLPATH%/TopicInteractionPluginSnap3.png' width='500' /></a>
+
+<a href='%ATTACHURLPATH%/TopicInteractionPluginSnap4.png' class='foswikiImage'><img src='%ATTACHURLPATH%/TopicInteractionPluginSnap4.png' width='500' /></a>
+
+<a href='%ATTACHURLPATH%/TopicInteractionPluginSnap5.png' class='foswikiImage'><img src='%ATTACHURLPATH%/TopicInteractionPluginSnap5.png' width='500' /></a>
+
+---++ Settings
 To activate you'll need to add =topicinteraction= to your SKIN path setting in your !SitePreferences, like
 
 <verbatim>
@@ -37,17 +52,80 @@ Use the =insidetab= setting of !MetaCommentPlugin to render comments inside a ta
 
 Note you won't need using Foswiki:Extensions/NatSkin as that's integrated automatically.
 
----++ Screenshots
+---++ Creating a link to an attachment
 
-<a href='%ATTACHURLPATH%/TopicInteractionPluginSnap1.png' class='foswikiImage'><img src='%ATTACHURLPATH%/TopicInteractionPluginSnap1.png' width='500' /></a>
+!TopicInteractionPlugin extens the standard way of inserting links to an attachment. Instead of only distinguishing between images and other kinds
+of attachments you may now specify different code to be inserted into the topic based on the mime type of an attachment. You may specify a set of
+various preference settings. The actual setting being used is chosen in the given precedence:
 
-<a href='%ATTACHURLPATH%/TopicInteractionPluginSnap2.png' class='foswikiImage'><img src='%ATTACHURLPATH%/TopicInteractionPluginSnap2.png' width='500' /></a>
+   1 =ATTACHED_&lt;file-extension>_FORMAT= 
+   1 =ATTACHED_&lt;mime-type>_FORMAT= 
+   1 =ATTACHEDIMAGEFORMAT= (provided for compatibility, left out in below examples)
+   1 =ATTACHED_FILE_FORMAT=
+   1 =ATTACHEDFILELINKFORMAT= (provided for compatibility, left out in below examples)
 
-<a href='%ATTACHURLPATH%/TopicInteractionPluginSnap3.png' class='foswikiImage'><img src='%ATTACHURLPATH%/TopicInteractionPluginSnap3.png' width='500' /></a>
+(=&lt;file-extension>= and =&lt;mime-type>= are uppercase). For example, when inserting a link to an attachment named =screenshot.png= the following
+settings are looked up:
 
-<a href='%ATTACHURLPATH%/TopicInteractionPluginSnap4.png' class='foswikiImage'><img src='%ATTACHURLPATH%/TopicInteractionPluginSnap4.png' width='500' /></a>
+   1 =ATTACHED_PNG_FORMAT=
+   1 =ATTACHED_IMAGE_FORMAT=
+   1 =ATTACHED_FILE_FORMAT=
 
-<a href='%ATTACHURLPATH%/TopicInteractionPluginSnap5.png' class='foswikiImage'><img src='%ATTACHURLPATH%/TopicInteractionPluginSnap5.png' width='500' /></a>
+The one first found is used. When looking up the link format based on the mime type, the actual _mime type group_ is used, such as
+=IMAGE=, =VIDEO=, =TEXT=, =AUDIO= etc just to name the most interesting ones. There are a couple of more mime types that are grouped together
+in a meaningful way to form the group =DOCUMENT= which are =application/.*(document|msword|msexcel|rtf).*=, as well as =PDF= which are =application/pdf=
+and =application/postscript=. 
+
+For example the following settings might be quite useful:
+
+Using [[Foswiki:Extensions/DocumentViewerPlugin][DocumentViewerPlugin]]:
+
+<verbatim class="tml">
+   * Set ATTACHED_ODT_FORMAT = $percntDOCUMENTVIEWER{"$filename"}$percnt
+   * Set ATTACHED_PDF_FORMAT = $percntDOCUMENTVIEWER{"$filename"}$percnt
+</verbatim>
+
+Using [[Foswiki:Extensions/ImagePlugin][ImagePlugin]]:
+
+<verbatim class="tml">
+   * Set ATTACHED_IMAGE_FORMAT = $percntIMAGE{"$filename" size="200" caption="$comment"}$percnt 
+</verbatim>
+
+Using [[Foswiki:Extensions/MediaElementPlugin][MediaElementPlugin]]:
+
+<verbatim class="tml">
+   * Set ATTACHED_VIDEO_FORMAT = $percntVIDEO{"$filename"}$percnt
+   * Set ATTACHED_AUDIO_FORMAT = $percntAUDIO{"$filename"}$percnt
+</verbatim>
+
+Using !WebDAVContrib (please adjust the webdav://wiki/dav prefix to your needs):
+
+<verbatim class="tml">
+   * Set OFFICELINK = <a href='webdav://wiki/dav/%WEB%/%TOPIC%/%DEFAULT{default=""}%' class='jqWebDAVLink' title='Edit Office Attachment' rel='nofollow'>%DEFAULT{default=""}%</a>
+   * Set ATTACHED_DOCUMENT_FORMAT = $percntOFFICELINK{"$filename"}$percnt
+</verbatim>
+
+
+The =..._FORMAT= strings support the following variables:
+
+   * =$filename=: the name of the file
+   * =$fileext=: the filename extension (string following the last period, if present) or an empty string.
+   * =$fileurl=: URL encoded version of the filename
+   * =$comment=: the file comment from the upload dialog
+   * =$size=: the filesize (=%<nop>ATTACHEDIMAGEFORMAT%= only)
+   * =$width=: image width
+   * =$height=: image width
+   * =$date=: modification date of attachment
+   * Any standard [[FormatTokens][formatting tokens]]: =$percnt=, =$dollar=, etc.
+    
+---+++ Incompatibilities
+
+There is a significant difference how Foswiki's natively processes =ATTACHEDFILEFORMAT= settings and the way !TopicInteractionPlugin does. 
+
+   * Any macro expression __must always be escaped__ using standard format tokens =$percnt= and =$dollar=. As such previous settings might be incompatible with !TopicInteractionPlugin
+     settings of the same kind.
+   * The __time format specifiers are not supported__. Use =$date= instead.
+
 
 ---++ Syntax
 
@@ -150,6 +228,7 @@ generates:
 
 ---++ Change History
 %TABLE{columnwidths="7em" tablewidth="100%"}%
+|  24 Oct 2018: | improved "insert link" action; added "create link & hide file" action; performance improvements to other actions |
 |  05 Mar 2018: | fixed selecting attachments with brackets in its filename |
 |  16 Feb 2018: | added a legacy uploader to be somewhat backwards compatible to the old plupload just enough to please natedit |
 |  16 Jan 2018: | check access permissions in %ATTACHMENTS makro; fixed url encoding of unicode files |
@@ -212,9 +291,9 @@ generates:
 %META:FIELD{name="Repository" title="Repository" value="https://github.com/foswiki/%25TOPIC%25"}%
 %META:FIELD{name="Support" title="Support" value="Foswiki:Support/%25TOPIC%25"}%
 %META:FIELD{name="Version" title="Version" value="%25$VERSION%25"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap5.png" attachment="TopicInteractionPluginSnap5.png" attr="" comment="" date="1518773290" size="36218" user="ProjectContributor" version="1"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap4.png" attachment="TopicInteractionPluginSnap4.png" attr="" comment="" date="1518773290" size="45039" user="ProjectContributor" version="1"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap3.png" attachment="TopicInteractionPluginSnap3.png" attr="" comment="" date="1518773290" size="99574" user="ProjectContributor" version="1"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap2.png" attachment="TopicInteractionPluginSnap2.png" attr="" comment="" date="1518773290" size="111026" user="ProjectContributor" version="1"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap1.png" attachment="TopicInteractionPluginSnap1.png" attr="" comment="" date="1518773290" size="16199" user="ProjectContributor" version="1"}%
-%META:FILEATTACHMENT{name="LibreOfficeWebDAV.reg" attachment="LibreOfficeWebDAV.reg" attr="" comment="" date="1518773290" moveby="micha" movedto="System.TopicInteractionPlugin.LibreOfficeWebDAV.reg" movedwhen="1470922302" movefrom="Sandbox.OpenToEditTest.LibreOfficeWebDAV.reg" size="1126" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap5.png" attachment="TopicInteractionPluginSnap5.png" attr="" comment="" date="1540399921" size="36218" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap4.png" attachment="TopicInteractionPluginSnap4.png" attr="" comment="" date="1540399921" size="45039" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap3.png" attachment="TopicInteractionPluginSnap3.png" attr="" comment="" date="1540399921" size="99574" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap2.png" attachment="TopicInteractionPluginSnap2.png" attr="" comment="" date="1540399921" size="111026" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap1.png" attachment="TopicInteractionPluginSnap1.png" attr="" comment="" date="1540399921" size="16199" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="LibreOfficeWebDAV.reg" attachment="LibreOfficeWebDAV.reg" attr="" comment="" date="1540399921" moveby="micha" movedto="System.TopicInteractionPlugin.LibreOfficeWebDAV.reg" movedwhen="1470922302" movefrom="Sandbox.OpenToEditTest.LibreOfficeWebDAV.reg" size="1126" user="ProjectContributor" version="1"}%

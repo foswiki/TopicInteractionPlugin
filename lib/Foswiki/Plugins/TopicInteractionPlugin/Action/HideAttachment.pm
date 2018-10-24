@@ -42,60 +42,38 @@ sub handle {
     return;
   }
 
-  # disable dbcache handler during loop
-  my $dbCacheEnabled = Foswiki::Func::getContext()->{DBCachePluginEnabled};
-  if ($dbCacheEnabled) {
-    require Foswiki::Plugins::DBCachePlugin;
-    Foswiki::Plugins::DBCachePlugin::disableRenameHandler();
-  }
-
   my ($meta) = Foswiki::Func::readTopic($web, $topic);
 
-  my $error;
-  my $thumbnail;
+  my $doSave = 0;
   foreach my $fileName (@{$params->{filenames}}) {
     next unless $fileName;
     $fileName = $this->sanitizeAttachmentName($fileName);
 
     my $attachment = $meta->get("FILEATTACHMENT", $fileName);
     unless ($attachment) {
-      $this->printJSONRPC($response, 102, "Attachment $fileName does not exist", $id);
+      $this->printJSONRPC($response, 104, "Attachment $fileName does not exist", $id);
       return;
     }
 
     my %attrs = map {$_ => 1} split(//, ($attachment->{attr} || ''));
     next if $attrs{h}; # already hidden
 
+    $attrs{h} = 1;
+    $attachment->{attr} = join("", sort keys %attrs);
+    $doSave = 1;
+
     $this->writeDebug("hiding fileName=$fileName, web=$web, topic=$topic");
-
-    try {
-      unless (DRY) {
-        $error = Foswiki::Func::saveAttachment(
-          $web, $topic, $fileName, {
-            dontlog     => !$Foswiki::cfg{Log}{upload},
-            hide        => 1,
-          });
-
-      }
-    } catch Error::Simple with {
-      $error = shift->{-text};
-      $this->writeDebug("ERROR: $error");
-    };
-
-    last if $error;
-
-    $thumbnail = $fileName if $attrs{t};
   }
-  ($meta) = Foswiki::Func::readTopic($web, $topic);
-  $this->setThumbnail($meta, $thumbnail) if $thumbnail && !DRY;
 
-  if ($dbCacheEnabled) {
-    # enabling dbcache handlers again
-    Foswiki::Plugins::DBCachePlugin::enableRenameHandler();
-
-    # manually update this topic
-    Foswiki::Plugins::DBCachePlugin::loadTopic($web, $topic);
-  }
+  my $error;
+  try {
+    unless (DRY) {
+      $meta->save();
+    }
+  } catch Error::Simple with {
+    $error = shift->{-text};
+    $this->writeDebug("ERROR: $error");
+  };
 
   if ($error) {
     $this->printJSONRPC($response, 1, $error, $id);

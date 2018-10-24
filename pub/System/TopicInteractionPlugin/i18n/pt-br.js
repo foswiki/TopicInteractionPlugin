@@ -1,6 +1,6 @@
 {
    "Select files" : "Escolha os arquivos",
-   "Add files to the upload queue and click the start button." : "Adicione os arquivos abaixo e clique no botão "Iniciar o envio".",
+   "Add files to the upload queue and click the start button." : "Adicione os arquivos abaixo e clique no botão \"Iniciar o envio\".",
    "Filename" : "Nome do arquivo",
    "Status" : "Status",
    "Size" : "Tamanho",

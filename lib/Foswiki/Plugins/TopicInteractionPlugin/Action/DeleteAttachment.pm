@@ -53,13 +53,6 @@ sub handle {
     return;
   }
 
-  # disable dbcache handler during loop
-  my $dbCacheEnabled = Foswiki::Func::getContext()->{DBCachePluginEnabled};
-  if ($dbCacheEnabled) {
-    require Foswiki::Plugins::DBCachePlugin;
-    Foswiki::Plugins::DBCachePlugin::disableRenameHandler();
-  }
-
   # load source and target topics
   my $fromObj = Foswiki::Meta->load($Foswiki::Plugins::SESSION, $web, $topic); # web, topic already normalized
   my $toObj = Foswiki::Meta->load($Foswiki::Plugins::SESSION, $newWeb, $newTopic);
@@ -102,14 +95,6 @@ sub handle {
     };
 
     last if $error;
-  }
-
-  if ($dbCacheEnabled) {
-    # enabling dbcache handlers again
-    Foswiki::Plugins::DBCachePlugin::enableRenameHandler();
-
-    # manually update this topic
-    Foswiki::Plugins::DBCachePlugin::loadTopic($web, $topic);
   }
 
   if ($error) {

@@ -1,6 +1,6 @@
 {
     "Select files" : "Выберите файлы",
-    "Add files to the upload queue and click the start button." : "Добавьте файлы в очередь и нажмите кнопку "Загрузить файлы".",
+    "Add files to the upload queue and click the start button." : "Добавьте файлы в очередь и нажмите кнопку \"Загрузить файлы\".",
     "Filename" : "Имя файла",
     "Status" : "Статус",
     "Size" : "Размер",

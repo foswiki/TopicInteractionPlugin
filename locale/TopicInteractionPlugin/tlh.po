@@ -16,20 +16,20 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 2.1\n"
 
-#: templates/metadata.tmpl:307
+#: templates/metadata.tmpl:352
 #, fuzzy
 msgid "%1 attachment(s)"
 msgstr "tepmey"
 
-#: templates/metadata.tmpl:350
+#: templates/metadata.tmpl:394
 msgid "<a href='%1'>Version %2</a> uploaded by %3 on %4"
 msgstr ""
 
-#: templates/metadata.tmpl:468
+#: templates/metadata.tmpl:512
 msgid "Are you sure that you want to delete %1?"
 msgstr ""
 
-#: templates/metadata.tmpl:481
+#: templates/metadata.tmpl:525
 msgid "Attach"
 msgstr "chel"
 
@@ -37,24 +37,24 @@ msgstr "chel"
 msgid "Attachments %1"
 msgstr "tepmey %1"
 
-#: templates/metadata.tmpl:175
+#: templates/metadata.tmpl:185
 msgid "Author"
 msgstr ""
 
-#: templates/metadata.tmpl:432 templates/metadata.tmpl:456
-#: templates/metadata.tmpl:482
+#: templates/metadata.tmpl:476 templates/metadata.tmpl:500
+#: templates/metadata.tmpl:526
 msgid "Cancel"
 msgstr "qIl"
 
-#: templates/metadata.tmpl:313
+#: templates/metadata.tmpl:358
 msgid "Clear all"
 msgstr "Hoch wIvHa&&#39;"
 
-#: templates/attach.topicinteraction.tmpl:10 templates/metadata.tmpl:362
+#: templates/attach.topicinteraction.tmpl:10 templates/metadata.tmpl:406
 msgid "Close"
 msgstr "<nop>SoQmoH"
 
-#: templates/metadata.tmpl:415
+#: templates/metadata.tmpl:459
 msgid "Comment"
 msgstr "ghItlhHom"
 
@@ -63,22 +63,22 @@ msgstr "ghItlhHom"
 msgid "Comments %1"
 msgstr "ghItlhHom"
 
-#: templates/metadata.tmpl:487
+#: templates/metadata.tmpl:531
 #, fuzzy
 msgid "Confirmation required"
 msgstr "Qu&&#39;vatlh! bI&&#39;ol net poQ"
 
-#: templates/metadata.tmpl:297
+#: templates/metadata.tmpl:342
 #, fuzzy
 msgid "Create image gallery"
 msgstr "wa&&#39;chaw chu&&#39; chenmoH"
 
-#: templates/metadata.tmpl:504
+#: templates/metadata.tmpl:555
 #, fuzzy
 msgid "Creating image gallery"
 msgstr "wa&&#39;chaw chu&&#39; chenmoH"
 
-#: templates/metadata.tmpl:498
+#: templates/metadata.tmpl:543 templates/metadata.tmpl:549
 #, fuzzy
 msgid "Creating links"
 msgstr "rarwI&&#39;mey chu&&#39;moH"
@@ -88,16 +88,16 @@ msgstr "rarwI&&#39;mey chu&&#39;moH"
 msgid "Data form"
 msgstr "De&&#39; tlheghmey"
 
-#: templates/metadata.tmpl:174
+#: templates/metadata.tmpl:184
 msgid "Date"
 msgstr "<nop>HovpoH"
 
-#: templates/metadata.tmpl:479
+#: templates/metadata.tmpl:523
 #, fuzzy
 msgid "Dateiname"
 msgstr "pongqa&&#39;"
 
-#: templates/metadata.tmpl:303
+#: templates/metadata.tmpl:348
 msgid "Delete"
 msgstr "polHa&&#39;"
 
@@ -106,65 +106,70 @@ msgstr "polHa&&#39;"
 msgid "Delete %1"
 msgstr "polHa&&#39;"
 
-#: templates/metadata.tmpl:461
+#: templates/metadata.tmpl:505
 #, fuzzy
 msgid "Delete attachment?"
 msgstr "tep %1 polHa&&#39;"
 
-#: templates/metadata.tmpl:243
+#: templates/metadata.tmpl:256
 #, fuzzy
 msgid "Delete this attachment"
 msgstr "tep %1 polHa&&#39;"
 
-#: templates/metadata.tmpl:528
+#: templates/metadata.tmpl:579
 #, fuzzy
 msgid "Deleting"
 msgstr "polHa&&#39;"
 
-#: templates/metadata.tmpl:191
+#: templates/metadata.tmpl:201
 msgid "Display hidden"
 msgstr ""
 
-#: templates/metadata.tmpl:502
+#: templates/metadata.tmpl:553
 msgid "Do you really want to create an image gallery for %1 attachment(s)?"
 msgstr ""
 
-#: templates/metadata.tmpl:496
+#: templates/metadata.tmpl:547
+#, fuzzy
+msgid "Do you really want to create links to %1 attachment(s) and hide them?"
+msgstr "tep vIHmoH pagh polHa&&#39;"
+
+#: templates/metadata.tmpl:541
 msgid "Do you really want to create links to %1 attachment(s)?"
 msgstr ""
 
-#: templates/metadata.tmpl:526
+#: templates/metadata.tmpl:577
 #, fuzzy
 msgid "Do you really want to delete %1 attachment(s)?"
 msgstr "tep vIHmoH pagh polHa&&#39;"
 
-#: templates/metadata.tmpl:508
+#: templates/metadata.tmpl:559
 msgid "Do you really want to download %1 attachment(s)?"
 msgstr ""
 
-#: templates/metadata.tmpl:514
+#: templates/metadata.tmpl:565
 #, fuzzy
 msgid "Do you really want to hide %1 attachment(s)?"
 msgstr "tep So&&#39;meH qeSmey"
 
-#: templates/metadata.tmpl:520
+#: templates/metadata.tmpl:571
 msgid "Do you really want to unhide %1 attachment(s)?"
 msgstr ""
 
-#: templates/metadata.tmpl:299
+#: templates/metadata.tmpl:344
 msgid "Download"
 msgstr ""
 
-#: templates/metadata.tmpl:510
+#: templates/metadata.tmpl:561
 #, fuzzy
 msgid "Downloading"
 msgstr "Dochmey chel (include)"
 
-#: templates/metadata.tmpl:545
+#: templates/metadata.tmpl:598
 msgid "Drag files here"
 msgstr ""
 
-#: templates/metadata.tmpl:404
+#: templates/metadata.tmpl:448
 #, fuzzy
 msgid "Edit attachment"
 msgstr "(tep polHa&&#39;)"
@@ -174,7 +179,7 @@ msgstr "(tep polHa&&#39;)"
 msgid "Edit form"
 msgstr "yu&&#39;muD choH"
 
-#: templates/metadata.tmpl:234
+#: templates/metadata.tmpl:247
 #, fuzzy
 msgid "Edit properties of this attachment"
 msgstr "tep So&&#39;meH qeSmey"
@@ -186,47 +191,52 @@ msgstr "wa&&#39;chawvam choH"
 
 #: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:223
 #: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:46
-#: templates/metadata.tmpl:232
+#: templates/metadata.tmpl:245
 #, fuzzy
 msgid "Edit this attachment"
 msgstr "wa&&#39;chawvam choH"
 
-#: templates/metadata.tmpl:190
+#: templates/metadata.tmpl:200
 msgid "Enable/disable displaying hidden attachments"
 msgstr ""
 
-#: templates/metadata.tmpl:168
+#: templates/metadata.tmpl:178
 msgid "Enter a search pattern to filter the list of attachments"
 msgstr ""
 
-#: templates/metadata.tmpl:411
+#: templates/metadata.tmpl:455
 #, fuzzy
 msgid "File name"
 msgstr "pong:"
 
-#: templates/metadata.tmpl:300
+#: templates/metadata.tmpl:345
 #, fuzzy
 msgid "Hide"
 msgstr "De&&#39; So&&#39;"
 
-#: templates/metadata.tmpl:422
+#: templates/metadata.tmpl:466
 #, fuzzy
 msgid "Hide attachment in normal topic view."
 msgstr "ghItlh bejlu&&#39;taHvIS tep lu&&#39;anglu&&#39;be&&#39;."
 
-#: templates/metadata.tmpl:555
+#: templates/metadata.tmpl:608
 #, fuzzy
 msgid "Hide options"
 msgstr "nejwI&&#39; <nop>DuHmey"
 
-#: templates/metadata.tmpl:516
+#: templates/metadata.tmpl:567
 #, fuzzy
 msgid "Hiding"
 msgstr "&&#39;ay&&#39; pong 1"
 
-#: templates/metadata.tmpl:295
+#: templates/metadata.tmpl:339
 #, fuzzy
 msgid "Insert links"
+msgstr "rarwI&&#39; chel"
+
+#: templates/metadata.tmpl:340
+#, fuzzy
+msgid "Insert links &&amp; hide"
 msgstr "rarwI&&#39; chel"
 
 #: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:226
@@ -234,16 +244,16 @@ msgstr "rarwI&&#39; chel"
 msgid "Manage properties of %1"
 msgstr "<nop>DuHmey neH choH"
 
-#: templates/metadata.tmpl:294
+#: templates/metadata.tmpl:338
 #, fuzzy
 msgid "More actions"
 msgstr "latlh ghItlh <nop>DuHmey"
 
-#: templates/metadata.tmpl:302 templates/metadata.tmpl:455
+#: templates/metadata.tmpl:347 templates/metadata.tmpl:499
 msgid "Move"
 msgstr "vIHmoH"
 
-#: templates/metadata.tmpl:437
+#: templates/metadata.tmpl:481
 msgid "Move attachment(s) to a different topic"
 msgstr ""
 
@@ -252,124 +262,129 @@ msgstr ""
 msgid "Move or delete %1"
 msgstr "tep %1 vIHmoH pagh &&#39;oH polHa&&#39;:"
 
-#: templates/metadata.tmpl:242
+#: templates/metadata.tmpl:255
 #, fuzzy
 msgid "Move this attachment to a different topic"
 msgstr ""
 "ghItlh chu&&#39;Daq ghItlhvam velqa&&#39; lan (tep chenmoHqa&&#39; je)."
 
-#: templates/metadata.tmpl:173
+#: templates/metadata.tmpl:183
 #, fuzzy
 msgid "Name"
 msgstr "pong:"
 
-#: templates/metadata.tmpl:472 templates/metadata.tmpl:532
+#: templates/metadata.tmpl:516 templates/metadata.tmpl:583
 msgid "No, thanks"
 msgstr ""
 
-#: templates/metadata.tmpl:419
+#: templates/metadata.tmpl:463
 msgid "Options"
 msgstr "<nop>DuHmey"
 
-#: templates/metadata.tmpl:477
+#: templates/metadata.tmpl:521
 #, fuzzy
 msgid "Paste attachment"
 msgstr "(tep polHa&&#39;)"
 
-#: templates/metadata.tmpl:357
+#: templates/metadata.tmpl:401
 msgid "Preview"
 msgstr "bej"
 
-#: templates/metadata.tmpl:238 templates/metadata.tmpl:240
+#: templates/metadata.tmpl:251 templates/metadata.tmpl:253
 #, fuzzy
 msgid "Preview this attachment"
 msgstr "De&&#39; tep vIHmoH"
 
-#: templates/metadata.tmpl:180
+#: templates/metadata.tmpl:190
 #, fuzzy
 msgid "Results per page"
 msgstr "%1 mIchDaq Dochmey&&#39;e&&#39; luSamlu&&#39;bogh"
 
-#: templates/metadata.tmpl:431
+#: templates/metadata.tmpl:475
 msgid "Save"
 msgstr "pol"
 
-#: templates/metadata.tmpl:167
+#: templates/metadata.tmpl:177
 msgid "Search"
 msgstr "nejwI&&#39;"
 
-#: templates/metadata.tmpl:312
+#: templates/metadata.tmpl:357
 #, fuzzy
 msgid "Select all"
 msgstr "<nop>Hoch <nop>wIv"
 
-#: templates/metadata.tmpl:556
+#: templates/metadata.tmpl:240
+#, fuzzy
+msgid "Select this attachment"
+msgstr "tep %1 polHa&&#39;"
+
+#: templates/metadata.tmpl:609
 #, fuzzy
 msgid "Show options"
 msgstr "nejwI&&#39; <nop>DuHmey"
 
-#: templates/metadata.tmpl:558
+#: templates/metadata.tmpl:611
 #, fuzzy
 msgid "Show/hide advanced options"
 msgstr "nejwI&&#39; <nop>DuHmey"
 
-#: templates/metadata.tmpl:176
+#: templates/metadata.tmpl:186
 msgid "Size"
 msgstr "ngI&&#39;"
 
-#: templates/metadata.tmpl:171
+#: templates/metadata.tmpl:181
 #, fuzzy
 msgid "Sort by"
 msgstr "mISHa&&#39;moH:"
 
-#: templates/metadata.tmpl:452
+#: templates/metadata.tmpl:496
 msgid "The new topic chosen must already exist."
 msgstr "taHnIS ghItlh chu&&#39; <nop>DawIvbogh."
 
-#: templates/metadata.tmpl:449
+#: templates/metadata.tmpl:493
 msgid "To topic"
 msgstr "<nop>DoS pong"
 
-#: templates/metadata.tmpl:445
+#: templates/metadata.tmpl:489
 msgid "To web"
 msgstr "<nop>DoS mIch"
 
-#: templates/metadata.tmpl:301
+#: templates/metadata.tmpl:346
 msgid "Unhide"
 msgstr ""
 
-#: templates/metadata.tmpl:522
+#: templates/metadata.tmpl:573
 msgid "Unhiding"
 msgstr ""
 
-#: templates/metadata.tmpl:549
+#: templates/metadata.tmpl:602
 #, fuzzy
 msgid "Upload files"
 msgstr "De&&#39; lab"
 
-#: templates/metadata.tmpl:550
+#: templates/metadata.tmpl:603
 msgid "Uploading ..."
 msgstr ""
 
-#: templates/metadata.tmpl:427
+#: templates/metadata.tmpl:471
 msgid "Use as a thumbnail for the page."
 msgstr ""
 
-#: templates/metadata.tmpl:264
+#: templates/metadata.tmpl:283
 #, fuzzy
 msgid "Version %1"
 msgstr "Dotlh"
 
-#: templates/metadata.tmpl:471
+#: templates/metadata.tmpl:515
 #, fuzzy
 msgid "Yes, delete"
 msgstr "(<nop>polHa&&#39;)"
 
-#: templates/metadata.tmpl:531
+#: templates/metadata.tmpl:582
 msgid "Yes, please"
 msgstr ""
 
-#: templates/metadata.tmpl:186
+#: templates/metadata.tmpl:196
 #, fuzzy
 msgid "all"
 msgstr "<nop>Hoch <nop>wIv"
@@ -384,20 +399,20 @@ msgstr "(<nop>polHa&&#39;)"
 msgid "edit"
 msgstr "choH"
 
-#: templates/metadata.tmpl:255
+#: templates/metadata.tmpl:270
 msgid "hidden"
 msgstr ""
 
-#: templates/metadata.tmpl:280
+#: templates/metadata.tmpl:299
 #, fuzzy
 msgid "hide other revisions"
 msgstr "Dotlh chu&&#39;:"
 
-#: templates/metadata.tmpl:280
+#: templates/metadata.tmpl:299
 msgid "less"
 msgstr ""
 
-#: templates/metadata.tmpl:280
+#: templates/metadata.tmpl:299
 #, fuzzy
 msgid "more"
 msgstr "(latlh)"
@@ -410,21 +425,21 @@ msgstr ""
 msgid "props"
 msgstr ""
 
-#: templates/metadata.tmpl:312
+#: templates/metadata.tmpl:357
 #, fuzzy
 msgid "select all attachments on this topic"
 msgstr "ghItlhvam naw&&#39; lajHa&&#39;chu&&#39;"
 
-#: templates/metadata.tmpl:280
+#: templates/metadata.tmpl:299
 #, fuzzy
 msgid "show previous revisions"
 msgstr "nungbogh Dotlh tu&&#39;lu&&#39;be&&#39;."
 
-#: templates/metadata.tmpl:257
+#: templates/metadata.tmpl:272
 msgid "thumbnail"
 msgstr ""
 
-#: templates/metadata.tmpl:313
+#: templates/metadata.tmpl:358
 #, fuzzy
 msgid "unselect all previously select attachments"
 msgstr "tep chu&&#39;moHmeH De&&#39;wI&&#39;lIjDaq De&&#39; chu&&#39; yIwIv"

@@ -24,6 +24,7 @@ sub new {
   my $class = shift;
 
   my $this = bless({
+      session => $Foswiki::Plugins::SESSION,
       @_
     },
     $class

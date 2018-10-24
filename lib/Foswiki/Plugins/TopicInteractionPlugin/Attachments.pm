@@ -68,9 +68,9 @@ sub handle {
   my $theExclude = $params->{exclude};
   my $theCase = Foswiki::Func::isTrue($params->{casesensitive}, 1);
 
-  $theLimit =~ s/[^\d]//go;
+  $theLimit =~ s/[^\d]//g;
   $theLimit = 0 unless $theLimit;
-  $theSkip =~ s/[^\d]//go;
+  $theSkip =~ s/[^\d]//g;
   $theSkip = 0 unless $theSkip;
 
   $params->{limit} = $theLimit;
@@ -314,11 +314,11 @@ sub urlEncode {
   my $text = defined($property)?$info->{$property}:$info;
   return $text unless $text;
 
-  $text = Encode::encode_utf8($text) if $Foswiki::UNICODE;
-
   # below encoding must be uppercase hex values to be compatible with 
   # encodeURIComponent() in browsers
-  $text =~ s/([^0-9a-zA-Z-_.:~!*\/])/sprintf('%%%02X',ord($1))/ge; 
+
+  # only encode reserverd characters
+  $text =~ s/([\!#\$&'\(\)\*\+,\/:;=\?\@\[\]])/sprintf('%%%02X',ord($1))/ge; 
 
   return $text;
 }
@@ -329,7 +329,6 @@ sub encodeName {
 
   return $text unless $text;
 
-  $text = Encode::encode_utf8($text) if $Foswiki::UNICODE;
   $text =~ s/[^0-9a-zA-Z_]/_/g; 
 
   return $text;
@@ -378,7 +377,11 @@ sub _humanizeBytes {
     $magnitude++;
   };
 
-  return sprintf("%.2f", $bytes) . ' '. $suffix;
+  my $result = sprintf("%.02f", $bytes);
+  $result =~ s/\.00$//;
+  $result .= ' '. $suffix;
+
+  return $result;
 }
 
 ##############################################################################
