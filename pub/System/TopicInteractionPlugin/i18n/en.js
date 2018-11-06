@@ -1,4 +1,5 @@
 {
+   "Drag files here." : "Drag files here.",
    "Deleting %file% ...": "Deleting %file% ...",
    "Edit failed": "Edit failed",
    "Error during '%action%'": "Error during '%action%'",

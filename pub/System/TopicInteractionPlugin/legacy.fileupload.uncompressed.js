@@ -21,7 +21,7 @@ var plupload = {
 (function($) {
 
 
-  // legacy uploader, wrapper around new implementation 
+  // legacy uploader, wrapper around new implementation
   function LegacyUploader(elem, opts) {
     var self = this,
         wrapper = $(elem).wrap("<div />").parent().addClass("jqLegacyUploader jqUploadButton");
@@ -31,11 +31,11 @@ var plupload = {
     self.fileInput = $("<input />").attr("type", "file").appendTo(wrapper);
     self.opts = $.extend({}, self.elem.data(), opts);
     self.init();
-  };
+  }
 
   LegacyUploader.prototype.init = function() {
     var self = this;
-    
+
     self.state = plupload.STOPPED;
     self.files = [];
     self.browseButton = $(self.opts.browseButton) || self.wrapper;
@@ -75,10 +75,10 @@ var plupload = {
   // add to jquery
   $.fn.uploader = function(opts) {
     console.warn("this uploader api is deprecated, please switch to new fileupload api");
-    return this.each(function () { 
-      if (!$.data(this, "uploader")) { 
-        $.data(this, "uploader", new LegacyUploader(this, opts)); 
-      } 
+    return this.each(function () {
+      if (!$.data(this, "uploader")) {
+        $.data(this, "uploader", new LegacyUploader(this, opts));
+      }
     });
   };
 

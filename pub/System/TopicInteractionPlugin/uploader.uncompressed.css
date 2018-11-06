@@ -40,10 +40,10 @@
   font-size:0.77em;
 }
 
-.jqUploadDropZone {
+.jqUploadIndicator {
   display:none;
 }
-.jqUploadDropZone span {
+.jqUploadIndicator span {
   position:relative;
   text-align:center;
   top:50%;
@@ -51,7 +51,7 @@
   font-size:200%;
   font-weight:bold;
 }
-.jqUploadDragging .jqUploadDropZone {
+.jqUploadDragging .jqUploadIndicator {
   display:block;
   box-sizing:border-box;
   opacity: 0.5;

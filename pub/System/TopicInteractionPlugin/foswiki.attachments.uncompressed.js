@@ -21,7 +21,10 @@ As per the GPL, removal of this notice is prohibited.
 
 */
 
+/* global Dialog, window */
+
 /*eslint-disable no-console */
+
 "use strict";
 (function($) {
 
@@ -38,14 +41,14 @@ As per the GPL, removal of this notice is prohibited.
   };
 
   /* The actual plugin constructor ****************************************/
-  function FoswikiAttachments(elem, opts) { 
+  function FoswikiAttachments(elem, opts) {
     var self = this;
 
-    self.elem = $(elem); 
-    self.opts = $.extend({}, defaults, self.elem.data(), opts); 
+    self.elem = $(elem);
+    self.opts = $.extend({}, defaults, self.elem.data(), opts);
     self.log("new FoswikiAttachments opts=",self.opts);
-    self.init(); 
-  } 
+    self.init();
+  }
 
   /* logger ***************************************************************/
   FoswikiAttachments.prototype.log = function() {
@@ -61,7 +64,7 @@ As per the GPL, removal of this notice is prohibited.
   };
 
   /* init attachments *****************************************************/
-  FoswikiAttachments.prototype.init = function () { 
+  FoswikiAttachments.prototype.init = function () {
     var self = this, tabpane;
 
     self.log("called init()");
@@ -144,7 +147,7 @@ As per the GPL, removal of this notice is prohibited.
         val = $input.val();
         if (val === 'none') {
           val = '';
-        } 
+        }
         self.load({
           "showempty": true,
           "filter": val
@@ -197,7 +200,7 @@ As per the GPL, removal of this notice is prohibited.
         $(this).removeClass("foswikiAttachmentHover");
       }
     ).on("click", function(e) {
-      var $attachment = $(this), 
+      var $attachment = $(this),
           id = $attachment.data('id');
 
       if (!$(e.target).is("a,img,i")) { // dont propagate the attachment clicks
@@ -242,7 +245,7 @@ As per the GPL, removal of this notice is prohibited.
 
       if (extension.match(/mp3|wav/)) {
         previewType = "audio";
-      } else if (extension.match(/flv|swf|mp4|mpe?g|mov|ogg|webm|ogv/)) { 
+      } else if (extension.match(/flv|swf|mp4|mpe?g|mov|ogg|webm|ogv/)) {
         previewType = "video";
       } else if (extension.match(/vsd/)) {
         previewType = "visio";
@@ -257,7 +260,7 @@ As per the GPL, removal of this notice is prohibited.
       });
 
       Dialog.load({
-        expand: "attachments::previewer::"+previewType, 
+        expand: "attachments::previewer::"+previewType,
         data: {
           filename: decodeURIComponent(attachmentOpts.filename)
         }
@@ -277,7 +280,7 @@ As per the GPL, removal of this notice is prohibited.
           thumbnail = $attachment.find(".foswikiThumbnail").clone().removeClass("foswikiLeft");
 
       Dialog.load({
-        id:"#foswikiAttachmentConfirmDelete", 
+        id:"#foswikiAttachmentConfirmDelete",
         expand:"attachments::confirmdelete",
         init: function() {
           var $this = this;
@@ -300,7 +303,7 @@ As per the GPL, removal of this notice is prohibited.
         ev.stopPropagation();
     });
 
-    // add button behaviour 
+    // add button behaviour
     self.elem.find(".foswikiAttachmentPropertiesButton").on("click", function() {
       var $button = $(this),
           $attachment = $button.parents(".foswikiAttachment:first"),
@@ -308,8 +311,8 @@ As per the GPL, removal of this notice is prohibited.
           thumbnail = $attachment.find(".foswikiThumbnail").clone().removeClass("foswikiLeft");
 
       Dialog.load({
-        id:"#foswikiAttachmentEditor", 
-        expand:"attachments::editor", 
+        id:"#foswikiAttachmentEditor",
+        expand:"attachments::editor",
         init: function() {
           var $this = this;
 
@@ -353,7 +356,7 @@ As per the GPL, removal of this notice is prohibited.
           thumbnail = $attachment.find(".foswikiThumbnail").clone().removeClass("foswikiLeft");
 
       Dialog.load({
-        id: "#foswikiAttachmentMove", 
+        id: "#foswikiAttachmentMove",
         expand: "attachments::moveattachment",
         init: function() {
           var $this = this;
@@ -363,7 +366,7 @@ As per the GPL, removal of this notice is prohibited.
             $this.find(".foswikiThumbnailContainer").html(thumbnail);
           }
           $this.find(".foswikiGenericThumbnail").hide();
-          
+
           $this.dialog("option", "position", "center");
         }
       });
@@ -374,7 +377,7 @@ As per the GPL, removal of this notice is prohibited.
     // add bulk action behaviour
     self.elem.find(".foswikiAttachmentsBulkAction select").on("change", function() {
       var $select = $(this),
-          action = $select.val(), 
+          action = $select.val(),
           hideFile,
           msgClass,
           len = self.selection?self.selection.length:0;
@@ -410,12 +413,11 @@ As per the GPL, removal of this notice is prohibited.
 
       if (action !== "move") {
         Dialog.load({
-          id: "#foswikiAttachmentConfirmBulk", 
+          id: "#foswikiAttachmentConfirmBulk",
           expand: "attachments::confirmbulkaction",
           init: function() {
             var $this = this,
-                $form = $this.find("form"),
-                $hideFile = $form.find("input[name=hidefile]");
+                $form = $this.find("form");
 
             $form.find("input[type='hidden'][name='filename']").remove();
             $form.find("input[type='hidden'][name='hidefile']").val(hideFile);
@@ -435,9 +437,9 @@ As per the GPL, removal of this notice is prohibited.
         });
 
       } else {
-        // move attachments 
+        // move attachments
         Dialog.load({
-          id: "#foswikiAttachmentMove", 
+          id: "#foswikiAttachmentMove",
           expand: "attachments::moveattachment",
           init: function() {
             var $this = this,
@@ -460,7 +462,7 @@ As per the GPL, removal of this notice is prohibited.
       }
     });
 
-    // add show more versions behaviour 
+    // add show more versions behaviour
     self.elem.find(".foswikiShowVersions").each(function() {
       var $this = $(this),
           $attachment = $this.parents(".foswikiAttachment:first"),
@@ -474,7 +476,7 @@ As per the GPL, removal of this notice is prohibited.
             "expand": "attachments::versions",
             "filename": attachmentOpts.filename
           };
-      
+
       $this.on("click", function() {
         if($versionContainer.is(".foswikiVersionsContainerLoaded")) {
           $this.hide();
@@ -482,7 +484,7 @@ As per the GPL, removal of this notice is prohibited.
           $versionContainer.slideDown("fast");
         } else {
           $versionContainer.show();
-          $versionContainer.load(url, params, function(resp, stat) {
+          $versionContainer.load(url, params, function() {
             $versionContainer.addClass("foswikiVersionsContainerLoaded");
             $attachment.effect("highlight");
             $this.hide();
@@ -492,13 +494,13 @@ As per the GPL, removal of this notice is prohibited.
         return false;
       });
     });
-   
-    // add hide more versions behaviour 
+
+    // add hide more versions behaviour
     self.elem.find(".foswikiHideVersions").each(function() {
       var $this = $(this),
           $attachment = $this.parents(".foswikiAttachment:first"),
           $versionContainer = $attachment.find(".foswikiVersionsContainer");
-      
+
       $this.on("click", function() {
         $this.hide();
         $attachment.find(".foswikiShowVersions").show();
@@ -637,23 +639,23 @@ As per the GPL, removal of this notice is prohibited.
         success: function(data) {
           $.unblockUI();
           // perform reload
-          if (action === "createlink" || action == "createlink_hidefile" || action === "createimagegallery") {
+          if (action === "createlink" || action === "createlink_hidefile" || action === "createimagegallery") {
             //self.log("reloading topic");
             window.location.href = foswiki.getScriptUrl("view", foswiki.getPreference("WEB"), foswiki.getPreference("TOPIC"));
-          } 
-          
+          }
+
           // perform redirect
           else if (action === "download") {
             //self.log("redirect url="+data.result);
             window.location.href = data.result;
-          } 
+          }
 
           // clear selection
           else if (action === 'delete') {
             self.clearSelection();
             self.load();
           }
-          
+
           // default
           else {
             self.load();
@@ -676,7 +678,7 @@ As per the GPL, removal of this notice is prohibited.
         }
       });
     });
-    
+
   };  // end of init()
 
   /* get number of attachments ********************************************/
@@ -697,7 +699,7 @@ As per the GPL, removal of this notice is prohibited.
 
   /* get data of attachments **********************************************/
   FoswikiAttachments.prototype.getAttachmentData = function(elem) {
-    var self = this, id;
+    var id;
 
     if (typeof(elem) === 'string')  {
       id = elem;
@@ -726,14 +728,14 @@ As per the GPL, removal of this notice is prohibited.
 
   /* all attachments *************************************************/
   FoswikiAttachments.prototype.load = function(params) {
-    var self = this, 
+    var self = this,
         url, thisParams = {},
         dfd = $.Deferred();
 
     self.log("called load()");
 
     $.each(params, function(key, val) {
-      thisParams["attachments_"+key] = val;  
+      thisParams["attachments_"+key] = val;
     });
 
     params = $.extend({
@@ -770,7 +772,7 @@ As per the GPL, removal of this notice is prohibited.
     self.container.load(url, params, function() {
       self.elem.unblock();
       self.container.height('auto');
-      self.elem.removeData("FoswikiAttachments"); // remove reference 
+      self.elem.removeData("FoswikiAttachments"); // remove reference
       dfd.resolve();
     });
 
@@ -808,7 +810,7 @@ As per the GPL, removal of this notice is prohibited.
       return;
     }
 
-    id = id.replace(/[^0-9a-zA-Z_]/g, "_"); 
+    id = id.replace(/[^0-9a-zA-Z_]/g, "_");
 
     //self.log(" select("+id+")");
     if (typeof(self.selection) === 'undefined') {

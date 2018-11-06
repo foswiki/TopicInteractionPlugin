@@ -4,6 +4,7 @@
 %TMPL:P{"metadata::attachments"}%%{}%
 %TMPL:P{"metadata::comments"}%%{}%
 %TMPL:P{"metadata::end"}%%{}%%TMPL:END%
+%TMPL:DEF{"spinner"}%%JQICON{"fa-spinner" animate="spin"}%%TMPL:END%
 
 %{ ################################################################################ }%
 %TMPL:DEF{"metadata::start"}%%{}%
@@ -80,9 +81,9 @@
   id="comments" 
   url="%SCRIPTURL{"rest"}%/RenderPlugin/template?name=metacomments;expand=metacomments;topic=%WEB%.%TOPIC%;render=on;%GMTIME{"$epoch"}%"
 }%
-<div class='foswikiFormSteps foswikiAttachmentsProcess'><span class='jqAjaxLoader'>&nbsp;</span></div>
-</div>
+<div class='foswikiFormSteps foswikiAttachmentsProcess'>%TMPL:P{"spinner"}%</div>
 %ENDTAB%%TMPL:END%
+
 
 %{ ################################################################################ }%
 %TMPL:DEF{"dataform::tab"}%%RENDERFORDISPLAY{
@@ -297,7 +298,7 @@
           </span>
           $percntIF{\"$version>1\"
             then=\"...&nbsp;<a href='#' class='foswikiShowVersions' title='%MAKETEXT{"show previous revisions"}%'>%MAKETEXT{"more"}%</a><a href='#' class='foswikiHideVersions' title='%MAKETEXT{"hide other revisions"}%' style='display:none'>%MAKETEXT{"less"}%</a>
-                   <div class='foswikiVersionsContainer' style='display:none'><span class='jqAjaxLoader'>&nbsp;</span></div>\"
+                   <div class='foswikiVersionsContainer' style='display:none'>%TMPL:P{"spinner"}%</div>\"
           }$percnt%{}%
         </div>
         %CLEAR%%TMPL:END%
@@ -588,19 +589,14 @@
 %TMPL:DEF{"uploadbutton"}%%TMPL:P{"uploadbutton::impl"}%%TMPL:END%
 %TMPL:DEF{"uploadbutton::impl"}%%TMPL:P{"uploadbutton::start"}%%{}%
 %TMPL:P{"uploadbutton::input"}%%{}%
-%TMPL:P{"uploadbutton::progress"}%%{}%
-%TMPL:P{"uploadbutton::dropzone"}%%{}%
 %TMPL:P{"uploadbutton::end"}%%TMPL:END%
 
 %TMPL:DEF{"uploadbutton::start"}%<span class='jqButton jqButtonSimple jqUploadButton' data-topic='%WEB%.%TOPIC%'>%TMPL:P{"uploadbutton::icon"}%<span class='jqButtonText'>%TMPL:P{"uploadbutton::label"}%</span>%TMPL:END%
 %TMPL:DEF{"uploadbutton::input"}%<input type="file" name="files[]" multiple />%TMPL:END%
-%TMPL:DEF{"uploadbutton::progress"}%<div class="jqUploadProgressBar">%TMPL:P{"uploadbutton::progress::label"}% <span class="jqUploadProgressInfo"></span></div>%TMPL:END%
-%TMPL:DEF{"uploadbutton::dropzone"}%<div class="jqUploadDropZone"><span>%MAKETEXT{"Drag files here"}%</span></div>%TMPL:END%
 %TMPL:DEF{"uploadbutton::end"}%</span>%TMPL:END%
 
 %TMPL:DEF{"uploadbutton::icon"}%<i class='jqButtonIcon fa-fw fa fa-upload'></i>%TMPL:END%
 %TMPL:DEF{"uploadbutton::label"}%%MAKETEXT{"Upload files"}%%TMPL:END%
-%TMPL:DEF{"uploadbutton::progress::label"}%%MAKETEXT{"Uploading ..."}%%TMPL:END%
 
 %{ ################################################################################ }%
 %TMPL:DEF{"optionsbutton"}%%BUTTON{

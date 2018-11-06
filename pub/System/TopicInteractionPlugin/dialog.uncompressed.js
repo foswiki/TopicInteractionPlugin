@@ -24,7 +24,6 @@ As per the GPL, removal of this notice is prohibited.
 /*eslint-disable no-console */
 
 "use strict";
-var Dialog;
 
 (function($) {
 
@@ -34,11 +33,11 @@ var Dialog;
   };
 
   /* constructor **********************************************************/
-  Dialog = function(opts) {
+  function Dialog(opts) {
     var self = this;
 
     self.opts = $.extend({}, defaults, opts);
-  };
+  }
 
   /* shortcut *************************************************************/
   Dialog.load = function(opts) {
@@ -62,10 +61,10 @@ var Dialog;
 
   /* load *****************************************************************/
   Dialog.prototype.load = function(params) {
-    var self = this, 
+    var self = this,
         opts = $.extend({}, self.opts, params),
         $dialog = typeof(opts.id) === 'undefined'?undefined:$(opts.id),
-        data, 
+        data,
         dfd = $.Deferred();
 
     self.log("called load() opts=",opts);
@@ -109,4 +108,8 @@ var Dialog;
 
     return dfd.promise();
   };
+
+  // export
+  window.Dialog = Dialog;
+
 })(jQuery);
