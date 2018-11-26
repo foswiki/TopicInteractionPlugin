@@ -25,7 +25,7 @@ use Error qw(:try);
 
 ###############################################################################
 sub handle {
-  my ($session, $params, $theTopic, $theWeb) = @_;
+  my ($session, $params, $theTopic, $theWeb, $obj, $compat) = @_;
 
   #writeDebug("called handleATTACHMENTS($theTopic, $theWeb)");
   #writeDebug("params=".$params->stringify());
@@ -83,12 +83,15 @@ sub handle {
 
   # sort attachments
   my ($meta) = Foswiki::Func::readTopic($thisWeb, $thisTopic );
-  my @attachments = $meta->find("FILEATTACHMENT");
+  my @attachments = map {getAttachmentInfo($_) } $meta->find("FILEATTACHMENT");
 
   my $isNumeric;
   my %sorting = ();
   if ($theSort eq 'name') {
     %sorting = map {$_ => lc($_->{name})} @attachments;
+    $isNumeric = 0;
+  } elsif ($theSort eq 'type') {
+    %sorting = map {$_ => lc($_->{extension}.$_->{name})} @attachments;
     $isNumeric = 0;
   } elsif ($theSort eq 'date') {
     %sorting = map {$_ => ($_->{date}||0)} @attachments;
@@ -149,32 +152,31 @@ sub handle {
   my $index = 0;
   my @selectedAttachments = ();
   foreach my $attachment (@attachments) {
-    my $info = getAttachmentInfo($attachment);
 
-    next unless $info->{name} =~ $namePattern;
-    next unless $info->{attr} =~ $attrPattern;
-    next if $theAutoAttached == 0 && $info->{autoattached} != 0;
-    next if $theAutoAttached == 1 && $info->{autoattached} != 1;
-    next if $theMinDate && $info->{date} < $theMinDate;
-    next if $theMaxDate && $info->{date} > $theMaxDate;
-    next unless $info->{user} =~ $userPattern;
-    next if $theMinSize && $info->{size} < $theMinSize;
-    next if $theMaxSize && $info->{size} > $theMaxSize;
-    next unless $info->{comment} =~ $commentPattern;
+    next unless $attachment->{name} =~ $namePattern;
+    next unless $attachment->{attr} =~ $attrPattern;
+    next if $theAutoAttached == 0 && $attachment->{autoattached} != 0;
+    next if $theAutoAttached == 1 && $attachment->{autoattached} != 1;
+    next if $theMinDate && $attachment->{date} < $theMinDate;
+    next if $theMaxDate && $attachment->{date} > $theMaxDate;
+    next unless $attachment->{user} =~ $userPattern;
+    next if $theMinSize && $attachment->{size} < $theMinSize;
+    next if $theMaxSize && $attachment->{size} > $theMaxSize;
+    next unless $attachment->{comment} =~ $commentPattern;
 
     if ($includePattern) {
       next unless
-        $info->{name} =~ $includePattern ||
-        $info->{user} =~ $includePattern ||
-        $info->{comment} =~ $includePattern ||
-        $info->{attr} =~ $includePattern;
+        $attachment->{name} =~ $includePattern ||
+        $attachment->{user} =~ $includePattern ||
+        $attachment->{comment} =~ $includePattern ||
+        $attachment->{attr} =~ $includePattern;
     }
     if ($excludePattern) {
       next if
-        $info->{name} =~ $excludePattern ||
-        $info->{user} =~ $excludePattern ||
-        $info->{comment} =~ $excludePattern ||
-        $info->{attr} =~ $excludePattern;
+        $attachment->{name} =~ $excludePattern ||
+        $attachment->{user} =~ $excludePattern ||
+        $attachment->{comment} =~ $excludePattern ||
+        $attachment->{attr} =~ $excludePattern;
     }
 
     $index++;
@@ -201,6 +203,7 @@ sub handle {
   $webDavUrl =~ s/\$web/$thisWeb/g;
   $webDavUrl =~ s/\$topic/$thisTopic/g;
 
+  my %extensions = ();
   foreach my $attachment (@selectedAttachments) {
 
     $index++;
@@ -208,37 +211,44 @@ sub handle {
     next if $theLimit && ($index-$theSkip) > $theLimit;
     $params->{_first} = $index unless defined $params->{_first};
 
-    my $info = getAttachmentInfo($attachment);
+    $extensions{$attachment->{extension}} = 1;
 
-    my $iconUrl = '%ICONURL{"' . $info->{name} . '" alt="else"}%';
-    my $icon = '%ICON{"' . $info->{name} . '" alt="else"}%';
+    my $iconUrl;
+    my $icon;
+    if (Foswiki::Func::getContext()->{MimeIconPluginEnabled}) {
+      $iconUrl = '%MIMEICON{"' . $attachment->{name} . '" format="$url" size="16"}%';
+      $icon = '%MIMEICON{"' . $attachment->{name} . '" size="16"}%';
+    } else {
+      $iconUrl = '%ICONURL{"' . $attachment->{name} . '" alt="else"}%';
+      $icon = '%ICON{"' . $attachment->{name} . '" alt="else"}%';
+    }
 
-    my $encName = urlEncode($info, 'name');
-    my $id = encodeName($info->{name});
+    my $encName = urlEncode($attachment, 'name');
+    my $id = encodeName($attachment->{name});
 
     # actions
     my $thisWebDavUrl = $webDavUrl;
     $thisWebDavUrl =~ s/\$attachment/$encName/g;
 
-    my $webDavAction = '<a rel="nofollow" href="' . $thisWebDavUrl . '" ' . 'title="%MAKETEXT{"Edit this attachment" args="<nop>' . $info->{name} . '"}%">' . '%MAKETEXT{"edit"}%</a>';
+    my $webDavAction = '<a rel="nofollow" href="' . $thisWebDavUrl . '" ' . 'title="%MAKETEXT{"Edit this attachment" args="<nop>' . $attachment->{name} . '"}%">' . '%MAKETEXT{"edit"}%</a>';
 
     my $propsUrl = '%SCRIPTURLPATH{"attach"}%/' . $thisWeb . '/' . $thisTopic . '?filename=' . $encName . '&revInfo=1';
-    my $propsAction = '<a rel="nofollow" href="' . $propsUrl . '" ' . 'title="%MAKETEXT{"Manage properties of [_1]" args="<nop>' . $info->{name} . '"}%">' . '%MAKETEXT{"props"}%</a>';
+    my $propsAction = '<a rel="nofollow" href="' . $propsUrl . '" ' . 'title="%MAKETEXT{"Manage properties of [_1]" args="<nop>' . $attachment->{name} . '"}%">' . '%MAKETEXT{"props"}%</a>';
 
     my $moveUrl = '%SCRIPTURLPATH{"rename"}%/' . $thisWeb . '/' . $thisTopic . '?attachment=' . $encName;
-    my $moveAction = '<a rel="nofollow" href="' . $moveUrl . '" ' . 'title="%MAKETEXT{"Move or delete [_1]" args="<nop>' . $info->{name} . '"}%">' . '%MAKETEXT{"move"}%</a>';
+    my $moveAction = '<a rel="nofollow" href="' . $moveUrl . '" ' . 'title="%MAKETEXT{"Move or delete [_1]" args="<nop>' . $attachment->{name} . '"}%">' . '%MAKETEXT{"move"}%</a>';
 
     my $deleteUrl = '%SCRIPTURLPATH{"rename"}%/' . $thisWeb . '/' . $thisTopic . '?attachment=' . $encName . '&newweb=Trash';
-    my $deleteAction = '<a rel="nofollow" href="' . $deleteUrl . '" ' . 'title="%MAKETEXT{"Delete [_1]" args="<nop>' . $info->{name} . '"}%">' . '%MAKETEXT{"delete"}%</a>';
+    my $deleteAction = '<a rel="nofollow" href="' . $deleteUrl . '" ' . 'title="%MAKETEXT{"Delete [_1]" args="<nop>' . $attachment->{name} . '"}%">' . '%MAKETEXT{"delete"}%</a>';
 
     my $url = '%PUBURL%'."/$thisWeb/$thisTopic/$encName";
     my $urlPath = '%PUBURLPATH%'."/$thisWeb/$thisTopic/$encName";
 
     my $oldVersions = '';
-    if ($theFormat =~ /\$oldversions/ && $info->{version} > 1) {
+    if ($theFormat =~ /\$oldversions/ && $attachment->{version} > 1) {
       my @oldVersions;
-      for (my $i = $info->{version} - 1; $i > 0; $i--) {
-        my ($date, $user, $rev, $comment) = Foswiki::Func::getRevisionInfo($thisWeb, $thisTopic, $i, $info->{name});
+      for (my $i = $attachment->{version} - 1; $i > 0; $i--) {
+        my ($date, $user, $rev, $comment) = Foswiki::Func::getRevisionInfo($thisWeb, $thisTopic, $i, $attachment->{name});
         $date = Foswiki::Func::formatTime($date);
         push @oldVersions, "$date;$user;$rev;$comment";
       }
@@ -246,13 +256,38 @@ sub handle {
     }
 
     # use webdav urls for document types that are webdav-enabled; null them otherwise
-    unless (defined($webDAVFilter) && $info->{name} =~ /\.($webDAVFilter)$/i) {
+    unless (defined($webDAVFilter) && $attachment->{name} =~ /\.($webDAVFilter)$/i) {
       $webDavAction = '';
       $thisWebDavUrl = '';
     }
 
     my $text = $theFormat;
-    $text =~ s/\$date\(([^\)]+)\)/_formatTile($info->{date}, $1)/ge;
+
+    # compatibility with AttachmentListPlugin
+    if ($compat) {
+      $text =~ s/\$fileName/\$name/g;
+      $text =~ s/\$fileSize/\$sizeH/g;
+      $text =~ s/\$fileExtension/\$extension/g;
+      $text =~ s/\$fileIcon/\$icon/g;
+      $text =~ s/\$fileComment/\$comment/g;
+      $text =~ s/\$fileUser/\$user/g;
+      $text =~ s/\$fileDate/\$date/g;
+      $text =~ s/\$fileUrl/\$url/g;
+      $text =~ s/\$fileTopic/\$topic/g;
+      $text =~ s/\$fileWeb/\$web/g;
+      $text =~ s/\$hidden/$attachment->{hidden}?'hidden':''/ge;
+
+# not supported
+#    $text =~ s/\$viewfileUrl//g;
+#    $text =~ s/\$fileActionUrl//g;
+#    $text =~ s/\$imgTag//g;
+#    $text =~ s/\$imgHeight//g;
+#    $text =~ s/\$imgWidth//g;
+
+    }
+
+    # regular format tokens
+    $text =~ s/\$date\(([^\)]+)\)/_formatTile($attachment->{date}, $1)/ge;
     $text =~ s/\$webdav\b/$webDavAction/g;
     $text =~ s/\$webdavUrl\b/$thisWebDavUrl/g;
     $text =~ s/\$propsUrl/$propsUrl/g;
@@ -264,33 +299,40 @@ sub handle {
     $text =~ s/\$icon\b/$icon/g;
     $text =~ s/\$iconUrl\b/$iconUrl/g;
     $text =~ s/\$iconurl\b/$iconUrl/g;
-    $text =~ s/\$attr\b/$info->{attr}/g;
-    $text =~ s/\$autoattached\b/$info->{autoattached}/g;
-    $text =~ s/\$comment\b/$info->{comment}/g;
-    $text =~ s/\$date\b/defined($info->{date})?Foswiki::Func::formatTime($info->{date}):'???'/ge;
+    $text =~ s/\$attr\b/$attachment->{attr}/g;
+    $text =~ s/\$autoattached\b/$attachment->{autoattached}/g;
+    $text =~ s/\$comment\b/$attachment->{comment}/g;
+    $text =~ s/\$date\b/defined($attachment->{date})?Foswiki::Func::formatTime($attachment->{date}):'???'/ge;
+    $text =~ s/\$hidden/$attachment->{hidden}?'1':'0'/ge;
     $text =~ s/\$index\b/$index/g;
-    $text =~ s/\$name\b/$info->{name}/g;
+    $text =~ s/\$name\b/$attachment->{name}/g;
+    $text =~ s/\$extension/$attachment->{extension}/g;
     $text =~ s/\$id\b/$id/g;
-    $text =~ s/\$path\b/$info->{path}/g;
-    $text =~ s/\$size\b/$info->{size}/g;
-    $text =~ s/\$sizeH\b/_humanizeBytes($info->{size})/ge;
-    $text =~ s/\$sizeK\b/_humanizeBytes($info->{size}, 'KB')/ge;
-    $text =~ s/\$sizeM\b/_humanizeBytes($info->{size}, 'MB')/ge;
-    $text =~ s/\$sizeG\b/_humanizeBytes($info->{size}, 'GB')/ge;
-    $text =~ s/\$sizeG\b/$info->{sizeG}/g;
+    $text =~ s/\$path\b/$attachment->{path}/g;
+    $text =~ s/\$size\b/$attachment->{size}/g;
+    $text =~ s/\$sizeH\b/_humanizeBytes($attachment->{size})/ge;
+    $text =~ s/\$sizeK\b/_humanizeBytes($attachment->{size}, 'KB')/ge;
+    $text =~ s/\$sizeM\b/_humanizeBytes($attachment->{size}, 'MB')/ge;
+    $text =~ s/\$sizeG\b/_humanizeBytes($attachment->{size}, 'GB')/ge;
+    $text =~ s/\$sizeG\b/$attachment->{sizeG}/g;
     $text =~ s/\$url\b/$url/g;
     $text =~ s/\$urlpath\b/$urlPath/g;
-    $text =~ s/\$user\b/$info->{userTopic}/g;
-    $text =~ s/\$wikiuser\b/$info->{userWeb}.$info->{userTopic}/g;
-    $text =~ s/\$version\b/$info->{version}/g;
+    $text =~ s/\$user\b/$attachment->{userTopic}/g;
+    $text =~ s/\$wikiuser\b/$attachment->{userWeb}.$attachment->{userTopic}/g;
+    $text =~ s/\$version\b/$attachment->{version}/g;
     $text =~ s/\$oldversions\b/$oldVersions/g;
     $text =~ s/\$web\b/$thisWeb/g;
     $text =~ s/\$topic\b/$thisTopic/g;
-    $text =~ s/\$encode\((.*?)\)/urlEncode($info, $1)/ges;
+    $text =~ s/\$encode\((.*?)\)/urlEncode($attachment, $1)/ges;
 
     push @result, $text if $text;
   }
   $params->{_first} ||= 0;
+
+  if ($compat) {
+    $theHeader .= '$n';
+    $theFooter = '$n'.$theFooter;
+  }
 
   my $result = '';
   if ($params->{_count} == 0) {
@@ -299,6 +341,15 @@ sub handle {
     $result = $theHeader.join($theSeparator, @result).$theFooter;
   }
 
+  if ($compat) {
+    $result =~ s/\$fileCount/\$count/g;
+    $result =~ s/\$fileExtensions/\$extensions/g;
+  }
+
+  my $extensions = join(", ", sort keys %extensions);
+
+  $result =~ s/\$extensions/$extensions/g;
+  $result =~ s/\$count\b/$params->{_count}/g;
   $result =~ s/\$count\b/$params->{_count}/g;
   $result =~ s/\$web\b/$thisWeb/g;
   $result =~ s/\$topic\b/$thisTopic/g;
@@ -309,9 +360,9 @@ sub handle {
 
 ##############################################################################
 sub urlEncode {
-  my ($info, $property) = @_;
+  my ($attachment, $property) = @_;
 
-  my $text = defined($property)?$info->{$property}:$info;
+  my $text = defined($property)?$attachment->{$property}:$attachment;
   return $text unless $text;
 
   # below encoding must be uppercase hex values to be compatible with 
@@ -351,6 +402,11 @@ sub getAttachmentInfo {
     path => ($attachment->{path} || ''),
     version => ($attachment->{version} || 1),
   );
+
+  $info{extension} = $info{name} =~ /\.([^\.]*?)$/?lc($1):'';
+  $info{extension} =~ s/jpg/jpeg/;
+
+  $info{hidden} = $info{attr} =~ /h/?1:0;
 
   if ($Foswiki::Plugins::VERSION >= 1.2) { # new Foswikis
     $info{user} = Foswiki::Func::getWikiName($info{user});

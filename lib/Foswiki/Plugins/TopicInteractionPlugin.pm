@@ -18,8 +18,8 @@ package Foswiki::Plugins::TopicInteractionPlugin;
 use strict;
 use warnings;
 
-our $VERSION = '8.10';
-our $RELEASE = '06 Nov 2018';
+our $VERSION = '8.20';
+our $RELEASE = '26 Nov 2018';
 our $SHORTDESCRIPTION = 'Improved interaction with attachments and !DataForms';
 our $NO_PREFS_IN_TOPIC = 1;
 our $core;
@@ -43,6 +43,12 @@ sub initPlugin {
   Foswiki::Func::registerTagHandler('ATTACHMENTS', sub {
     require Foswiki::Plugins::TopicInteractionPlugin::Attachments;
     return Foswiki::Plugins::TopicInteractionPlugin::Attachments::handle(@_);
+  });
+
+  # compatibility with AttachmentListPlugin
+  Foswiki::Func::registerTagHandler('ATTACHMENTLIST', sub {
+    require Foswiki::Plugins::TopicInteractionPlugin::Attachments;
+    return Foswiki::Plugins::TopicInteractionPlugin::Attachments::handle(@_, 1);
   });
 
   Foswiki::Func::registerTagHandler('WEBDAVURL', sub {
