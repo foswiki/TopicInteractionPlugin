@@ -1,6 +1,6 @@
 {
    "Drag files here." : "Drag files here.",
-   "Deleting %file% ...": "Deleting %file% ...",
+   "Deleting ...": "Deleting ...",
    "Edit failed": "Edit failed",
    "Error during '%action%'": "Error during '%action%'",
    "Failed to delete %file%": "Failed to delete %file%",
@@ -19,5 +19,5 @@
    "Saving changes ...": "Saving changes ...",
    "Security error.": "Security error.",
    "Show options": "Show options",
-   "Uploading ...": "Uploading ..."
+   "Uploading ... ": "Uploading ... "
 }

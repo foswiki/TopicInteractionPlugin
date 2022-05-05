@@ -1,6 +1,6 @@
 {
    "Drag files here." : "Dateien hier hinziehen.",
-   "Deleting %file% ...": "Lösche %file% ...",
+   "Deleting ...": "Lösche ...",
    "Edit failed": "Editieren fehlgeschlagen",
    "Error during '%action%'": "Fehler während '%action%'",
    "Failed to delete %file%": "Löschen von %file% fehlgeschlagen",
@@ -19,5 +19,5 @@
    "Saving changes ...": "Speichere Änderungen ...",
    "Security error.": "Sicherheits-Fehler.",
    "Show options": "Optionen anzeigen",
-   "Uploading ...": "Lade ..."
+   "Uploading ... ": "Lade ... "
 }

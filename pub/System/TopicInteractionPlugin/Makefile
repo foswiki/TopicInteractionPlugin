@@ -3,7 +3,8 @@ TARGET= \
   metadata.js \
   metadata.css \
   uploader.js \
-  uploader.css 
+  uploader.css \
+  webdav.js
 
 UPLOADER_SOURCE= \
   dialog.uncompressed.js \
@@ -21,16 +22,21 @@ METADATA_SOURCE= \
 .PRECIOUS: %.uncompressed.js
 
 uploader.uncompressed.js: $(UPLOADER_SOURCE)
-	@echo creating $@ from $^; echo "/* WARNING: THIS IS A DERIVED FILE. DON'T MODIFIY. */" > $@; $(CAT) $^ >> $@
+	@echo creating $@; echo "/* WARNING: THIS IS A DERIVED FILE. DON'T MODIFIY. */" > $@; $(CAT) $^ >> $@
 
 metadata.uncompressed.js: $(METADATA_SOURCE)
-	@echo creating $@ from $^; echo "/* WARNING: THIS IS A DERIVED FILE. DON'T MODIFIY. */" > $@; $(CAT) $^ >> $@
+	@echo creating $@; echo "/* WARNING: THIS IS A DERIVED FILE. DON'T MODIFIY. */" > $@; $(CAT) $^ >> $@
 
 clean:
 	rm -f $(TARGET) *.gz igp_* genpdf_* *.jslint metadata.uncompressed.js uploader.uncompressed.js
 
-ifneq (,$(wildcard dist))
-%.uncompressed.js: dist/js/%.js
-	cp $< $@
-endif
+.PHONY: git
 
+git:
+	git clone https://github.com/blueimp/jQuery-File-Upload.git git
+
+ifneq (,$(wildcard git))
+%.uncompressed.js: git/js/%.js
+	@echo "generating $@"
+	@$(CAT) $< > $@
+endif

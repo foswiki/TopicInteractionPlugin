@@ -2,7 +2,7 @@
 
 Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 
-(c)opyright 2010-2018 Michael Daum http://michaeldaumconsulting.com
+(c)opyright 2010-2022 Michael Daum http://michaeldaumconsulting.com
 
 are listed in the AUTHORS file in the root of this distribution.
 NOTE: Please extend that file, not this notice.
@@ -25,15 +25,18 @@ As per the GPL, removal of this notice is prohibited.
 (function($) {
 
   function getOfficeUrl(url, officeSuite) {
-    var schema;
+    var schema = "";
 
     if (officeSuite === 'msoffice') {
       schema = getMsOfficeSchema(url) + ':ofe|u|';
-      url = schema + url.replace(/^.*:/, window.location.protocol);
     } else if (officeSuite === 'libreoffice') {
+      schema = 'vnd.libreoffice.command:';
+    } else if (officeSuite === 'openoffice') {
       schema = 'vnd.sun.star.webdav:';
-      url = url.replace(/^.*:/, schema);
     }
+
+    url = schema + url.replace(/^.*:/, window.location.protocol);
+    //console.log("url=",url);
 
     return url;
   }
@@ -50,6 +53,7 @@ As per the GPL, removal of this notice is prohibited.
     return a.pop();
   }
 
+  // https://docs.microsoft.com/en-us/office/client-developer/office-uri-schemes
   function getMsOfficeSchema(url) {
     var ext = getExtension(url).toLowerCase();
 
@@ -123,15 +127,13 @@ As per the GPL, removal of this notice is prohibited.
       // special treatment for windows and macos; linux can handle this on its own using xdg
       if ($.detectOS.Windows || $.detectOS.MacOS) {
         $this.on("click", function() {
-          var $this = $(this), 
-              url = getOfficeUrl($this.attr("href"), foswiki.getPreference("TopicInteractionPlugin").officeSuite || 'msoffice');
+          var url = getOfficeUrl($this.attr("href"), foswiki.getPreference("TopicInteractionPlugin").officeSuite);
 
           $("<iframe />").hide().attr("src", url).appendTo("body");
 
           return false;
         });
       } 
-
     });
   });
 

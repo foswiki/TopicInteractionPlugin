@@ -1,7 +1,7 @@
 /*
  * foswiki file upload plugin 2.0
  *
- * Copyright (c) 2016-2018 Michael Daum http://michaeldaumconsulting.com
+ * Copyright (c) 2016-2022 Michael Daum http://michaeldaumconsulting.com
  *
  * Licensed GPL http://www.gnu.org/licenses/gpl.html
  *
@@ -74,7 +74,7 @@
               filename: "clipboard"
             }
           }).done(function($dialog) {
-            $dialog.find("form:not(.inited)").addClass("inited").submit(function() {
+            $dialog.find("form").on("submit", function() {
               var fileName = $dialog.find("input[name='filename']").val();
 
               if (fileName) {
@@ -136,8 +136,12 @@
         self.elem.trigger("afterUpload", [self.uploadedFiles]);
       },
       fail: function(e, data) {
-        var response = data.jqXHR.responseJSON || { error: { message: "unknown error"} };
-        //console.log("upload failed:",response.error.message);
+        var response = data.jqXHR.responseJSON || {
+	    error: { 
+	      message: data.jqXHR.responseText || "unknown error"
+	    } 
+	  };
+        console.log("upload failed. data:",data.jqXHR);
         $.pnotify({
           text: $.i18n("Error: %msg%", {msg: response.error.message}),
           type: "error"
@@ -146,7 +150,7 @@
     });
 
     // prevent default browser drop event
-    $(document).bind('drop dragover', function (e) {
+    $(document).on('drop dragover', function (e) {
       e.preventDefault();
       return false;
     });
@@ -214,7 +218,7 @@
   function UploadProgress(elem) {
     var self = this;
 
-    self.bar = $('<div class="jqUploadProgressBar"><span class="i18n">Uploading ...</span><span class="jqUploadProgressInfo"></span></div>').appendTo(elem);
+    self.bar = $('<div class="jqUploadProgressBar"><span class="i18n">Uploading ... </span><span class="jqUploadProgressInfo"></span></div>').appendTo(elem);
     self.progressInfo = self.bar.find(".jqUploadProgressInfo");
     self.dropIndicator = $('<div class="jqUploadIndicator"><span class="i18n">Drag files here.</span></div>').appendTo(elem);
     self.reset();
@@ -305,8 +309,8 @@
       $("body").foswikiUploader();
 
       // create upload buttons
-      $(".jqUploadButton:not(.jqUploadButtonInited)").livequery(function() {
-        $(this).uploadButton().addClass("jqUploadButtonInited");
+      $(".jqUploadButton").livequery(function() {
+        $(this).uploadButton();
       });
 
   });

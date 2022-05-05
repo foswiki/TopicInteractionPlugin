@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# Copyright (C) 2005-2018 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2005-2022 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,20 +22,46 @@ use Encode ();
 use Error qw(:try);
 
 #use Data::Dump qw(dump);
+###############################################################################
+sub new {
+  my $class = shift;
+  my $session = shift;
+
+  $session ||= $Foswiki::Plugins::SESSION,
+
+  my $this = bless({
+      session => $session,
+      @_,
+    },
+    $class
+  );
+
+  $this->{_attachmentInfo} = ();
+
+  return $this;
+}
+
+###############################################################################
+sub finish {
+  my $this = shift;
+
+  undef $this->{_attachmentInfo};
+}
 
 ###############################################################################
 sub handle {
-  my ($session, $params, $theTopic, $theWeb, $obj, $compat) = @_;
+  my ($this, $params, $theTopic, $theWeb, $obj, $compat) = @_;
 
   #writeDebug("called handleATTACHMENTS($theTopic, $theWeb)");
   #writeDebug("params=".$params->stringify());
 
   # get parameters
-  my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $session->{topicName};
-  my $thisWeb = $params->{web} || $session->{webName};
+  my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $this->{session}{topicName};
+  my $thisWeb = $params->{web} || $this->{session}{webName};
 
   ($thisWeb, $thisTopic) = Foswiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
-  return "" unless Foswiki::Func::checkAccessPermission("VIEW", $session->{user}, undef, $thisTopic, $thisWeb);
+  my $wikiName = Foswiki::Func::getWikiName();
+  return "" unless Foswiki::Func::checkAccessPermission("VIEW", $wikiName, undef, $thisTopic, $thisWeb);
 
   my $theNames = $params->{names} || $params->{name} || '.*';
   my $theAttr = $params->{attr} || '.*';
@@ -67,6 +93,7 @@ sub handle {
   my $theInclude = $params->{include};
   my $theExclude = $params->{exclude};
   my $theCase = Foswiki::Func::isTrue($params->{casesensitive}, 1);
+  my $theDateFormat = $params->{"dateformat"} || $Foswiki::cfg{DateManipPlugin}{DefaultDateTimeFormat} || '$day $mon $year - $hour:$min';
 
   $theLimit =~ s/[^\d]//g;
   $theLimit = 0 unless $theLimit;
@@ -81,9 +108,11 @@ sub handle {
   $theSeparator = $params->{sep} unless defined $theSeparator;
   $theSeparator = "\n" unless defined $theSeparator;
 
+  my $theRev = $params->{rev} // $params->{revision};
+
   # sort attachments
-  my ($meta) = Foswiki::Func::readTopic($thisWeb, $thisTopic );
-  my @attachments = map {getAttachmentInfo($_) } $meta->find("FILEATTACHMENT");
+  my ($meta) = Foswiki::Func::readTopic($thisWeb, $thisTopic, $theRev);
+  my @attachments = map {$this->getAttachmentInfo($thisWeb, $thisTopic, $_) } $meta->find("FILEATTACHMENT");
 
   my $isNumeric;
   my %sorting = ();
@@ -111,7 +140,17 @@ sub handle {
   } elsif ($theSort eq 'random') {
     %sorting = map {$_ => rand()} @attachments;
     $isNumeric = 1;
+  } else {
+    # apply predefined order
+    my %attachments = map {$_->{name} => $_} @attachments;
+    @attachments = ();
+
+    $theSort =~ s/^\s+|\s+$//g;
+    foreach my $item (split(/\s*,\s*/,$theSort)) {
+      push @attachments, $attachments{$item} if defined $attachments{$item};
+    }
   }
+
   if (defined $isNumeric) {
     if ($isNumeric) {
       @attachments = sort { $sorting{$a} <=> $sorting{$b} } @attachments;
@@ -136,9 +175,9 @@ sub handle {
     $commentPattern = qr/$theComment/;
     $userPattern = qr/^($theUser)$/;
     $includePattern = $theCase?qr/$theInclude/:qr/$theInclude/i
-      if defined $theInclude;
+      if defined $theInclude && $theInclude ne "";
     $excludePattern = $theCase?qr/$theExclude/:qr/$theExclude/i
-      if defined $theExclude;
+      if defined $theExclude && $theExclude ne "";
   } catch Error::Simple with {
     $error = shift->stringify();
     $error =~ s/ at .*$//;
@@ -223,8 +262,8 @@ sub handle {
       $icon = '%ICON{"' . $attachment->{name} . '" alt="else"}%';
     }
 
-    my $encName = urlEncode($attachment, 'name');
-    my $id = encodeName($attachment->{name});
+    my $encName = _urlEncode($attachment, 'name');
+    my $id = _encodeName($attachment->{name});
 
     # actions
     my $thisWebDavUrl = $webDavUrl;
@@ -249,14 +288,14 @@ sub handle {
       my @oldVersions;
       for (my $i = $attachment->{version} - 1; $i > 0; $i--) {
         my ($date, $user, $rev, $comment) = Foswiki::Func::getRevisionInfo($thisWeb, $thisTopic, $i, $attachment->{name});
-        $date = Foswiki::Func::formatTime($date);
+        $date = Foswiki::Func::formatTime($date, $theDateFormat);
         push @oldVersions, "$date;$user;$rev;$comment";
       }
       $oldVersions = join("\n", @oldVersions);
     }
 
     # use webdav urls for document types that are webdav-enabled; null them otherwise
-    unless (defined($webDAVFilter) && $attachment->{name} =~ /\.($webDAVFilter)$/i) {
+    unless (Foswiki::Func::getContext()->{FilesysVirtualPluginEnabled} && defined($webDAVFilter) && $attachment->{name} =~ /\.($webDAVFilter)$/i) {
       $webDavAction = '';
       $thisWebDavUrl = '';
     }
@@ -287,7 +326,17 @@ sub handle {
     }
 
     # regular format tokens
-    $text =~ s/\$date\(([^\)]+)\)/_formatTile($attachment->{date}, $1)/ge;
+    $text =~ s/\$movedfrom\b/$attachment->{movedfrom}/g;
+    $text =~ s/\$movedfromweb\b/$attachment->{movedfromWeb}/g;
+    $text =~ s/\$movedfromtopic\b/$attachment->{movedfromTopic}/g;
+    $text =~ s/\$movedfromname\b/$attachment->{movedfromName}/g;
+    $text =~ s/\$movedto\b/$attachment->{movedto}/g;
+    $text =~ s/\$movedtoweb\b/$attachment->{movedtoWeb}/g;
+    $text =~ s/\$movedtotopic\b/$attachment->{movedtoTopic}/g;
+    $text =~ s/\$movedtoname\b/$attachment->{movedtoName}/g;
+    $text =~ s/\$movedby\b/$attachment->{movedbyTopic}/g;
+    $text =~ s/\$movedwhen\b/$attachment->{movedwhen}?Foswiki::Func::formatTime($attachment->{movedwhen}, $theDateFormat):'???'/ge;
+    $text =~ s/\$movedwhen\(([^\)]+)\)/$attachment->{movedwhen}?Foswiki::Time::formatTime($attachment->{movedwhen}, $1):'???'/ge;
     $text =~ s/\$webdav\b/$webDavAction/g;
     $text =~ s/\$webdavUrl\b/$thisWebDavUrl/g;
     $text =~ s/\$propsUrl/$propsUrl/g;
@@ -302,7 +351,8 @@ sub handle {
     $text =~ s/\$attr\b/$attachment->{attr}/g;
     $text =~ s/\$autoattached\b/$attachment->{autoattached}/g;
     $text =~ s/\$comment\b/$attachment->{comment}/g;
-    $text =~ s/\$date\b/defined($attachment->{date})?Foswiki::Func::formatTime($attachment->{date}):'???'/ge;
+    $text =~ s/\$date\(([^\)]+)\)/$attachment->{date}?Foswiki::Time::formatTime($attachment->{date}, $1):'???'/ge;
+    $text =~ s/\$date\b/$attachment->{date}?Foswiki::Func::formatTime($attachment->{date}, $theDateFormat):'???'/ge;
     $text =~ s/\$hidden/$attachment->{hidden}?'1':'0'/ge;
     $text =~ s/\$index\b/$index/g;
     $text =~ s/\$name\b/$attachment->{name}/g;
@@ -323,7 +373,8 @@ sub handle {
     $text =~ s/\$oldversions\b/$oldVersions/g;
     $text =~ s/\$web\b/$thisWeb/g;
     $text =~ s/\$topic\b/$thisTopic/g;
-    $text =~ s/\$encode\((.*?)\)/urlEncode($attachment, $1)/ges;
+    $text =~ s/\$encode\((.*?)\)/_urlEncode($attachment, $1)/ges;
+    $text =~ s/\$exists\b/$attachment->{exists}/g;
 
     push @result, $text if $text;
   }
@@ -359,62 +410,78 @@ sub handle {
 }
 
 ##############################################################################
-sub urlEncode {
-  my ($attachment, $property) = @_;
-
-  my $text = defined($property)?$attachment->{$property}:$attachment;
-  return $text unless $text;
-
-  # below encoding must be uppercase hex values to be compatible with 
-  # encodeURIComponent() in browsers
-
-  # only encode reserverd characters
-  $text =~ s/([\!#\$&'\(\)\*\+,\/:;=\?\@\[\]])/sprintf('%%%02X',ord($1))/ge; 
-
-  return $text;
-}
-
-##############################################################################
-sub encodeName {
-  my $text = shift;
-
-  return $text unless $text;
-
-  $text =~ s/[^0-9a-zA-Z_]/_/g; 
-
-  return $text;
-}
-
-##############################################################################
 sub getAttachmentInfo {
-  my $attachment = shift;
+  my ($this, $web, $topic, $attachment) = @_;
 
   #print STDERR dump($attachment)."\n";
+  my $key = $web . "::" . $topic . "::" . $attachment->{name};
 
-  my %info = (
+  my $info = $this->{_attachmentInfo}{$key};
+
+  return $info if defined $info;
+
+  $info = {
     name => $attachment->{name},
     attr => ($attachment->{attr} || ''),
     autoattached => $attachment->{autoattached} || 0,
-    date => $attachment->{date},
+    date => $attachment->{date} || '',
     user => ($attachment->{user} || $attachment->{author} || 'UnknownUser'),
     size => $attachment->{size} || 0,
     comment => (defined $attachment->{comment}) ? $attachment->{comment} : '',
     path => ($attachment->{path} || ''),
     version => ($attachment->{version} || 1),
-  );
+    exists => Foswiki::Func::attachmentExists($web, $topic, $attachment->{name})?1:0,
+    movedfrom => $attachment->{movefrom} || '',
+    movedto => $attachment->{movedto} || '',
+    movedby => $attachment->{moveby} || '',
+    movedwhen => $attachment->{movedwhen} || '',
+  };
 
-  $info{extension} = $info{name} =~ /\.([^\.]*?)$/?lc($1):'';
-  $info{extension} =~ s/jpg/jpeg/;
+  $info->{movedfromWeb} = '';
+  $info->{movedfromTopic} = '';
+  $info->{movedfromName} = '';
+  $info->{movedtoWeb} = '';
+  $info->{movedtoTopic} = '';
+  $info->{movedtoName} = '';
 
-  $info{hidden} = $info{attr} =~ /h/?1:0;
+  my $origName = $attachment->{attachment} || $attachment->{name};
 
-  if ($Foswiki::Plugins::VERSION >= 1.2) { # new Foswikis
-    $info{user} = Foswiki::Func::getWikiName($info{user});
+  if ($info->{movedfrom}) {
+    if ($info->{movedfrom} =~ /^((.*)\.(.*?))\.(\Q$origName\E|\Q$info->{name}\E)$/) {
+      $info->{movedfrom} = $1;
+      $info->{movedfromWeb} = $2;
+      $info->{movedfromTopic} = $3;
+      $info->{movedfromName} = $4;
+    } else {
+      #print STDERR "failed to parse movedfrom '$info->{movedfrom}' of '$origName'\n";
+    }
   }
 
-  ($info{userWeb}, $info{userTopic}) = Foswiki::Func::normalizeWebTopicName('', $info{user});
+  if ($info->{movedto}) {
+    if ($info->{movedto} =~ /^((.*)\.(.*?))\.(\Q$origName\E|\Q$info->{name}\E)$/) {
+      $info->{movedto} = $1;
+      $info->{movedtoWeb} = $2;
+      $info->{movedtoTopic} = $3;
+      $info->{movedtoName} = $4;
+    }
+  }
 
-  return \%info;
+  $info->{extension} = $info->{name} =~ /\.([^\.]*?)$/?lc($1):'';
+  $info->{extension} =~ s/jpg/jpeg/;
+
+  $info->{hidden} = $info->{attr} =~ /h/?1:0;
+
+  if ($Foswiki::Plugins::VERSION >= 1.2) { # new Foswikis
+    $info->{user} = Foswiki::Func::getWikiName($info->{user});
+    $info->{movedby} = Foswiki::Func::getWikiName($info->{movedby}) if $info->{movedby};
+  }
+
+  ($info->{userWeb}, $info->{userTopic}) = Foswiki::Func::normalizeWebTopicName('', $info->{user});
+  ($info->{movedbyWeb}, $info->{movedbyTopic}) = Foswiki::Func::normalizeWebTopicName('', $info->{movedby});
+
+  $this->{_attachmentInfo}{$key} = $info;
+
+  return $info;
 }
 
 our @BYTE_SUFFIX = ('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB');
@@ -467,6 +534,13 @@ sub renderPager {
     $result .= "<span class='foswikiAttachmentsPagerPrev foswikiGrayText'>%MAKETEXT{\"Previous\"}%</span>";
   }
 
+  if ($currentPage < $lastPage) {
+    my $skip = ($currentPage + 1) * $entriesPerPage;
+    $result .= "<a href='#skip$skip' class='foswikiAttachmentsPagerNext' data-skip='$skip'>%MAKETEXT{\"Next\"}%</a>";
+  } else {
+    $result .= "<span class='foswikiAttachmentsPagerNext foswikiGrayText'>%MAKETEXT{\"Next\"}%</span>";
+  }
+
   my $startPage = $currentPage - 4;
   my $endPage = $currentPage + 4;
   if ($endPage >= $lastPage) {
@@ -506,14 +580,34 @@ sub renderPager {
     $result .= "<a href='#skip$skip' class='$marker' data-skip='$skip'>".($lastPage+1)."</a>";
   }
 
-  if ($currentPage < $lastPage) {
-    my $skip = ($currentPage + 1) * $entriesPerPage;
-    $result .= "<a href='#skip$skip' class='foswikiAttachmentsPagerNext' data-skip='$skip'>%MAKETEXT{\"Next\"}%</a>";
-  } else {
-    $result .= "<span class='foswikiAttachmentsPagerNext foswikiGrayText'>%MAKETEXT{\"Next\"}%</span>";
-  }
-
   return $result;
+}
+
+##############################################################################
+sub _urlEncode {
+  my ($attachment, $property) = @_;
+
+  my $text = defined($property)?$attachment->{$property}:$attachment;
+  return $text unless $text;
+
+  # below encoding must be uppercase hex values to be compatible with 
+  # encodeURIComponent() in browsers
+
+  # only encode reserverd characters
+  $text =~ s/([\!#\$&'\(\)\*\+,\/:;=\?\@\[\]])/sprintf('%%%02X',ord($1))/ge; 
+
+  return $text;
+}
+
+##############################################################################
+sub _encodeName {
+  my $text = shift;
+
+  return $text unless $text;
+
+  $text =~ s/[^0-9a-zA-Z_]/_/g; 
+
+  return $text;
 }
 
 1;

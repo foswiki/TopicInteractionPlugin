@@ -91,6 +91,8 @@ pub/System/TopicInteractionPlugin/uploader.js 0644
 pub/System/TopicInteractionPlugin/uploader.js.gz 0644
 pub/System/TopicInteractionPlugin/uploader.uncompressed.css 0644
 pub/System/TopicInteractionPlugin/uploader.uncompressed.js 0644
+pub/System/TopicInteractionPlugin/webdav.js 0644
+pub/System/TopicInteractionPlugin/webdav.js.gz 0644
 pub/System/TopicInteractionPlugin/webdav.uncompressed.js 0644
 templates/attach.topicinteraction.tmpl 0644
 templates/metadata.tmpl 0644

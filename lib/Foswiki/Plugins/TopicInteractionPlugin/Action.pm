@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# Copyright (C) 2010-2018 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2022 Michael Daum, http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -14,6 +14,9 @@
 # http://www.gnu.org/copyleft/gpl.html
 
 package Foswiki::Plugins::TopicInteractionPlugin::Action;
+
+use strict;
+use warnings;
 
 use JSON ();
 use Foswiki::Func ();
@@ -85,7 +88,7 @@ sub prepareAction {
 
   # check permissions
   my $wikiName = Foswiki::Func::getWikiName();
-  $this->writeDebug("wikiName=$wikiName, web=$web, $topic=$topic");
+  $this->writeDebug("wikiName=$wikiName, web=$web, topic=$topic");
   unless (Foswiki::Func::checkAccessPermission(
     'VIEW', $wikiName, undef, $topic, $web)) {
     $this->printJSONRPC($response, 102, "Access denied", $id);
@@ -226,14 +229,17 @@ sub sanitizeAttachmentName {
 
   my $origFileName = $fileName;
 
-  my $filter = 
-    $Foswiki::cfg{AttachmentNameFilter}  ||
-    $Foswiki::cfg{NameFilter} ||
-    '[^[:alnum:]\. _-]';
+  my $filter =
+       $Foswiki::cfg{AttachmentNameFilter}
+    || $Foswiki::cfg{NameFilter}
+    || '[^[:alnum:]\. _-]';
 
   $fileName =~ s{[\\/]+$}{};    # Get rid of trailing slash/backslash (unlikely)
   $fileName =~ s!^.*[\\/]!!;    # Get rid of leading directory components
   $fileName =~ s/$filter+//g;
+  #$fileName =~ s/[{},\(\)]//g;    # some more
+
+  $fileName =~ s/$Foswiki::cfg{UploadFilter}/$1\.txt/gi;
 
   return Foswiki::Sandbox::untaintUnchecked($fileName);
 }

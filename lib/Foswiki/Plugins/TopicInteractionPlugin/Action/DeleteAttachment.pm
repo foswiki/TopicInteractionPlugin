@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2018 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2010-2022 Michael Daum http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ sub handle {
   my $topic = $params->{topic};
   my $id = $params->{id};
 
-  my $newWeb = $Foswiki::cfg{TrashWebName};
+  my $newWeb = Foswiki::Func::getPreferencesValue("TRASHWEB") || $Foswiki::cfg{TrashWebName};
   my $newTopic = 'TrashAttachment';
 
   # check permissions
@@ -60,14 +60,6 @@ sub handle {
   my $error;
   foreach my $fileName (@{$params->{filenames}}) {
     next unless $fileName;
-    $fileName = $this->sanitizeAttachmentName($fileName);
-
-    # Disabled to be able to clear up wrong META data
-#   unless ($fromObj->hasAttachment($fileName)) {
-#     $this->writeDebug("oops $fileName does not exist at $web.$topic");
-#     $error = "Attachment $fileName does not exist";
-#     last;
-#   }
 
     try {
 

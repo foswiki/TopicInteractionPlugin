@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2018 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2022 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,6 +19,7 @@ use strict;
 use warnings;
 
 use Foswiki::Plugins ();
+use Foswiki::Plugins::TopicInteractionPlugin ();
 use Foswiki::Plugins::JQueryPlugin::Plugin ();
 
 our @ISA = qw( Foswiki::Plugins::JQueryPlugin::Plugin );
@@ -46,14 +47,14 @@ sub new {
     $class->SUPER::new(
       $Foswiki::Plugins::SESSION,
       name => 'Uploader',
-      version => '2.00',
+      version => $Foswiki::Plugins::TopicInteractionPlugin::VERSION,
       author => 'Michael Daum',
       homepage => 'http://foswiki.org/Externsions/TopicInteractionPlugin',
       puburl => '%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin',
       documentation => "$Foswiki::cfg{SystemWebName}.TopicInteractionPlugin",
       javascript => ['uploader.js'],
       css => ['uploader.css'],
-      dependencies => ['blockui', 'scrollto', 'button', 'livequery', 'metadata', 'ui::dialog', 'pnotify', 'form', 'i18n', 'JavascriptFiles/foswikiPref'],
+      dependencies => ['blockui', 'scrollto', 'button', 'metadata', 'ui::dialog', 'pnotify', 'form', 'i18n', 'JavascriptFiles/foswikiPref'],
       i18n => $Foswiki::cfg{SystemWebName} . "/TopicInteractionPlugin/i18n",
       @_
     ),

@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2009-2018 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2009-2022 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,11 +18,12 @@ package Foswiki::Plugins::TopicInteractionPlugin;
 use strict;
 use warnings;
 
-our $VERSION = '8.20';
-our $RELEASE = '26 Nov 2018';
+our $VERSION = '9.00';
+our $RELEASE = '05 Mar 2022';
 our $SHORTDESCRIPTION = 'Improved interaction with attachments and !DataForms';
 our $NO_PREFS_IN_TOPIC = 1;
 our $core;
+our $attachments;
 
 use Foswiki::Func ();
 use Foswiki::Plugins::JQueryPlugin ();
@@ -37,18 +38,17 @@ BEGIN {
     }
 }
 
+
 ##############################################################################
 sub initPlugin {
 
   Foswiki::Func::registerTagHandler('ATTACHMENTS', sub {
-    require Foswiki::Plugins::TopicInteractionPlugin::Attachments;
-    return Foswiki::Plugins::TopicInteractionPlugin::Attachments::handle(@_);
+    return getAttachments(shift)->handle(@_);
   });
 
   # compatibility with AttachmentListPlugin
   Foswiki::Func::registerTagHandler('ATTACHMENTLIST', sub {
-    require Foswiki::Plugins::TopicInteractionPlugin::Attachments;
-    return Foswiki::Plugins::TopicInteractionPlugin::Attachments::handle(@_, 1);
+    return getAttachments(shift)->handle(@_);
   });
 
   Foswiki::Func::registerTagHandler('WEBDAVURL', sub {
@@ -60,7 +60,7 @@ sub initPlugin {
       return getCore(shift)->restChangeProperties(@_);
     },
     authenticate => 1,
-    validate => 0,
+    validate => 1,
     http_allow => 'POST',
   );
 
@@ -68,7 +68,7 @@ sub initPlugin {
       return getCore(shift)->restDelete(@_);
     },
     authenticate => 1,
-    validate => 0,
+    validate => 1,
     http_allow => 'POST',
   );
 
@@ -76,7 +76,7 @@ sub initPlugin {
       return getCore(shift)->restMove(@_);
     },
     authenticate => 1,
-    validate => 0,
+    validate => 1,
     http_allow => 'POST',
   );
 
@@ -92,7 +92,7 @@ sub initPlugin {
       return getCore(shift)->restCreateLink(@_);
     },
     authenticate => 1,
-    validate => 0,
+    validate => 1,
     http_allow => 'POST',
   );
 
@@ -100,7 +100,7 @@ sub initPlugin {
       return getCore(shift)->restCreateImageGallery(@_);
     },
     authenticate => 1,
-    validate => 0,
+    validate => 1,
     http_allow => 'POST',
   );
 
@@ -108,7 +108,7 @@ sub initPlugin {
       return getCore(shift)->restDownload(@_);
     },
     authenticate => 1,
-    validate => 0,
+    validate => 1,
     http_allow => 'POST',
   );
 
@@ -116,7 +116,7 @@ sub initPlugin {
       return getCore(shift)->restHide(@_);
     },
     authenticate => 1,
-    validate => 0,
+    validate => 1,
     http_allow => 'POST',
   );
 
@@ -124,12 +124,9 @@ sub initPlugin {
       return getCore(shift)->restUnhide(@_);
     },
     authenticate => 1,
-    validate => 0,
+    validate => 1,
     http_allow => 'POST',
   );
-
-  # just in case it did not make it to LocalSite.cfg in time
-  Foswiki::Plugins::JQueryPlugin::registerPlugin("uploader", 'Foswiki::Plugins::TopicInteractionPlugin::Uploader');
 
   # init 
   getCore();
@@ -140,6 +137,11 @@ sub initPlugin {
 ##############################################################################
 sub finishPlugin {
   undef $core;
+
+  if ($attachments) {
+    $attachments->finish;
+    undef $attachments;
+  }
 }
 ##############################################################################
 sub getCore {
@@ -151,6 +153,18 @@ sub getCore {
   }
 
   return $core;
+}
+
+##############################################################################
+sub getAttachments {
+  my $session = shift;
+
+  unless ($attachments) {
+    require Foswiki::Plugins::TopicInteractionPlugin::Attachments;
+    $attachments = Foswiki::Plugins::TopicInteractionPlugin::Attachments->new($session);
+  }
+
+  return $attachments;
 }
 
 ##############################################################################

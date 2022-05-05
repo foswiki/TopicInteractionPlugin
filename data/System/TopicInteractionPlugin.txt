@@ -103,6 +103,7 @@ Using !WebDAVContrib (please adjust the webdav://wiki/dav prefix to your needs):
 <verbatim class="tml">
    * Set OFFICELINK = <a href='webdav://wiki/dav/%WEB%/%TOPIC%/%DEFAULT{default=""}%' class='jqWebDAVLink' title='Edit Office Attachment' rel='nofollow'>%DEFAULT{default=""}%</a>
    * Set ATTACHED_DOCUMENT_FORMAT = $percntOFFICELINK{"$filename"}$percnt
+   * Set WEBDAV_OFFICE_SUITE = msoffice, libreoffice or openoffice (defaults to settings in =configure=)
 </verbatim>
 
 
@@ -110,7 +111,7 @@ The =..._FORMAT= strings support the following variables:
 
    * =$filename=: the name of the file
    * =$fileext=: the filename extension (string following the last period, if present) or an empty string.
-   * =$fileurl=: URL encoded version of the filename
+   * =$fileurl=: URL of the filename
    * =$comment=: the file comment from the upload dialog
    * =$size=: the filesize (=%<nop>ATTACHEDIMAGEFORMAT%= only)
    * =$width=: image width
@@ -139,7 +140,7 @@ limit the number of attachments to be listed.
 
 *Syntax:*
 | *%<nop>ATTACHMENTS%, %<nop>ATTACHMENTS{"&lt;topic>" ...}%* ||
-| ="&lt;topic>"= | topic whos attachments we want to query | 
+| ="&lt;topic>"= | topic with attachments to be included | 
 | =attr="..."= | match the attachments' attribute |
 | =autoattached="yes,no,undef"= | limit attachments to those that are (not) autoattached |
 | =casesensitive="on/off"= | specify string comparison mode when filtering attachments, defaults to =on= | 
@@ -148,8 +149,10 @@ limit the number of attachments to be listed.
 | =maxsize="..."= | specify biggest attachment |
 | =mindate="..."= | specify earliest attachment |
 | =minsize="..."= | specify smallest attachment |
-| =names="..."= | match the name of attachments to be include in the list |
-| =user="..."= | match the attachments' user who uploaded it |
+| =names="..."= | regular expression matching the name of attachments to be include in the list |
+| =user="..."= | regular expression matching the attachments' user who uploaded it |
+| =include="..."= | general regular expression that the name, user, comment and attributes must match |
+| =exclude="..."= | general regular expression that the name, user, comment and attributes must _not_ match |
 | =footer="..."= | format string appended to the result |
 | =format="..."= | how to format each attachment |
 | =header="..."= | format string prefixing the resulting output |
@@ -162,6 +165,7 @@ limit the number of attachments to be listed.
 | =sort="name,date,size,user,comment,comment:name,random,type"= | sort results by specified property |
 | =reverse="on/off"= | enable reverse sorting |
 | =limit="..."= | limit the number of attachments to the given number; by default show all |
+| =dateformat="..."= | custom date format string, defaults to the system's default date format |
 
 The following variables can be used in the format parameter:
    * $attr: the attributes
@@ -195,6 +199,22 @@ The following variables can be used in the format parameter:
    * $webdav: the action to edit the current attachment using the Foswiki:Extensions/WebDavPlugin
    * $webdavUrl: the url used in the webdav action
    * $wikiuser: the user's home topic that recently changed the current attachment
+   * $movedfrom: location from where an attachment was moved from to the current location
+   * $movedfromweb: web part
+   * $movedfromtopic: topic part
+   * $movedfromname: name of the original attachment
+   * $movedto: location where an attachment was moved to 
+   * $movedtoweb: web part
+   * $movedtotopic: topic part
+   * $movedtoname: name part
+   * $movedby: name of the user that moved the attachment
+   * $movedwhen: date when the attachment was moved
+   * $movedwhen(&lt;format>): date when the attachment was moved with a custom date format string
+   * $version: version of the attachment
+   * $oldversions: list of old version information in the format =$date;$user;$rev;$comment=
+   * $encode(...): helper to url encode the enclosed string
+   * $exists: boolean to indicate whether the attachment really exists
+
 
 The header and footer format strings may only contain
    * $count: the number of attachments found
@@ -231,6 +251,12 @@ generates:
 
 ---++ Change History
 %TABLE{columnwidths="7em" tablewidth="100%"}%
+|  05 Mar 2022: | added support for a custom TRASHWEB; \
+                  improved =%ATTACHMENTS= macro in various ways; \
+                  allow uploader to be disabled using the =%TOPICINTERACTION_UPLOADERENABLED= preference setting; \
+                  sanitizing attachment names using the ={UploadFilter}=; \
+                  improved =ChangeProperties= to be more robust against storage errros; \
+                  improved "insert link" feature |
 |  26 Nov 2018: | added compatibility with <nop>AttachmentListPlugin; \
                   added support for Foswiki:Extensions/MimeIconPlugin to render attachment icons; \
                   added sort by type option to %ATTACHMENTS makro |
@@ -290,7 +316,7 @@ generates:
 
 %META:FORM{name="PackageForm"}%
 %META:FIELD{name="Author" title="Author" value="Michael Daum"}%
-%META:FIELD{name="Copyright" title="Copyright" value="&copy; 2010-2018 Michael Daum http://michaeldaumconsulting.com"}%
+%META:FIELD{name="Copyright" title="Copyright" value="&copy; 2010-2021 Michael Daum"}%
 %META:FIELD{name="Description" title="Description" value="%25$SHORTDESCRIPTION%25"}%
 %META:FIELD{name="Home" title="Home" value="Foswiki:Extensions/%25TOPIC%25"}%
 %META:FIELD{name="License" title="License" value="[[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]]"}%

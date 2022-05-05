@@ -1,7 +1,7 @@
 /*
  * foswiki legacy file upload plugin 1.0
  *
- * Copyright (c) 2018 Michael Daum http://michaeldaumconsulting.com
+ * Copyright (c) 2018-2022 Michael Daum http://michaeldaumconsulting.com
  *
  * Licensed GPL http://www.gnu.org/licenses/gpl.html
  *
@@ -42,28 +42,34 @@ var plupload = {
     self.browseButton.uploadButton(self.opts).addClass("jqUploadButtonInited");
 
     // we only simulate those events that we actually need in jquery.natedit
-    $("body").bind("fileuploadadd", function(e, data) {
+    $("body").on("fileuploadadd", function(e, data) {
       self.files = data.files;
       self.state = plupload.QUEUED;
       self.trigger("QueueChange");
-    }).bind("fileuploadstart", function(e, data) {
+    }).on("fileuploadstart", function(e, data) {
       self.state = plupload.STARTED;
       self.files[0].percent = 0;
       self.trigger("StateChanged");
-    }).bind("fileuploadstop", function(e, data) {
+    }).on("fileuploadstop", function(e, data) {
       self.files = [];
       self.state = plupload.STOPPED;
-    }).bind("fileuploaddone", function() {
+    }).on("fileuploaddone", function() {
       self.state = plupload.STOPPED;
       self.files[0].percent = 100;
       self.trigger("StateChanged");
     });
   };
 
+  LegacyUploader.prototype.on = function(signal, fn) {
+    var self = this;
+
+    self.elem.on(signal, fn);
+  };
+
   LegacyUploader.prototype.bind = function(signal, fn) {
     var self = this;
 
-    self.elem.bind(signal, fn);
+    self.elem.on(signal, fn);
   };
 
   LegacyUploader.prototype.trigger = function(signal) {

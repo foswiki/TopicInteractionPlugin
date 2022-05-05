@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2018 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2022 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -45,7 +45,6 @@ sub handle {
     my $zip = Archive::Zip->new();
     foreach my $fileName (@{$params->{filenames}}) {
       next unless $fileName;
-      $fileName = $this->sanitizeAttachmentName($fileName);
 
       unless (Foswiki::Func::attachmentExists($web, $topic, $fileName)) {
         $this->printJSONRPC($response, 104, "Attachment $fileName does not exist", $id);
@@ -84,7 +83,6 @@ sub getArchiveName {
 
   # loop over all files and generate an md5 checksum for this selection
   foreach my $fileName (@$fileNames) {
-    $fileName = $this->sanitizeAttachmentName($fileName);
     my $attachment = $attachments{$fileName};
     unless ($attachment) {
       $this->writeDebug("warning $fileName not found in attachments hash");

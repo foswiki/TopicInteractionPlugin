@@ -11,6 +11,7 @@ Foswiki::Plugins::LikePlugin,>=2.00,perl,Optional
 Foswiki::Plugins::MimeIconPlugin,>=1.1,perl,Required
 Foswiki::Plugins::RenderPlugin,>=3.01,perl,Required
 Archive::Zip,>=0,cpan,Required
+Digest::MD5,>=2.36,cpan,Required
 JSON,>=2.17,cpan,Required
 ONLYIF ( $Foswiki::Plugins::VERSION < 2.1)
 Foswiki::Plugins::ZonePlugin,>=3.1,perl,Required for Foswiki < 1.1

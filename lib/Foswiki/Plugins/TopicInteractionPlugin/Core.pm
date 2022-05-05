@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2018 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2010-2022 Michael Daum http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -72,7 +72,10 @@ sub new {
 sub restChangeProperties {
   my ($this, $subject, $verb, $response) = @_;
   
-  require Foswiki::Plugins::TopicInteractionPlugin::Action::ChangeProperties;
+  eval {require Foswiki::Plugins::TopicInteractionPlugin::Action::ChangeProperties;};
+  if ($@) {
+    print STDERR "ERROR: loading ChangeProperties - $@\n";
+  }
 
   my $action = Foswiki::Plugins::TopicInteractionPlugin::Action::ChangeProperties->new();
   $action->handle($response);

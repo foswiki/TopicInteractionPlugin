@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2018 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2022 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -43,13 +43,15 @@ sub handle {
   }
 
   my ($oopsUrl, $loginName, $unlockTime) = Foswiki::Func::checkTopicEditLock($web, $topic);
-  if ($unlockTime) {
+  my $lockWikiName = Foswiki::Func::getWikiName($loginName);
+  if ($unlockTime && $wikiName ne $lockWikiName) {
     $this->printJSONRPC($response, 105, "Topic is locked by $loginName", $id);
-    return;
+    return; 
   }
+
   my ($meta, $text) = Foswiki::Func::readTopic($web, $topic);
   my $format = '%IMAGEGALLERY{include="$pattern"}%';
-  my $pattern = '^('.join('|', @{$params->{filenames}}).')$';
+  my $pattern = '^('.join('|', map {quotemeta($_)} @{$params->{filenames}}).')$';
   $format =~ s/\$pattern\b/$pattern/g;
   $text .= $format."\n";
 

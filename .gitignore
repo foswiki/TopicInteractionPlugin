@@ -6,6 +6,8 @@ igp_*
 *.jslint
 pub/System/TopicInteractionPlugin/attic/
 pub/System/TopicInteractionPlugin/dist/
+pub/System/TopicInteractionPlugin/git/
+pub/System/TopicInteractionPlugin/webdav.js
 pub/System/TopicInteractionPlugin/jquery.fileupload-process.js
 pub/System/TopicInteractionPlugin/metadata.css
 pub/System/TopicInteractionPlugin/metadata.js

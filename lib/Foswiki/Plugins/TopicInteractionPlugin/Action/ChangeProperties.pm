@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# Copyright (C) 2010-2018 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2022 Michael Daum, http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@ use Error qw( :try );
 use Foswiki::Func ();
 use Foswiki::Plugins::TopicInteractionPlugin::Action ();
 our @ISA = ('Foswiki::Plugins::TopicInteractionPlugin::Action');
+
 use constant DRY => 0;    # toggle me
 
 sub handle {
@@ -31,21 +32,20 @@ sub handle {
   return unless $params;
 
   my $newFileName = $this->sanitizeAttachmentName($params->{filename});
-  my $fileName = $this->sanitizeAttachmentName($params->{origfilename});
+  my $fileName = $params->{origfilename};    # not sanitizing to really find it
 
   my $web = $params->{web};
   my $topic = $params->{topic};
   my $id = $params->{id};
 
   unless (Foswiki::Func::attachmentExists($web, $topic, $fileName)) {
-    $this->printJSONRPC($response, 104, "Attachment $fileName does not exist", $id);
+    $this->printJSONRPC($response, 104, "Attachment $fileName does not exist at $web.$topic", $id);
     return;
   }
 
   # check permissions
   my $wikiName = Foswiki::Func::getWikiName();
-  unless (Foswiki::Func::checkAccessPermission(
-    'CHANGE', $wikiName, undef, $topic, $web)) {
+  unless (Foswiki::Func::checkAccessPermission('CHANGE', $wikiName, undef, $topic, $web)) {
     $this->printJSONRPC($response, 102, "Access denied", $id);
     return;
   }
@@ -69,29 +69,56 @@ sub handle {
   my $error;
   try {
     unless (DRY) {
+
+      my ($meta) = Foswiki::Func::readTopic($web, $topic);
+
       if ($newFileName ne $fileName) {
-        Foswiki::Func::moveAttachment($web, $topic, $fileName, $web, $topic, $newFileName);
-      }
-      Foswiki::Func::saveAttachment(
-        $web, $topic,
-        $newFileName,
-        {
+
+        if ($meta->hasAttachment($newFileName)) {
+          $meta->removeFromStore($newFileName);
+          $meta->remove("FILEATTACHMENT", $newFileName);
+        }
+
+        my $att = $meta->get("FILEATTACHMENT", $fileName);
+        my $fileSize = $att ? $att->{size} : undef;
+
+        $meta->moveAttachment($fileName, $meta, new_name => $newFileName);
+        $meta->attach(
           name => $newFileName,
           attachment => $newFileName,
-          dontlog => !$Foswiki::cfg{Log}{upload},
           comment => $fileComment,
           hide => $fileHide,
           createlink => $fileCreateLink,
-        }
-      );
+          filesize => $fileSize,
+          size => $fileSize,
+          dontlog => !$Foswiki::cfg{Log}{upload},
+        );
 
-      my ($meta) = Foswiki::Func::readTopic($web, $topic);
+      } else {
+        my $att = $meta->get("FILEATTACHMENT", $fileName);
+        my $fileSize = $att ? $att->{size} : undef;
+        unless (defined $fileSize) {
+          my $filePath = $Foswiki::cfg{PubDir} . '/' . $web . '/' . $topic . '/' . $fileName;
+          $fileSize = (stat($filePath))[7] if -e $filePath;
+        }
+        $fileSize //= 0;
+        $meta->attach(
+          name => $newFileName,
+          attachment => $newFileName,
+          comment => $fileComment,
+          hide => $fileHide,
+          createlink => $fileCreateLink,
+          filesize => $fileSize,
+          size => $fileSize,
+          dontlog => !$Foswiki::cfg{Log}{upload},
+        );
+      }
+
       $this->setThumbnail($meta, $newFileName, $isThumbnail);
     }
-  }
-  catch Error::Simple with {
+  } catch Error::Simple with {
     $error = shift->{-text};
-    $this->riteDebug("ERROR: $error");
+    $this->writeDebug("ERROR: $error");
   };
 
   if ($error) {

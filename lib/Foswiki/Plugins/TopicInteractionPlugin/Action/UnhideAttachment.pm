@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2018 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2022 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -47,7 +47,6 @@ sub handle {
   my $doSave = 0;
   foreach my $fileName (@{$params->{filenames}}) {
     next unless $fileName;
-    $fileName = $this->sanitizeAttachmentName($fileName);
 
     my $attachment = $meta->get("FILEATTACHMENT", $fileName);
     unless ($attachment) {
