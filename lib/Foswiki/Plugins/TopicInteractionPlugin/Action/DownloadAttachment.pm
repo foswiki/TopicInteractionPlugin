@@ -26,6 +26,8 @@ use Foswiki::Plugins::TopicInteractionPlugin::Action ();
 our @ISA = ('Foswiki::Plugins::TopicInteractionPlugin::Action');
 use constant DRY => 0; # toggle me
 
+$Archive::Zip::UNICODE = 1;
+
 sub handle {
   my ($this, $response) = @_;
 

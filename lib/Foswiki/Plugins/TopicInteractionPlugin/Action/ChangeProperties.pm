@@ -57,8 +57,9 @@ sub handle {
   $fileHide = 'off' unless defined $fileHide;
   $fileHide = $fileHide eq 'on' ? 1 : 0;
 
-  my $fileComment = $params->{filecomment};
+  my $fileComment = $this->sanitizeString($params->{filecomment});
   $fileComment = '' unless defined $fileComment;
+
 
   my $isThumbnail = $params->{isthumbnail};
   $isThumbnail = 'off' unless defined $isThumbnail && $isThumbnail eq 'on';

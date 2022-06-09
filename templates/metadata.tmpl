@@ -315,7 +315,7 @@ Kind Regards,
 
 %{ ################################################################################ }%
 %TMPL:DEF{"attachments::format::versions"}%<span class='foswikiGrayText'>
-    %{}% $date &#124; %MAKETEXT{"Version [_1]" args="$version"}% &#124; $percntGETTOPICTITLE{\"$percntUSERINFO{\"$user\" format=\"$wikiusername\"}$percnt\"}$percnt
+    %{}% $date &#124; %MAKETEXT{"Version [_1]" args="$version"}% &#124; $percntGETTOPICTITLE{\"$wikiuser\"}$percnt
     $percntIF{\"context LikePluginEnabled\"
       then=\"$dollarpercntLIKE{
         theme=\\"simple\\" 
@@ -348,7 +348,7 @@ Kind Regards,
   attr="%IF{"'%TMPL:P{"attachments::showhidden"}%'!='true'" then="^[^h]*$"}%"
   include="%FORMATLIST{"%TMPL:P{"attachments::filter"}%" split="\s+" header=".*" format="$1" separator=".*" footer=".*"}%"
   casesensitive="off"
-  format="<input type='hidden' name='allattachments' data-filename='$encode(name)' data-web='$web' data-topic='$topic' data-filecomment='$encode(comment)' data-fileattr='$attr' data-moved-from-web='$movedfromweb' data-moved-from-topic='$movedfromtopic' data-moved-from-name='$movedfromname' data-id='$id' id='data_$id' class='foswikiAttachmentsAll' />"
+  format="<input type='hidden' name='allattachments' data-filename='$encode(name)' data-web='$web' data-topic='$topic' data-filecomment='$comment' data-fileattr='$attr' data-moved-from-web='$movedfromweb' data-moved-from-topic='$movedfromtopic' data-moved-from-name='$movedfromname' data-id='$id' id='data_$id' class='foswikiAttachmentsAll' />"
   separator="$n"
 }%%ATTACHMENTS{
   rev="%URLPARAM{"rev"}%"

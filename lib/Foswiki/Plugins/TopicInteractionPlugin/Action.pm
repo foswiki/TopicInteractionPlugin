@@ -245,6 +245,20 @@ sub sanitizeAttachmentName {
 }
 
 ##############################################################################
+sub sanitizeString {
+  my ($this, $str) = @_;
+
+  my $orig = $str;
+
+  $str =~ s/([[\x01-\x09\x0b\x0c\x0e-\x1f"%&\$'*<=>@\]_\|])/'&#'.ord($1).';'/ge;
+
+  print STDERR "WARNING: string needed sanitize. possible attempt of an XSS attack in '$orig', stripped down to '$str'\n"
+    unless $orig eq $str;
+
+  return $str;
+}
+
+##############################################################################
 sub writeDebug {
   my $this = shift;
   print STDERR "- TopicInteractionPlugin - $_[0]\n" if TRACE;
