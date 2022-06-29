@@ -1,5 +1,5 @@
 /*
- * foswiki file upload plugin 2.0
+ * foswiki file upload plugin 2.1
  *
  * Copyright (c) 2016-2022 Michael Daum http://michaeldaumconsulting.com
  *
@@ -15,7 +15,9 @@
   // uploader defaults
   var defaults = {
     topic: null,
-    progress: null
+    progress: null,
+    multiFileUpload: false,
+    limitMultiFileUploads: 10
   };
 
   // The file upload class ///////////////////////////////////////////////////
@@ -39,7 +41,8 @@
       dataType: 'json',
       pasteZone: $(document),
       sequentialUploads: true,
-      singleFileUploads: true,
+      singleFileUploads: self.opts.multiFileUpload ? false: true,
+      limitMultiFileUploads: self.opts.limitMultiFileUploads,
       replaceFileInput: false,
       progress: function(e, data) {
         var files = [];

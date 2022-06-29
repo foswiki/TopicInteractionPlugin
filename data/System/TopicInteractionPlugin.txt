@@ -251,6 +251,9 @@ generates:
 
 ---++ Change History
 %TABLE{columnwidths="7em" tablewidth="100%"}%
+|  29 Jun 2022: | validate web, topic and filename parameters properly; \
+                  fix some Perl::Critic violations; \
+                  support multi-file upload capabilities of newer Foswiki cores |
 |  09 Jun 2022: | zip archives need to flag filenames as unicode explicitly; fix encoding of attachment comments |
 |  05 Mar 2022: | added support for a custom TRASHWEB; \
                   improved =%ATTACHMENTS= macro in various ways; \

@@ -666,7 +666,7 @@ Kind Regards,
 %TMPL:P{"uploadbutton::input"}%%{}%
 %TMPL:P{"uploadbutton::end"}%%TMPL:END%
 
-%TMPL:DEF{"uploadbutton::start"}%<span class='jqButton jqButtonSimple jqUploadButton' data-topic='%WEB%.%TOPIC%'>%TMPL:P{"uploadbutton::icon"}%<span class='jqButtonText'>%TMPL:P{"uploadbutton::label"}%</span>%TMPL:END%
+%TMPL:DEF{"uploadbutton::start"}%<span class='jqButton jqButtonSimple jqUploadButton' data-topic='%WEB%.%TOPIC%' data-multi-file-upload='%IF{"context SUPPORTS_MULTIUPLOAD" then="true" else"false"}%'>%TMPL:P{"uploadbutton::icon"}%<span class='jqButtonText'>%TMPL:P{"uploadbutton::label"}%</span>%TMPL:END%
 %TMPL:DEF{"uploadbutton::input"}%<input type="file" name="files[]" multiple />%TMPL:END%
 %TMPL:DEF{"uploadbutton::end"}%</span>%TMPL:END%
 

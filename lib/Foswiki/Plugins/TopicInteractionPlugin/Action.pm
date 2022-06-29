@@ -19,7 +19,9 @@ use strict;
 use warnings;
 
 use JSON ();
+use Error qw(:try);
 use Foswiki::Func ();
+use Foswiki::Sandbox ();
 
 use constant TRACE => 0; # toggle me
 
@@ -70,7 +72,7 @@ sub prepareAction {
   $id =~ s/[^\da-z]/_/g;
   $id =~ m/^(.*)$/; $id = 1;
 
-  if ( $request && $request->method() && uc($request->method()) ne 'POST') {
+  if ( !Foswiki::Func::getContext()->{command_line} && $request && $request->method() && uc($request->method()) ne 'POST') {
     $this->printJSONRPC($response, -32600, "Method not Allowed", $id);
     return;
   }
@@ -78,13 +80,35 @@ sub prepareAction {
   # read parameters 
   my $topic = $params->{topic} || $this->{session}{webName};
   my $web = $this->{session}{webName};
-
   ($web, $topic) = Foswiki::Func::normalizeWebTopicName($web, $topic);
+
+  my $fileName = $params->{name} || $params->{filename} || '';
+  if ($opts->{requireFileName} && !$fileName) {
+    $this->printJSONRPC($response, 103, "No filename", $id);
+    return;
+  }
+
+  my $error;
+  try {
+    $this->validateWebName($web);
+    $this->validateTopicName($topic);
+    $this->validateAttachmentName($fileName);
+  } catch Error with {
+    $error = shift;
+    $error =~ s/ at .*$//s;
+  };
+
+  if ($error) {
+    $this->printJSONRPC($response, -32602, $error, $id);
+    return;
+  }
+
   #print STDERR "topic='$topic'\n";
   unless (Foswiki::Func::topicExists($web, $topic)) {
     $this->printJSONRPC($response, 101, "Topic $web.$topic does not exist", $id);
     return;
   }
+
 
   # check permissions
   my $wikiName = Foswiki::Func::getWikiName();
@@ -95,11 +119,6 @@ sub prepareAction {
     return;
   }
 
-  my $fileName = $params->{name} || $params->{filename} || '';
-  if ($opts->{requireFileName} && !$fileName) {
-    $this->printJSONRPC($response, 103, "No filename", $id);
-    return;
-  }
 
   # playback to params to be used by delegates
   $params->{filename} = $fileName;
@@ -211,7 +230,7 @@ sub setThumbnail {
     foreach my $otherAttachment ($meta->find("FILEATTACHMENT")) {
       next if $otherAttachment->{name} eq $name;
       if($otherAttachment->{attr} && $otherAttachment->{attr} =~ /t/) {
-        my %attrs = map {$_ => 1} split(//, $otherAttachment->{attr});
+        %attrs = map {$_ => 1} split(//, $otherAttachment->{attr});
         delete $attrs{t};
         $otherAttachment->{attr} = join("", sort keys %attrs);
       }
@@ -242,6 +261,31 @@ sub sanitizeAttachmentName {
   $fileName =~ s/$Foswiki::cfg{UploadFilter}/$1\.txt/gi;
 
   return Foswiki::Sandbox::untaintUnchecked($fileName);
+}
+
+##############################################################################
+sub validateAttachmentName {
+  my ($this, $fileName) = @_;
+
+  throw Error::Simple("invalid attachmnent name")
+    unless Foswiki::Sandbox::untaint( $fileName, \&Foswiki::Sandbox::validateAttachmentName );
+}
+
+##############################################################################
+sub validateWebName {
+  my ($this, $web) = @_;
+
+  throw Error::Simple("invalid web name")
+    unless Foswiki::Sandbox::untaint($web, \&Foswiki::Sandbox::validateWebName);
+}
+
+##############################################################################
+sub validateTopicName {
+  my ($this, $topic) = @_;
+
+print STDERR "validate $topic\n";
+  throw Error::Simple("invalid topic name")
+    unless Foswiki::Sandbox::untaint($topic, \&Foswiki::Sandbox::validateTopicName);
 }
 
 ##############################################################################

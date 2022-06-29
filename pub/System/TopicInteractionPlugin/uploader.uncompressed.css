@@ -21,6 +21,7 @@
   width:40%;
   left:30%;
   background-color:#b0d0ef;
+  overflow:hidden;
 }
 
 .jqUploadProgressBar {

@@ -60,7 +60,6 @@ sub handle {
   my $fileComment = $this->sanitizeString($params->{filecomment});
   $fileComment = '' unless defined $fileComment;
 
-
   my $isThumbnail = $params->{isthumbnail};
   $isThumbnail = 'off' unless defined $isThumbnail && $isThumbnail eq 'on';
   $isThumbnail = $isThumbnail eq 'on' ? 1 : 0;

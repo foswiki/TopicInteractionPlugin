@@ -24,7 +24,8 @@ use Foswiki::Plugins ();
 use Foswiki::Meta ();
 use Foswiki::Plugins::TopicInteractionPlugin::Action ();
 our @ISA = ('Foswiki::Plugins::TopicInteractionPlugin::Action');
-use constant DRY => 0; # toggle me
+
+use constant DRY => 1; # toggle me
 
 sub handle {
   my ($this, $response) = @_;
@@ -38,6 +39,21 @@ sub handle {
 
   my $newWeb = $params->{newweb} || $web;
   my $newTopic = $params->{newtopic} || $topic;
+  ($newWeb, $newTopic) = Foswiki::Func::normalizeWebTopicName($newWeb, $newTopic);
+
+  my $error;
+  try {
+    $this->validateWebName($newWeb);
+    $this->validateTopicName($newTopic);
+  } catch Error with {
+    $error = shift;
+    $error =~ s/ at .*$//s;
+  };
+
+  if ($error) {
+    $this->printJSONRPC($response, -32602, $error, $id);
+    return;
+  }
 
   # check permissions
   my $wikiName = Foswiki::Func::getWikiName();
@@ -48,7 +64,6 @@ sub handle {
   }
 
   # check existence
-  ($newWeb, $newTopic) = Foswiki::Func::normalizeWebTopicName($newWeb, $newTopic);
   unless (Foswiki::Func::topicExists($newWeb, $newTopic)) {
     $this->printJSONRPC($response, 101, "Topic $newWeb.$newTopic does not exist", $id);
     return;
@@ -71,13 +86,12 @@ sub handle {
   my $fromObj = Foswiki::Meta->load($Foswiki::Plugins::SESSION, $web, $topic); # web, topic already normalized
   my $toObj = Foswiki::Meta->load($Foswiki::Plugins::SESSION, $newWeb, $newTopic);
 
-  my $error;
   foreach my $fileName (@{$params->{filenames}}) {
     next unless $fileName;
 
     unless ($fromObj->hasAttachment($fileName)) {
-      $this->writeDebug("oops $fileName does not exist at $web.$topic");
-      #$this->printJSONRPC($response, 104, "Attachment $fileName does not exist", $id);
+      $this->writeError("oops attachment $fileName does not exist at $web.$topic");
+      #$error = "Attachment does not exist";
       #last;
       next;
     }

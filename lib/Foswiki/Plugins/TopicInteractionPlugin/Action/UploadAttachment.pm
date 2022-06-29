@@ -50,7 +50,7 @@ sub handle {
   $maxSize = 0 unless ($maxSize =~ /([0-9]+)/);
 
   # read additional params
-  my $request = Foswiki::Func::getCgiQuery();
+  my $request = Foswiki::Func::getRequestObject();
 
   my $fileCreateLink = $params->{createlink} || '0';
   $fileCreateLink = $fileCreateLink eq 'on' ? 1:0;
@@ -93,7 +93,7 @@ sub handle {
     }
 
     my $prevAttachment;
-    my $fileComment = $params->{filecomment};
+    my $fileComment = $this->sanitizeString($params->{filecomment});
     unless (defined $fileComment) {
       # get prev comment as we override it otherwise
       $prevAttachment = $meta->get('FILEATTACHMENT', $fileName) || {};

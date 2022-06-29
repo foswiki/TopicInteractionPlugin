@@ -1729,7 +1729,7 @@ As per the GPL, removal of this notice is prohibited.
   });
 });
 /*
- * foswiki file upload plugin 2.0
+ * foswiki file upload plugin 2.1
  *
  * Copyright (c) 2016-2022 Michael Daum http://michaeldaumconsulting.com
  *
@@ -1745,7 +1745,9 @@ As per the GPL, removal of this notice is prohibited.
   // uploader defaults
   var defaults = {
     topic: null,
-    progress: null
+    progress: null,
+    multiFileUpload: false,
+    limitMultiFileUploads: 10
   };
 
   // The file upload class ///////////////////////////////////////////////////
@@ -1769,7 +1771,8 @@ As per the GPL, removal of this notice is prohibited.
       dataType: 'json',
       pasteZone: $(document),
       sequentialUploads: true,
-      singleFileUploads: true,
+      singleFileUploads: self.opts.multiFileUpload ? false: true,
+      limitMultiFileUploads: self.opts.limitMultiFileUploads,
       replaceFileInput: false,
       progress: function(e, data) {
         var files = [];
