@@ -92,7 +92,7 @@ sub prepareAction {
   try {
     $this->validateWebName($web);
     $this->validateTopicName($topic);
-    $this->validateAttachmentName($fileName);
+    $this->validateAttachmentName($fileName) if $fileName;
   } catch Error with {
     $error = shift;
     $error =~ s/ at .*$//s;
@@ -283,7 +283,6 @@ sub validateWebName {
 sub validateTopicName {
   my ($this, $topic) = @_;
 
-print STDERR "validate $topic\n";
   throw Error::Simple("invalid topic name")
     unless Foswiki::Sandbox::untaint($topic, \&Foswiki::Sandbox::validateTopicName);
 }
