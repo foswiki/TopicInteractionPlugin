@@ -25,7 +25,7 @@ use Foswiki::Meta ();
 use Foswiki::Plugins::TopicInteractionPlugin::Action ();
 our @ISA = ('Foswiki::Plugins::TopicInteractionPlugin::Action');
 
-use constant DRY => 1; # toggle me
+use constant DRY => 0; # toggle me
 
 sub handle {
   my ($this, $response) = @_;
