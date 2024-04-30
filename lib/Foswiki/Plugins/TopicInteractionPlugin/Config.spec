@@ -17,13 +17,4 @@ $Foswiki::cfg{TopicInteractionPlugin}{DefaultOfficeSuite} = 'msoffice';
 # Defines the uri pattern for webdav links. Empty this in case you don't use webdav enabled urls.
 $Foswiki::cfg{TopicInteractionPlugin}{WebDAVUrl} = 'webdav://$host/dav/$web/$topic_files/$attachment';
 
-# ---++ JQueryPlugin
-# ---+++ Extra plugins
-
-# **STRING EXPERT**
-$Foswiki::cfg{JQueryPlugin}{Plugins}{Uploader}{Module} = 'Foswiki::Plugins::TopicInteractionPlugin::Uploader';
-
-# **BOOLEAN**
-$Foswiki::cfg{JQueryPlugin}{Plugins}{Uploader}{Enabled} = 1;
-
 1;

@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2022 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2010-2024 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@ use Foswiki::Plugins ();
 use Foswiki::Meta ();
 use Foswiki::Plugins::TopicInteractionPlugin::Action ();
 our @ISA = ('Foswiki::Plugins::TopicInteractionPlugin::Action');
+
 use constant DRY => 0; # toggle me
 
 sub handle {

@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2022 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2024 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -114,6 +114,7 @@ sub getAttachmentLink {
   my $geom = "";
 
   my $format = $this->getAttachmentFormat($fileName, $type);
+  return "" if $format eq "";
 
   # only support values if ImagePlugin is installed
   if ($format =~ /\$width|\$height|\$size/) {
@@ -184,7 +185,7 @@ sub getAttachmentFormat {
     last if $format;
   }
 
-  $format = '   * [[$percntATTACHURLPATH$percnt/$filename][$filename]]: $comment' unless $format;
+  $format = '$n   * [[$percntATTACHURLPATH{"$filename"}$percnt][$filename]]' unless defined $format;
 
   return $format;
 }

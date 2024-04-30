@@ -120,7 +120,7 @@ msgstr "Lösche ..."
 
 #: templates/metadata.tmpl:207
 msgid "Display hidden"
-msgstr "Anzeige einblenden"
+msgstr "Versteckte einblenden"
 
 #: templates/metadata.tmpl:619
 msgid "Do you really want to create an image gallery for %1 attachment(s)?"

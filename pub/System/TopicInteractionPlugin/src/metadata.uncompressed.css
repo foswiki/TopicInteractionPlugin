@@ -1,5 +1,9 @@
 .foswikiMetaData {
-  margin-top:2.7692em; /* 36px */
+  margin-top:calc(var(--margin, 2em) * 2);
+}
+.foswikiAttachmentsCount {
+  display:inline-block;
+  margin:0 0.1em;
 }
 .foswikiMetaData .jqTab {
   border-color: var(--tabpane-border-color, #ddd);
@@ -50,8 +54,11 @@
 }
 .foswikiAttachments .foswikiFilter,
 .foswikiAttachments .foswikiSortBy,
-.foswikiAttachments .foswikiResultsPerPage {
-  margin-right:0.5em;
+.foswikiAttachments .foswikiResultsPerPage,
+.foswikiAttachments .foswikiDisplayHidden {
+  margin:0 0.5em 0.5em 0;
+  white-space:nowrap;
+  display:inline-block;
 }
 .foswikiAttachments .foswikiAlert {
   margin-top: 9px;
@@ -94,6 +101,7 @@
 .foswikiAttachment {
   position:relative;
   width:50em;
+  max-width:100%;
   flex-grow:1;
   border:0;
 }

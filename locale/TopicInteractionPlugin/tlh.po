@@ -451,35 +451,3 @@ msgstr ""
 msgid "unselect all previously select attachments"
 msgstr "tep chu&&#39;moHmeH De&&#39;wI&&#39;lIjDaq De&&#39; chu&&#39; yIwIv"
 
-#, fuzzy
-#~ msgid "Create links to the selected attachments."
-#~ msgstr "tep vIHmoH pagh polHa&&#39;"
-
-#, fuzzy
-#~ msgid ""
-#~ "Do you really want to create links to %1 attachment(s) and hide them?"
-#~ msgstr "tep vIHmoH pagh polHa&&#39;"
-
-#, fuzzy
-#~ msgid "Insert links"
-#~ msgstr "rarwI&&#39; chel"
-
-#, fuzzy
-#~ msgid "Use formats based on the type of the selected attachemts."
-#~ msgstr "tep vIHmoH pagh polHa&&#39;"
-
-#, fuzzy
-#~ msgid "viewer"
-#~ msgstr "bej"
-
-#, fuzzy
-#~ msgid "Filename"
-#~ msgstr "pong:"
-
-#, fuzzy
-#~ msgid "Dateiname"
-#~ msgstr "pongqa&&#39;"
-
-#, fuzzy
-#~ msgid "Insert links &&amp; hide"
-#~ msgstr "rarwI&&#39; chel"

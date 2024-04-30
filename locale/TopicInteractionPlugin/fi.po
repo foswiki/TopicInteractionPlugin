@@ -458,27 +458,3 @@ msgstr ""
 msgid "unselect all previously select attachments"
 msgstr "Valitse uusi paikallinen tiedosto päivittääksesi liite"
 
-#, fuzzy
-#~ msgid "Create links to the selected attachments."
-#~ msgstr "Siirrä tai poista liite"
-
-#, fuzzy
-#~ msgid ""
-#~ "Do you really want to create links to %1 attachment(s) and hide them?"
-#~ msgstr "Siirrä tai poista liite"
-
-#, fuzzy
-#~ msgid "Use formats based on the type of the selected attachemts."
-#~ msgstr "Siirrä tai poista liite"
-
-#, fuzzy
-#~ msgid "viewer"
-#~ msgstr "esikatselu"
-
-#, fuzzy
-#~ msgid "Filename"
-#~ msgstr "Etunimi:"
-
-#, fuzzy
-#~ msgid "Dateiname"
-#~ msgstr "Nimeä uudelleen"

@@ -448,27 +448,3 @@ msgstr ""
 msgid "unselect all previously select attachments"
 msgstr ""
 
-#, fuzzy
-#~ msgid "Create links to the selected attachments."
-#~ msgstr "첨부물 이동 혹은 삭제하기"
-
-#, fuzzy
-#~ msgid ""
-#~ "Do you really want to create links to %1 attachment(s) and hide them?"
-#~ msgstr "첨부물 이동 혹은 삭제하기"
-
-#, fuzzy
-#~ msgid "Use formats based on the type of the selected attachemts."
-#~ msgstr "첨부물 이동 혹은 삭제하기"
-
-#, fuzzy
-#~ msgid "viewer"
-#~ msgstr "미리보기"
-
-#, fuzzy
-#~ msgid "Filename"
-#~ msgstr "이름(First Name):"
-
-#, fuzzy
-#~ msgid "Dateiname"
-#~ msgstr "이름 변경"

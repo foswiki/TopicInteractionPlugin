@@ -78,20 +78,20 @@ and =application/postscript=.
 
 For example the following settings might be quite useful:
 
-Using [[Foswiki:Extensions/DocumentViewerPlugin][DocumentViewerPlugin]]:
+Using [[https://foswiki.org/Extensions/DocumentViewerPlugin][DocumentViewerPlugin]]:
 
 <verbatim class="tml">
    * Set ATTACHED_ODT_FORMAT = $percntDOCUMENTVIEWER{"$filename"}$percnt
    * Set ATTACHED_PDF_FORMAT = $percntDOCUMENTVIEWER{"$filename"}$percnt
 </verbatim>
 
-Using [[Foswiki:Extensions/ImagePlugin][ImagePlugin]]:
+Using [[https://foswiki.org/Extensions/ImagePlugin][ImagePlugin]]:
 
 <verbatim class="tml">
    * Set ATTACHED_IMAGE_FORMAT = $percntIMAGE{"$filename" size="200" caption="$comment"}$percnt 
 </verbatim>
 
-Using [[Foswiki:Extensions/MediaElementPlugin][MediaElementPlugin]]:
+Using [[https://foswiki.org/Extensions/MediaElementPlugin][MediaElementPlugin]]:
 
 <verbatim class="tml">
    * Set ATTACHED_VIDEO_FORMAT = $percntVIDEO{"$filename"}$percnt
@@ -177,7 +177,7 @@ The following variables can be used in the format parameter:
    * $deleteUrl: the url used in the delete action
    * $extension: file extension of this attachment
    * $hidden: =0= or =1= depending on the file being hidden or not
-   * $icon: img tag representing the filetype, this is either a matching [[System.DocumentGraphics][document graphics]] or using [[Foswiki:Extensions/MimeIconPlugin][MimeIconPlugin]] if installed
+   * $icon: img tag representing the filetype, this is either a matching [[System.DocumentGraphics][document graphics]] or using [[https://foswiki.org/Extensions/MimeIconPlugin][MimeIconPlugin]] if installed
    * $iconUrl: the url pointing to the icon used in the img tag
    * $index: the position index of the attachment in the result
    * $move: the action to move the current attachment
@@ -251,6 +251,7 @@ generates:
 
 ---++ Change History
 %TABLE{columnwidths="7em" tablewidth="100%"}%
+|  30 Apr 2024: | refactored javascript implementation |
 |  12 Jul 2022: | remove DRY flag from move-attachment action |
 |  01 Jul 2022: | fixed detection of multi-file upload capabilities of foswiki core |
 |  29 Jun 2022: | validate web, topic and filename parameters properly; \
@@ -322,7 +323,7 @@ generates:
 
 %META:FORM{name="PackageForm"}%
 %META:FIELD{name="Author" title="Author" value="Michael Daum"}%
-%META:FIELD{name="Copyright" title="Copyright" value="&copy; 2010-2022 Michael Daum"}%
+%META:FIELD{name="Copyright" title="Copyright" value="&copy; 2010-2024 Michael Daum"}%
 %META:FIELD{name="Description" title="Description" value="%25$SHORTDESCRIPTION%25"}%
 %META:FIELD{name="Home" title="Home" value="Foswiki:Extensions/%25TOPIC%25"}%
 %META:FIELD{name="License" title="License" value="[[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]]"}%

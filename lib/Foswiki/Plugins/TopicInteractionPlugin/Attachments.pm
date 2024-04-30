@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# Copyright (C) 2005-2022 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2005-2024 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -116,7 +116,7 @@ sub handle {
 
   my $isNumeric;
   my %sorting = ();
-  if ($theSort eq 'name') {
+  if ($theSort eq 'name' or $theSort eq 'on') {
     %sorting = map {$_ => lc($_->{name})} @attachments;
     $isNumeric = 0;
   } elsif ($theSort eq 'type') {
@@ -605,7 +605,7 @@ sub _encodeName {
 
   return $text unless $text;
 
-  $text =~ s/[^0-9a-zA-Z_]/_/g; 
+  $text =~ s/[^0-9a-zA-Z_]/__/g; 
 
   return $text;
 }

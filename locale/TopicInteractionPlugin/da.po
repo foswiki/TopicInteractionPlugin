@@ -453,38 +453,3 @@ msgstr ""
 msgid "unselect all previously select attachments"
 msgstr "Vælg en ny lokal fil til at opdatere denne vedhæftede fil"
 
-#, fuzzy
-#~ msgid "Create links to the selected attachments."
-#~ msgstr "Flyt eller slet vedhæftet fil"
-
-#, fuzzy
-#~ msgid ""
-#~ "Do you really want to create links to %1 attachment(s) and hide them?"
-#~ msgstr "Flyt eller slet vedhæftet fil"
-
-#, fuzzy
-#~ msgid "Insert links"
-#~ msgstr "Indsæt link"
-
-#, fuzzy
-#~ msgid "Use formats based on the type of the selected attachemts."
-#~ msgstr "Flyt eller slet vedhæftet fil"
-
-#, fuzzy
-#~ msgid "viewer"
-#~ msgstr "Forhåndsvisning"
-
-#, fuzzy
-#~ msgid "Filename"
-#~ msgstr "Fornavn:"
-
-#, fuzzy
-#~ msgid "Dateiname"
-#~ msgstr "Omdøb"
-
-#~ msgid "Drag files here"
-#~ msgstr "Træk filer her"
-
-#, fuzzy
-#~ msgid "Insert links &&amp; hide"
-#~ msgstr "Indsæt link"

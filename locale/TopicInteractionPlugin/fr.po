@@ -458,38 +458,3 @@ msgstr ""
 "Choisissez un nouveau fichier local (sur l'ordinateur que vous utilisez "
 "actuellement) pour mettre à jour ce fichier attaché"
 
-#, fuzzy
-#~ msgid "Create links to the selected attachments."
-#~ msgstr "Déplacer ou supprimer le fichier attaché"
-
-#, fuzzy
-#~ msgid ""
-#~ "Do you really want to create links to %1 attachment(s) and hide them?"
-#~ msgstr "Déplacer ou supprimer le fichier attaché"
-
-#, fuzzy
-#~ msgid "Insert links"
-#~ msgstr "Insérer un lien"
-
-#, fuzzy
-#~ msgid "Use formats based on the type of the selected attachemts."
-#~ msgstr "Déplacer ou supprimer le fichier attaché"
-
-#, fuzzy
-#~ msgid "viewer"
-#~ msgstr "Prévisualiser"
-
-#, fuzzy
-#~ msgid "Filename"
-#~ msgstr "Prénom :"
-
-#, fuzzy
-#~ msgid "Dateiname"
-#~ msgstr "Renommer"
-
-#~ msgid "Drag files here"
-#~ msgstr "Glisser-déposer les fichiers ici"
-
-#, fuzzy
-#~ msgid "Insert links &&amp; hide"
-#~ msgstr "Insérer un lien"

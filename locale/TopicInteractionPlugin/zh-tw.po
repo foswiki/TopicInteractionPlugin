@@ -457,35 +457,3 @@ msgstr ""
 msgid "unselect all previously select attachments"
 msgstr "選擇本地的新檔來更新附件"
 
-#, fuzzy
-#~ msgid "Create links to the selected attachments."
-#~ msgstr "移動或刪除附件"
-
-#, fuzzy
-#~ msgid ""
-#~ "Do you really want to create links to %1 attachment(s) and hide them?"
-#~ msgstr "移動或刪除附件"
-
-#, fuzzy
-#~ msgid "Insert links"
-#~ msgstr "插入連結"
-
-#, fuzzy
-#~ msgid "Use formats based on the type of the selected attachemts."
-#~ msgstr "移動或刪除附件"
-
-#, fuzzy
-#~ msgid "viewer"
-#~ msgstr "預覽"
-
-#, fuzzy
-#~ msgid "Filename"
-#~ msgstr "名:"
-
-#, fuzzy
-#~ msgid "Dateiname"
-#~ msgstr "改名"
-
-#, fuzzy
-#~ msgid "Insert links &&amp; hide"
-#~ msgstr "插入連結"

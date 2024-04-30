@@ -454,38 +454,3 @@ msgstr ""
 msgid "unselect all previously select attachments"
 msgstr "Vyberte nový lokální soubor pro změnu přílohy"
 
-#, fuzzy
-#~ msgid "Create links to the selected attachments."
-#~ msgstr "Přesun nebo smazání přílohy"
-
-#, fuzzy
-#~ msgid ""
-#~ "Do you really want to create links to %1 attachment(s) and hide them?"
-#~ msgstr "Přesun nebo smazání přílohy"
-
-#, fuzzy
-#~ msgid "Insert links"
-#~ msgstr "Vložit odkaz"
-
-#, fuzzy
-#~ msgid "Use formats based on the type of the selected attachemts."
-#~ msgstr "Přesun nebo smazání přílohy"
-
-#, fuzzy
-#~ msgid "viewer"
-#~ msgstr "Náhled"
-
-#, fuzzy
-#~ msgid "Filename"
-#~ msgstr "Křestní jméno:"
-
-#, fuzzy
-#~ msgid "Dateiname"
-#~ msgstr "Přejmenovat"
-
-#~ msgid "Drag files here"
-#~ msgstr "Přetáhněte soubory sem"
-
-#, fuzzy
-#~ msgid "Insert links &&amp; hide"
-#~ msgstr "Vložit odkaz"

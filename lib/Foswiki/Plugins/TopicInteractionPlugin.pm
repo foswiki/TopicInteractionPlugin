@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2009-2022 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2009-2024 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,16 +18,17 @@ package Foswiki::Plugins::TopicInteractionPlugin;
 use strict;
 use warnings;
 
-our $VERSION = '9.23';
-our $RELEASE = '01 Jul 2022';
+use Foswiki::Func ();
+use Foswiki::Request();
+use Foswiki::Plugins::JQueryPlugin ();
+
+our $VERSION = '10.00';
+our $RELEASE = '%$RELEASE%';
 our $SHORTDESCRIPTION = 'Improved interaction with attachments and !DataForms';
+our $LICENSECODE = '%$LICENSECODE%';
 our $NO_PREFS_IN_TOPIC = 1;
 our $core;
 our $attachments;
-
-use Foswiki::Func ();
-use Foswiki::Plugins::JQueryPlugin ();
-use Foswiki::Request();
 
 BEGIN {
     # Backwards compatibility for Foswiki 1.1.x
@@ -38,9 +39,11 @@ BEGIN {
     }
 }
 
-
 ##############################################################################
 sub initPlugin {
+
+  Foswiki::Plugins::JQueryPlugin::registerPlugin("Uploader", 'Foswiki::Plugins::TopicInteractionPlugin::Uploader');
+  Foswiki::Plugins::JQueryPlugin::registerPlugin("TipMetaData", 'Foswiki::Plugins::TopicInteractionPlugin::MetaData');
 
   Foswiki::Func::registerTagHandler('ATTACHMENTS', sub {
     return getAttachments(shift)->handle(@_);
@@ -197,6 +200,5 @@ sub afterUploadHandler {
     }
   }
 }
-
 
 1;

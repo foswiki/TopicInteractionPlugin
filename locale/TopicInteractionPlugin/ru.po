@@ -464,27 +464,3 @@ msgid "unselect all previously select attachments"
 msgstr ""
 "Выберите новый файл на своем компьютере, чтобы обновить прикрепленный файл"
 
-#, fuzzy
-#~ msgid "Create links to the selected attachments."
-#~ msgstr "Переместить или удалить вложение"
-
-#, fuzzy
-#~ msgid ""
-#~ "Do you really want to create links to %1 attachment(s) and hide them?"
-#~ msgstr "Переместить или удалить вложение"
-
-#, fuzzy
-#~ msgid "Use formats based on the type of the selected attachemts."
-#~ msgstr "Переместить или удалить вложение"
-
-#, fuzzy
-#~ msgid "viewer"
-#~ msgstr "предпросмотр"
-
-#, fuzzy
-#~ msgid "Filename"
-#~ msgstr "Имя:"
-
-#, fuzzy
-#~ msgid "Dateiname"
-#~ msgstr "Переименовать"

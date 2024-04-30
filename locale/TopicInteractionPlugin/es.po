@@ -458,27 +458,3 @@ msgstr ""
 msgid "unselect all previously select attachments"
 msgstr "Seleccione un nuevo archivo local para actualizar el archivo adjunto"
 
-#, fuzzy
-#~ msgid "Create links to the selected attachments."
-#~ msgstr "Mover o borrar archivo adjunto"
-
-#, fuzzy
-#~ msgid ""
-#~ "Do you really want to create links to %1 attachment(s) and hide them?"
-#~ msgstr "Mover o borrar archivo adjunto"
-
-#, fuzzy
-#~ msgid "Use formats based on the type of the selected attachemts."
-#~ msgstr "Mover o borrar archivo adjunto"
-
-#, fuzzy
-#~ msgid "viewer"
-#~ msgstr "(previsualizar)"
-
-#, fuzzy
-#~ msgid "Filename"
-#~ msgstr "Nombre"
-
-#, fuzzy
-#~ msgid "Dateiname"
-#~ msgstr "Renombrar"

@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2024 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2024 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -13,7 +13,7 @@
 # GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 
-package Foswiki::Plugins::TopicInteractionPlugin::Uploader;
+package Foswiki::Plugins::TopicInteractionPlugin::MetaData;
 
 use strict;
 use warnings;
@@ -30,16 +30,15 @@ sub new {
   my $this = bless(
     $class->SUPER::new(
       $Foswiki::Plugins::SESSION,
-      name => 'Uploader',
+      name => 'TipMetaData',
       version => $Foswiki::Plugins::TopicInteractionPlugin::VERSION,
       author => 'Michael Daum',
       homepage => 'http://foswiki.org/Externsions/TopicInteractionPlugin',
       puburl => '%PUBURLPATH%/%SYSTEMWEB%/TopicInteractionPlugin/build',
       documentation => "$Foswiki::cfg{SystemWebName}.TopicInteractionPlugin",
-      javascript => ['uploader.js'],
-      css => ['uploader.css'],
-      dependencies => ['blockui', 'scrollto', 'button', 'metadata', 'ui::dialog', 'pnotify', 'form', 'i18n', 'JavascriptFiles/foswikiPref'],
-      i18n => $Foswiki::cfg{SystemWebName} . "/TopicInteractionPlugin/i18n",
+      javascript => ['metadata.js'],
+      css => ['metadata.css'],
+      dependencies => ['JQUERYPLUGIN::UPLOADER', 'ui', 'tabpane'],
       @_
     ),
     $class
@@ -49,4 +48,3 @@ sub new {
 }
 
 1;
-

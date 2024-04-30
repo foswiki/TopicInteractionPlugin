@@ -1,7 +1,7 @@
 /*
- * foswiki file upload plugin 2.1
+ * foswiki file upload plugin 2.3
  *
- * Copyright (c) 2016-2022 Michael Daum http://michaeldaumconsulting.com
+ * Copyright (c) 2016-2024 Michael Daum http://michaeldaumconsulting.com
  *
  * Licensed GPL http://www.gnu.org/licenses/gpl.html
  *
@@ -17,7 +17,9 @@
     topic: null,
     progress: null,
     multiFileUpload: false,
-    limitMultiFileUploads: 10
+    limitMultiFileUploads: 10,
+    dropZone: null,
+    pasteZone: null
   };
 
   // The file upload class ///////////////////////////////////////////////////
@@ -39,7 +41,8 @@
       url: foswiki.getScriptUrl("rest", "TopicInteractionPlugin", "upload"),
       fileInput: null,
       dataType: 'json',
-      pasteZone: $(document),
+      dropZone: self.opts.dropZone,
+      pasteZone: self.opts.pasteZone,
       sequentialUploads: true,
       singleFileUploads: self.opts.multiFileUpload ? false: true,
       limitMultiFileUploads: self.opts.limitMultiFileUploads,
@@ -49,11 +52,15 @@
         $.each(data.files, function(index, file) {
           files.push(file.name);
         });
-        self.progressBar.add(files);
+        if (self.progressBar) {
+          self.progressBar.add(files);
+        }
       },
       progressall: function (e, data) {
         var progress = parseInt(data.loaded / data.total * 100, 10);
-        self.progressBar.setProgress(progress);
+        if (self.progressBar) {
+          self.progressBar.setProgress(progress);
+        }
       },
       add: function(e, data) {
         data.files = data.files;
@@ -103,7 +110,9 @@
       },
       start: function() {
         self.uploadedFiles = [];
-        self.progressBar.start();
+        if (self.progressBar) {
+          self.progressBar.start();
+        }
       },
       dragover: function() {
         if (self.dragoverTimer) {
@@ -129,7 +138,9 @@
         });
       },
       stop: function() {
-        self.progressBar.stop();
+        if (self.progressBar) {
+          self.progressBar.stop();
+        }
         $.pnotify({
           text: $.i18n("Uploaded %num% file(s)", {num: self.uploadedFiles.length}),
           type: "success",
@@ -137,6 +148,18 @@
         });
         $(".foswikiAttachments").trigger("refresh", [self.uploadedFiles]); // legacy
         self.elem.trigger("afterUpload", [self.uploadedFiles]);
+
+        // integrate into WebSocketPlugin
+        let ec = foswiki.eventClient;
+        if (ec) {
+          ec.send("upload", {
+            channel: ec.getChannelName(),
+            web: ec.web,
+            topic: ec.topic,
+            files: self.uploadedFiles
+          });
+        }
+
       },
       fail: function(e, data) {
         var response = data.jqXHR.responseJSON || {
@@ -159,7 +182,7 @@
     });
 
     // attach to progress bar object
-    self.progressBar = self.elem.data("uploadProgress");
+    self.progressBar = $("body").data("uploadProgress");
 
     //console.log("init'ed fileupload on",this);
   };
@@ -185,6 +208,7 @@
 
     self.elem = $(elem);
     self.opts = $.extend({}, self.elem.data(), opts);
+    self.uploader = new FoswikiUploader(elem, self.opts);
     self.init();
   }
 
@@ -204,7 +228,7 @@
   UploadButton.prototype.add = function () {
     var self = this;
 
-    return foswiki.uploader.add({
+    return self.uploader.add({
       fileInput: self.elem.find("input[type=file]")
     });
   };
@@ -212,7 +236,7 @@
   UploadButton.prototype.send = function () {
     var self = this;
 
-    return foswiki.uploader.send({
+    return self.uploader.send({
       fileInput: self.elem.find("input[type=file]")
     });
   };
@@ -305,16 +329,20 @@
       // set defaults
       defaults.topic = foswiki.getPreference("WEB")+"."+foswiki.getPreference("TOPIC");
 
-      // create progress bar for uploads
-      $("body").uploadProgress();
+      if (foswiki.getPreference("TopicInteractionPlugin").uploaderEnabled) {
+        // create progress bar for uploads
+        $("body").uploadProgress();
 
-      // create foswiki uploader
-      $("body").foswikiUploader();
+        // create foswiki uploader
+        $("body").foswikiUploader({
+          dropZone: $(document),
+          pasteZone: $(document)
+        });
 
-      // create upload buttons
-      $(".jqUploadButton").livequery(function() {
-        $(this).uploadButton();
-      });
-
+        // create upload buttons
+        $(".jqUploadButton").livequery(function() {
+          $(this).uploadButton();
+        });
+      }
   });
 })(jQuery);
