@@ -7,7 +7,6 @@ TARGET= \
   build/webdav.js
 
 UPLOADER_SOURCE= \
-  src/dialog.uncompressed.js \
   src/jquery.fileupload.uncompressed.js \
   src/foswiki.fileupload.uncompressed.js \
   src/legacy.fileupload.uncompressed.js 
@@ -21,11 +20,11 @@ METADATA_SOURCE= \
 
 .PRECIOUS: %.uncompressed.js
 
-build/uploader.uncompressed.js: $(UPLOADER_SOURCE)
-	@echo creating $@; echo "/* WARNING: THIS IS A DERIVED FILE. DON'T MODIFIY. */" > $@; $(CAT) $^ >> $@
+build/uploader.js: $(UPLOADER_SOURCE)
+	@echo creating $@; $(JSMIN) $^ > $@
 
-build/metadata.uncompressed.js: $(METADATA_SOURCE)
-	@echo creating $@; echo "/* WARNING: THIS IS A DERIVED FILE. DON'T MODIFIY. */" > $@; $(CAT) $^ >> $@
+build/metadata.js: $(METADATA_SOURCE)
+	@echo creating $@; $(JSMIN) $^ > $@
 
 clean:
 	rm -f build/* igp_* genpdf_* src/*.jslint 

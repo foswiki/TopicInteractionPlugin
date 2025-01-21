@@ -14,6 +14,7 @@ lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin/Config.spec 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin/Core.pm 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin/DEPENDENCIES 0644
+lib/Foswiki/Plugins/TopicInteractionPlugin/MANIFEST 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin/MetaData.pm 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin.pm 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin/Uploader.pm 0644
@@ -46,12 +47,10 @@ pub/System/TopicInteractionPlugin/build/metadata.css 0644
 pub/System/TopicInteractionPlugin/build/metadata.css.gz 0644
 pub/System/TopicInteractionPlugin/build/metadata.js 0644
 pub/System/TopicInteractionPlugin/build/metadata.js.gz 0644
-pub/System/TopicInteractionPlugin/build/metadata.uncompressed.js 0644
 pub/System/TopicInteractionPlugin/build/uploader.css 0644
 pub/System/TopicInteractionPlugin/build/uploader.css.gz 0644
 pub/System/TopicInteractionPlugin/build/uploader.js 0644
 pub/System/TopicInteractionPlugin/build/uploader.js.gz 0644
-pub/System/TopicInteractionPlugin/build/uploader.uncompressed.js 0644
 pub/System/TopicInteractionPlugin/build/webdav.js 0644
 pub/System/TopicInteractionPlugin/build/webdav.js.gz 0644
 pub/System/TopicInteractionPlugin/i18n/cs.js 0644
@@ -80,7 +79,6 @@ pub/System/TopicInteractionPlugin/LibreOfficeWebDAV.reg 0644
 pub/System/TopicInteractionPlugin/Makefile 0644
 pub/System/TopicInteractionPlugin/Screenshot.png 0644
 pub/System/TopicInteractionPlugin/src/detectos.uncompressed.js 0644
-pub/System/TopicInteractionPlugin/src/dialog.uncompressed.js 0644
 pub/System/TopicInteractionPlugin/src/foswiki.attachments.uncompressed.js 0644
 pub/System/TopicInteractionPlugin/src/foswiki.fileupload.uncompressed.js 0644
 pub/System/TopicInteractionPlugin/src/jquery.fileupload-process.uncompressed.js 0644

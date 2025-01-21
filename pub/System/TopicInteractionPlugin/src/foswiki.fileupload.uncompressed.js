@@ -72,18 +72,20 @@
         if (typeof(data.files) !== 'undefined' && data.files.length) {
           self.currentData = data;
 
-          Dialog.load({
-            id:"#foswikiAttachmentPaste",
+          foswiki.loadTemplate({
+            name: "metadata",
             expand:"attachments::paste",
-            init: function() {
-              if (typeof(self.prevFileName) !== 'undefined') {
-                this.find("input[name='filename']").val(self.prevFileName);
-              }
-            },
-            data: {
-              filename: "clipboard"
+            topic: self.opts.topic,
+            filename: "clipboard"
+          }).done(function(data) {
+            var $dialog = $(data.expand);
+
+            $("body").append($dialog);
+
+            if (typeof(self.prevFileName) !== 'undefined') {
+              $dialog.find("input[name='filename']").val(self.prevFileName);
             }
-          }).done(function($dialog) {
+
             $dialog.find("form").on("submit", function() {
               var fileName = $dialog.find("input[name='filename']").val();
 
@@ -167,7 +169,7 @@
 	      message: data.jqXHR.responseText || "unknown error"
 	    } 
 	  };
-        console.log("upload failed. data:",data.jqXHR);
+        console.log("upload failed. xhr=",data.jqXHR);
         $.pnotify({
           text: $.i18n("Error: %msg%", {msg: response.error.message}),
           type: "error"

@@ -38,7 +38,7 @@ sub new {
       documentation => "$Foswiki::cfg{SystemWebName}.TopicInteractionPlugin",
       javascript => ['uploader.js'],
       css => ['uploader.css'],
-      dependencies => ['blockui', 'scrollto', 'button', 'metadata', 'ui::dialog', 'pnotify', 'form', 'i18n', 'JavascriptFiles/foswikiPref'],
+      dependencies => ['blockui', 'scrollto', 'button', 'ui::dialog', 'pnotify', 'form', 'i18n', 'JavascriptFiles/foswikiPref'],
       i18n => $Foswiki::cfg{SystemWebName} . "/TopicInteractionPlugin/i18n",
       @_
     ),

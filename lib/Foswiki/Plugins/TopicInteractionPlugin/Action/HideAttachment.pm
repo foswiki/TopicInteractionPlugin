@@ -45,7 +45,7 @@ sub handle {
   my ($meta) = Foswiki::Func::readTopic($web, $topic);
 
   my $doSave = 0;
-  foreach my $fileName (@{$params->{filenames}}) {
+  foreach my $fileName ($this->getFileNames($meta)) {
     next unless $fileName;
 
     my $attachment = $meta->get("FILEATTACHMENT", $fileName);

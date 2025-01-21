@@ -51,13 +51,21 @@ sub handle {
 
   my ($meta, $text) = Foswiki::Func::readTopic($web, $topic);
   my $format = '%IMAGEGALLERY{include="$pattern"}%';
-  my $pattern = '^('.join('|', map {quotemeta($_)} @{$params->{filenames}}).')$';
-  $format =~ s/\$pattern\b/$pattern/g;
+
+  if ($params->{filename} eq 'all') {
+    $format = '%IMAGEGALLERY%';
+  } else {
+    my @fileNames = $this->getFileNames($meta);
+    my $pattern = '^('.join('|', map {quotemeta($_)} @fileNames).')$';
+    $format =~ s/\$pattern\b/$pattern/g;
+  }
+
   $text .= $format."\n";
+  $meta->text($text);
 
   my $error;
   try {
-    Foswiki::Func::saveTopic($web, $topic, $meta, $text);
+    $meta->save();
   } catch Error::Simple with {
     $error = shift->{-text};
     $this->writeDebug("ERROR: $error");

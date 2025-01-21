@@ -22,7 +22,7 @@ use Foswiki::Func ();
 use Foswiki::Request();
 use Foswiki::Plugins::JQueryPlugin ();
 
-our $VERSION = '10.00';
+our $VERSION = '11.01';
 our $RELEASE = '%$RELEASE%';
 our $SHORTDESCRIPTION = 'Improved interaction with attachments and !DataForms';
 our $LICENSECODE = '%$LICENSECODE%';
@@ -92,6 +92,14 @@ sub initPlugin {
   );
 
   Foswiki::Func::registerRESTHandler('createlink', sub {
+      return getCore(shift)->restCreateLink(@_);
+    },
+    authenticate => 1,
+    validate => 1,
+    http_allow => 'POST',
+  );
+
+  Foswiki::Func::registerRESTHandler('embed', sub {
       return getCore(shift)->restCreateLink(@_);
     },
     authenticate => 1,
@@ -198,6 +206,13 @@ sub afterUploadHandler {
       $meta->putKeyed("FILEATTACHMENT", $attachment);
       $meta->save();
     }
+  }
+}
+
+##############################################################################
+sub afterCommonTagsHandler {
+  if ($core) {
+    getCore()->addAssets();
   }
 }
 

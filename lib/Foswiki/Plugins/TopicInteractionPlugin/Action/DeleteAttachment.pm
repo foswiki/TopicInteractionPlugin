@@ -59,7 +59,7 @@ sub handle {
   my $toObj = Foswiki::Meta->load($Foswiki::Plugins::SESSION, $newWeb, $newTopic);
 
   my $error;
-  foreach my $fileName (@{$params->{filenames}}) {
+  foreach my $fileName ($this->getFileNames($fromObj)) {
     next unless $fileName;
 
     try {

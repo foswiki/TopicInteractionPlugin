@@ -165,6 +165,7 @@ limit the number of attachments to be listed.
 | =sort="name,date,size,user,comment,comment:name,random,type"= | sort results by specified property |
 | =reverse="on/off"= | enable reverse sorting |
 | =limit="..."= | limit the number of attachments to the given number; by default show all |
+| =maxversions="..."= | maximum number of old revisions to load per attachment, defaults to all |
 | =dateformat="..."= | custom date format string, defaults to the system's default date format |
 
 The following variables can be used in the format parameter:
@@ -211,7 +212,7 @@ The following variables can be used in the format parameter:
    * $movedwhen: date when the attachment was moved
    * $movedwhen(&lt;format>): date when the attachment was moved with a custom date format string
    * $version: version of the attachment
-   * $oldversions: list of old version information in the format =$date;$user;$rev;$comment=
+   * $oldversions: list of old version information in the format =$date;$user;$rev;$comment=, delimitted by the =maxversions= parameter
    * $encode(...): helper to url encode the enclosed string
    * $exists: boolean to indicate whether the attachment really exists
 
@@ -251,6 +252,8 @@ generates:
 
 ---++ Change History
 %TABLE{columnwidths="7em" tablewidth="100%"}%
+|  11 Sep 2024: | improved handling all attachments in a batch operation |
+|  23 May 2024: | added new parameter =maxversions= for the =%ATTACHMENTS= macro |
 |  30 Apr 2024: | refactored javascript implementation |
 |  12 Jul 2022: | remove DRY flag from move-attachment action |
 |  01 Jul 2022: | fixed detection of multi-file upload capabilities of foswiki core |

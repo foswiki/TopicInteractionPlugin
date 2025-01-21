@@ -39,13 +39,15 @@ sub handle {
   my $id = $params->{id};
 
   my $pubDir  = $Foswiki::cfg{PubDir}.'/'.$web.'/'.$topic;
-  my $archiveName = $this->getArchiveName($web, $topic, $params->{filenames});
+  my ($meta) = Foswiki::Func::readTopic( $web, $topic );
+  my @fileNames = $this->getFileNames($meta);
+  my $archiveName = $this->getArchiveName($meta, \@fileNames);
   my $archivePath = $pubDir."/".$archiveName;
   my $archiveUrl = URI->new_abs($Foswiki::cfg{PubUrlPath}."/".$web."/".$topic."/".$archiveName, Foswiki::Func::getUrlHost()."/")->as_string;
 
   unless (-e $archivePath) {
     my $zip = Archive::Zip->new();
-    foreach my $fileName (@{$params->{filenames}}) {
+    foreach my $fileName (@fileNames) {
       next unless $fileName;
 
       unless (Foswiki::Func::attachmentExists($web, $topic, $fileName)) {
@@ -75,12 +77,13 @@ sub handle {
 }
 
 sub getArchiveName {
-  my ($this, $web, $topic, $fileNames) = @_;
+  my ($this, $meta, $fileNames) = @_;
 
+  my $web = $meta->web;
+  my $topic = $meta->topic;
   $web =~ s/\//\./; # added for subweb support
-  my ($meta, $text) = Foswiki::Func::readTopic( $web, $topic );
-  my %attachments = map {$_->{name} => $_} $meta->find('FILEATTACHMENT');
 
+  my %attachments = map {$_->{name} => $_} $meta->find('FILEATTACHMENT');
   my $md5 = Digest::MD5->new();
 
   # loop over all files and generate an md5 checksum for this selection

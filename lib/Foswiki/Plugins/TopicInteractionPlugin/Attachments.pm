@@ -94,6 +94,7 @@ sub handle {
   my $theExclude = $params->{exclude};
   my $theCase = Foswiki::Func::isTrue($params->{casesensitive}, 1);
   my $theDateFormat = $params->{"dateformat"} || $Foswiki::cfg{DateManipPlugin}{DefaultDateTimeFormat} || '$day $mon $year - $hour:$min';
+  my $theMaxVersions = $params->{maxversions} || 0;
 
   $theLimit =~ s/[^\d]//g;
   $theLimit = 0 unless $theLimit;
@@ -286,10 +287,13 @@ sub handle {
     my $oldVersions = '';
     if ($theFormat =~ /\$oldversions/ && $attachment->{version} > 1) {
       my @oldVersions;
+      my $count = 0;
       for (my $i = $attachment->{version} - 1; $i > 0; $i--) {
         my ($date, $user, $rev, $comment) = Foswiki::Func::getRevisionInfo($thisWeb, $thisTopic, $i, $attachment->{name});
         $date = Foswiki::Func::formatTime($date, $theDateFormat);
+        last if $theMaxVersions && $count >= $theMaxVersions;
         push @oldVersions, "$date;$user;$rev;$comment";
+        $count++;
       }
       $oldVersions = join("\n", @oldVersions);
     }

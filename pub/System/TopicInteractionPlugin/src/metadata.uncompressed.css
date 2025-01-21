@@ -60,6 +60,12 @@
   white-space:nowrap;
   display:inline-block;
 }
+.foswikiAttachments .jqButtonSimple {
+  margin-right:1.5em;
+}
+.foswikiAttachmentsSelect .jqButtonSimple {
+  margin-right:0;
+}
 .foswikiAttachments .foswikiAlert {
   margin-top: 9px;
 }
@@ -67,8 +73,12 @@
   margin:-4px 0 -3px;
 }
 .foswikiAttachmentsContainer {
-  display:flex;
-  flex-wrap:wrap;
+  column-width:calc(var(--page-width-fixed) * 0.5);
+  column-gap:0;
+}
+.foswikiAttachment {
+  break-inside:avoid;
+  position:relative;
 }
 .foswikiAttachments .current {
   background:#aaa;
@@ -97,13 +107,6 @@
 .foswikiAttachmentInfo {
   margin: 0 9px 0 62px;
   color: var(--color-text, #333);
-}
-.foswikiAttachment {
-  position:relative;
-  width:50em;
-  max-width:100%;
-  flex-grow:1;
-  border:0;
 }
 .foswikiDataForm .foswikiLayoutTable tr:nth-child(2n-1) td,
 .foswikiDataForm .foswikiLayoutTable tr:nth-child(2n-1) th,
@@ -196,9 +199,8 @@
   margin-top:-2px;
 }
 
-.foswikiAttachmentBulkProgressMessage,
-.foswikiAttachmentBulkMessage {
-  display:none; /* switched on while opening the dialog */
+.foswikiAttachmentBulkProgressMessage {
+  display:none; 
 }
 
 .foswikiAttachmentBulkMessage img {

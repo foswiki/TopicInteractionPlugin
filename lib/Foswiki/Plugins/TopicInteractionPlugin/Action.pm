@@ -59,7 +59,7 @@ sub prepareAction {
     -pragma=>"no-cache"
   );
 
-  my $request = Foswiki::Func::getCgiQuery();
+  my $request = Foswiki::Func::getRequestObject();
   my $params = $this->getRequestParams($request);
   my $id = $params->{id};
 
@@ -70,7 +70,8 @@ sub prepareAction {
 
   # sanitize and untaint id
   $id =~ s/[^\da-z]/_/g;
-  $id =~ m/^(.*)$/; $id = 1;
+  $id =~ m/^(.*)$/; 
+  $id = $1;
 
   if ( !Foswiki::Func::getContext()->{command_line} && $request && $request->method() && uc($request->method()) ne 'POST') {
     $this->printJSONRPC($response, -32600, "Method not Allowed", $id);
@@ -78,7 +79,7 @@ sub prepareAction {
   }
 
   # read parameters 
-  my $topic = $params->{topic} || $this->{session}{webName};
+  my $topic = $params->{topic} || $this->{session}{topicName};
   my $web = $this->{session}{webName};
   ($web, $topic) = Foswiki::Func::normalizeWebTopicName($web, $topic);
 
@@ -162,6 +163,21 @@ sub printJSONRPC {
 
   $message = JSON::to_json($message, {pretty=>1});
   $response->print($message);
+}
+
+##############################################################################
+sub getFileNames {
+  my ($this, $meta) = @_;
+
+  my @fileNames;
+
+  if ($this->{params}{filename} eq 'all') {
+    @fileNames = map {$_->{name}} $meta->find("FILEATTACHMENT");
+  }  else {
+    @fileNames = @{$this->{params}{filenames}};
+  }
+
+  return @fileNames;
 }
 
 ##############################################################################

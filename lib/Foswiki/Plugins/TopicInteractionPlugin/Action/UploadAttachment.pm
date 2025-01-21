@@ -25,7 +25,7 @@ our @ISA = ('Foswiki::Plugins::TopicInteractionPlugin::Action');
 
 sub handle {
   my ($this, $response) = @_;
-  
+
   my $params = $this->prepareAction($response, {
     requireFileName => 0
   });

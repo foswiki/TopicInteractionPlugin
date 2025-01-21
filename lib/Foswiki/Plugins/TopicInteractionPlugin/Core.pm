@@ -52,21 +52,27 @@ sub new {
 
   my $this = bless({
       session => $session,
-      prefs => {
-        officeSuite => Foswiki::Func::getPreferencesValue("WEBDAV_OFFICE_SUITE") || $Foswiki::cfg{TopicInteractionPlugin}{DefaultOfficeSuite} || '',
-        attachFileSizeLimit => Foswiki::Func::getPreferencesValue("ATTACHFILESIZELIMIT") || 0,
-        uploaderEnabled => Foswiki::Func::isTrue(Foswiki::Func::getPreferencesValue("TOPICINTERACTION_UPLOADERENABLED"), 1),
-      },
       @_,
     },
     $class
   );
 
-  # export configuration to javascript 
-  my $content = "<script class='\$zone \$id foswikiPreferences' type='text/json'>{\"TopicInteractionPlugin\":" . JSON::encode_json($this->{prefs}) . "}</script>";
-  Foswiki::Func::addToZone("script", "JQUERYPLUGIN::UPLOADER::META", $content, "JQUERYPLUGIN::FOSWIKI::PREFERENCES");
-
   return $this;
+}
+
+##############################################################################
+sub addAssets {
+  my $this = shift;
+
+  my $prefs = {
+    officeSuite => Foswiki::Func::getPreferencesValue("WEBDAV_OFFICE_SUITE") || $Foswiki::cfg{TopicInteractionPlugin}{DefaultOfficeSuite} || '',
+    attachFileSizeLimit => Foswiki::Func::getPreferencesValue("ATTACHFILESIZELIMIT") || 0,
+    uploaderEnabled => Foswiki::Func::isTrue(Foswiki::Func::getPreferencesValue("TOPICINTERACTION_UPLOADERENABLED"), 1),
+  };
+
+  # export configuration to javascript
+  my $content = "<script class='\$zone \$id foswikiPreferences' type='text/json'>{\"TopicInteractionPlugin\":" . JSON::encode_json($prefs) . "}</script>";
+  Foswiki::Func::addToZone("script", "JQUERYPLUGIN::UPLOADER::META", $content, "JQUERYPLUGIN::FOSWIKI::PREFERENCES");
 }
 
 ##############################################################################

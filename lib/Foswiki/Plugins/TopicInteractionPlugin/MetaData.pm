@@ -38,7 +38,7 @@ sub new {
       documentation => "$Foswiki::cfg{SystemWebName}.TopicInteractionPlugin",
       javascript => ['metadata.js'],
       css => ['metadata.css'],
-      dependencies => ['JQUERYPLUGIN::UPLOADER', 'ui', 'tabpane'],
+      dependencies => ['JQUERYPLUGIN::UPLOADER', 'ui', 'tabpane', 'FoswikiTemplate'],
       @_
     ),
     $class
