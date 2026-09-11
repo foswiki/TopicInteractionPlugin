@@ -15,456 +15,573 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 2.1\n"
 
-#: templates/metadata.tmpl:380
+#: templates/metadata.tmpl:385
 #, fuzzy
 msgid "%1 attachment(s)"
 msgstr "(dosya ekini taşı)"
 
-#: templates/metadata.tmpl:303
+#: templates/metadata.tmpl:301
 msgid ""
 "<b>Warning</b>: attachment '%name%' does not exist anymore. Please contact "
 "<a href='%1'>a wiki administrator</a> in case you want to restore it."
 msgstr ""
 
-#: templates/metadata.tmpl:552
+#: templates/metadata.tmpl:628
 msgid "Are you sure that you want to delete %1?"
 msgstr ""
 
-#: templates/metadata.tmpl:565
+#: templates/metadata.tmpl:878
 #, fuzzy
-msgid "Attach"
-msgstr "Dosya ekle"
-
-#: templates/metadata.tmpl:122
-#, fuzzy
-msgid "Attachments %1"
-msgstr "%1 e dosya ekle"
-
-#: templates/metadata.tmpl:189
-msgid "Author"
-msgstr ""
-
-#: templates/metadata.tmpl:512 templates/metadata.tmpl:540
-#: templates/metadata.tmpl:566
-msgid "Cancel"
-msgstr "İptal"
-
-#: templates/metadata.tmpl:386
-msgid "Clear all"
-msgstr ""
-
-#: templates/attach.topicinteraction.tmpl:10 templates/metadata.tmpl:442
-msgid "Close"
-msgstr "Kapat"
-
-#: templates/metadata.tmpl:495
-msgid "Comment"
-msgstr "Yorum"
-
-#: templates/metadata.tmpl:89
-#, fuzzy
-msgid "Comments %1"
-msgstr "Yorum"
-
-#: templates/metadata.tmpl:571
-#, fuzzy
-msgid "Confirmation required"
-msgstr "Dikkat! Doğrulama Gerekiyor"
-
-#: templates/metadata.tmpl:370
-#, fuzzy
-msgid "Create image gallery"
-msgstr "Yeni grup oluştur"
-
-#: templates/metadata.tmpl:367
-msgid "Create link(s)"
-msgstr ""
-
-#: templates/metadata.tmpl:634
-#, fuzzy
-msgid "Creating image gallery ..."
-msgstr "Yeni grup oluştur"
-
-#: templates/metadata.tmpl:597
-msgid "Creating links ..."
-msgstr ""
-
-#: templates/metadata.tmpl:102
-#, fuzzy
-msgid "Data form"
-msgstr "Form Ekle"
-
-#: templates/metadata.tmpl:188
-msgid "Date"
-msgstr "Tarih"
-
-#: templates/metadata.tmpl:376
-msgid "Delete"
-msgstr "Sil"
-
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:282
-#, fuzzy
-msgid "Delete %1"
-msgstr "Sil"
-
-#: templates/metadata.tmpl:545
-#, fuzzy
-msgid "Delete attachment?"
-msgstr "Eklentiyi sil"
-
-#: templates/metadata.tmpl:277
-#, fuzzy
-msgid "Delete this attachment"
-msgstr "Eklentiyi sil"
-
-#: templates/metadata.tmpl:698
-#, fuzzy
-msgid "Deleting ..."
-msgstr "Sil"
-
-#: templates/metadata.tmpl:206
-msgid "Display hidden"
-msgstr ""
-
-#: templates/metadata.tmpl:628
-msgid "Do you really want to create an image gallery for %1 attachment(s)?"
-msgstr ""
-
-#: templates/metadata.tmpl:631
-#, fuzzy
-msgid "Do you really want to create an image gallery for all attachments?"
+msgid "Are you sure that you want to finally delete %1 attachment(s)?"
 msgstr "(dosya ekini taşı)"
 
-#: templates/metadata.tmpl:584
-msgid "Do you really want to create links to %1 attachment(s)?"
+#: templates/metadata.tmpl:649
+msgid "Are you sure that you want to finally delete %1?"
 msgstr ""
 
-#: templates/metadata.tmpl:587
+#: templates/metadata.tmpl:881
 #, fuzzy
-msgid "Do you really want to create links to all attachments?"
-msgstr "(dosya ekini taşı)"
-
-#: templates/metadata.tmpl:692
-msgid "Do you really want to delete %1 attachment(s)?"
-msgstr ""
-
-#: templates/metadata.tmpl:695
-#, fuzzy
-msgid "Do you really want to delete all attachments?"
-msgstr "(dosya ekini taşı)"
-
-#: templates/metadata.tmpl:644
-msgid "Do you really want to download %1 attachment(s)?"
-msgstr ""
-
-#: templates/metadata.tmpl:647
-#, fuzzy
-msgid "Do you really want to download all attachments?"
-msgstr "(dosya ekini taşı)"
-
-#: templates/metadata.tmpl:606
-#, fuzzy
-msgid "Do you really want to embed %1 attachment(s)?"
-msgstr "(dosya ekini taşı)"
-
-#: templates/metadata.tmpl:609
-#, fuzzy
-msgid "Do you really want to embed all attachments?"
-msgstr "(dosya ekini taşı)"
-
-#: templates/metadata.tmpl:660
-#, fuzzy
-msgid "Do you really want to hide %1 attachment(s)?"
+msgid "Are you sure that you want to finally delete all attachments?"
 msgstr "(dosya ekini taşı)"
 
 #: templates/metadata.tmpl:663
 #, fuzzy
+msgid "Attach"
+msgstr "Dosya ekle"
+
+#: templates/metadata.tmpl:104
+#, fuzzy
+msgid "Attachments %1"
+msgstr "%1 e dosya ekle"
+
+#: templates/metadata.tmpl:181
+msgid "Author"
+msgstr ""
+
+#: templates/metadata.tmpl:550 templates/metadata.tmpl:608
+#: templates/metadata.tmpl:664 templates/metadata.tmpl:810
+msgid "Cancel"
+msgstr "İptal"
+
+#: templates/metadata.tmpl:391
+msgid "Clear all"
+msgstr ""
+
+#: templates/attach.topicinteraction.tmpl:10 templates/metadata.tmpl:476
+#: templates/metadata.tmpl:562
+msgid "Close"
+msgstr "Kapat"
+
+#: templates/metadata.tmpl:532
+msgid "Comment"
+msgstr "Yorum"
+
+#: templates/metadata.tmpl:72
+#, fuzzy
+msgid "Comments %1"
+msgstr "Yorum"
+
+#: templates/metadata.tmpl:669
+#, fuzzy
+msgid "Confirmation required"
+msgstr "Dikkat! Doğrulama Gerekiyor"
+
+#: templates/metadata.tmpl:809
+#, fuzzy
+msgid "Convert"
+msgstr "(sil)"
+
+#: templates/metadata.tmpl:375
+msgid "Convert image format"
+msgstr ""
+
+#: templates/metadata.tmpl:807
+#, fuzzy
+msgid "Converting images ..."
+msgstr "Yeni grup oluştur"
+
+#: templates/metadata.tmpl:372
+#, fuzzy
+msgid "Create image gallery"
+msgstr "Yeni grup oluştur"
+
+#: templates/metadata.tmpl:369
+msgid "Create link(s)"
+msgstr ""
+
+#: templates/metadata.tmpl:733
+#, fuzzy
+msgid "Creating image gallery ..."
+msgstr "Yeni grup oluştur"
+
+#: templates/metadata.tmpl:696
+msgid "Creating links ..."
+msgstr ""
+
+#: templates/metadata.tmpl:84
+#, fuzzy
+msgid "Data form"
+msgstr "Form Ekle"
+
+#: templates/metadata.tmpl:180
+msgid "Date"
+msgstr "Tarih"
+
+#: templates/metadata.tmpl:381
+msgid "Delete"
+msgstr "Sil"
+
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:285
+#, fuzzy
+msgid "Delete %1"
+msgstr "Sil"
+
+#: templates/metadata.tmpl:618
+#, fuzzy
+msgid "Delete attachment?"
+msgstr "Eklentiyi sil"
+
+#: templates/metadata.tmpl:276
+#, fuzzy
+msgid "Delete this attachment"
+msgstr "Eklentiyi sil"
+
+#: templates/metadata.tmpl:901
+#, fuzzy
+msgid "Deleting ..."
+msgstr "Sil"
+
+#: templates/metadata.tmpl:202
+msgid "Display hidden"
+msgstr ""
+
+#: templates/metadata.tmpl:268
+msgid "Display image information"
+msgstr ""
+
+#: templates/metadata.tmpl:742
+#, fuzzy
+msgid "Do you really want to convert %1 image(s)?"
+msgstr "(dosya ekini taşı)"
+
+#: templates/metadata.tmpl:745
+#, fuzzy
+msgid "Do you really want to convert all images?"
+msgstr "(dosya ekini taşı)"
+
+#: templates/metadata.tmpl:727
+msgid "Do you really want to create an image gallery for %1 attachment(s)?"
+msgstr ""
+
+#: templates/metadata.tmpl:730
+#, fuzzy
+msgid "Do you really want to create an image gallery for all attachments?"
+msgstr "(dosya ekini taşı)"
+
+#: templates/metadata.tmpl:683
+msgid "Do you really want to create links to %1 attachment(s)?"
+msgstr ""
+
+#: templates/metadata.tmpl:686
+#, fuzzy
+msgid "Do you really want to create links to all attachments?"
+msgstr "(dosya ekini taşı)"
+
+#: templates/metadata.tmpl:895
+msgid "Do you really want to delete %1 attachment(s)?"
+msgstr ""
+
+#: templates/metadata.tmpl:898
+#, fuzzy
+msgid "Do you really want to delete all attachments?"
+msgstr "(dosya ekini taşı)"
+
+#: templates/metadata.tmpl:819
+msgid "Do you really want to download %1 attachment(s)?"
+msgstr ""
+
+#: templates/metadata.tmpl:822
+#, fuzzy
+msgid "Do you really want to download all attachments?"
+msgstr "(dosya ekini taşı)"
+
+#: templates/metadata.tmpl:705
+#, fuzzy
+msgid "Do you really want to embed %1 attachment(s)?"
+msgstr "(dosya ekini taşı)"
+
+#: templates/metadata.tmpl:708
+#, fuzzy
+msgid "Do you really want to embed all attachments?"
+msgstr "(dosya ekini taşı)"
+
+#: templates/metadata.tmpl:835
+#, fuzzy
+msgid "Do you really want to hide %1 attachment(s)?"
+msgstr "(dosya ekini taşı)"
+
+#: templates/metadata.tmpl:838
+#, fuzzy
 msgid "Do you really want to hide all attachments?"
 msgstr "(dosya ekini taşı)"
 
-#: templates/metadata.tmpl:676
+#: templates/metadata.tmpl:851
 msgid "Do you really want to unhide %1 attachment(s)?"
 msgstr ""
 
-#: templates/metadata.tmpl:679
+#: templates/metadata.tmpl:854
 #, fuzzy
 msgid "Do you really want to unhide all attachments?"
 msgstr "(dosya ekini taşı)"
 
-#: templates/metadata.tmpl:372
+#: templates/metadata.tmpl:377
 msgid "Download"
 msgstr ""
 
-#: templates/metadata.tmpl:650
+#: templates/metadata.tmpl:825
 msgid "Downloading ..."
 msgstr ""
 
-#: templates/metadata.tmpl:484
+#: templates/metadata.tmpl:266
+#, fuzzy
+msgid "Edit Image"
+msgstr "Form Ekle"
+
+#: templates/metadata.tmpl:518
 #, fuzzy
 msgid "Edit attachment"
 msgstr "(dosya ekini sil)"
 
-#: templates/metadata.tmpl:104
+#: templates/metadata.tmpl:86
 #, fuzzy
 msgid "Edit form"
 msgstr "Form Ekle"
 
-#: templates/metadata.tmpl:268
+#: templates/metadata.tmpl:264
 #, fuzzy
 msgid "Edit properties of this attachment"
 msgstr "(dosya ekini taşı)"
 
-#: templates/metadata.tmpl:105
+#: templates/metadata.tmpl:87
 #, fuzzy
 msgid "Edit this !DataForm"
 msgstr "Tablo Düzenle"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:273
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:276
 #: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:43
-#: templates/metadata.tmpl:266
+#: templates/metadata.tmpl:262
 #, fuzzy
 msgid "Edit this attachment"
 msgstr "Tablo Düzenle"
 
-#: templates/metadata.tmpl:368
+#: templates/metadata.tmpl:370
 msgid "Embed"
 msgstr ""
 
-#: templates/metadata.tmpl:619
+#: templates/metadata.tmpl:718
 #, fuzzy
 msgid "Embedding attachments ..."
 msgstr "(dosya ekini sil)"
 
-#: templates/metadata.tmpl:205
+#: templates/metadata.tmpl:201
 msgid "Enable/disable displaying hidden attachments"
 msgstr ""
 
-#: templates/metadata.tmpl:182
+#: templates/metadata.tmpl:173
 msgid "Enter a search pattern to filter the list of attachments"
 msgstr ""
 
-#: templates/metadata.tmpl:491 templates/metadata.tmpl:563
+#: templates/metadata.tmpl:528 templates/metadata.tmpl:661
 #, fuzzy
 msgid "File name"
 msgstr "Soyad"
 
-#: templates/metadata.tmpl:373
+#: templates/metadata.tmpl:867
+#, fuzzy
+msgid "Finally delete attachment(s)?"
+msgstr "Eklentiyi sil"
+
+#: templates/metadata.tmpl:635
+#, fuzzy
+msgid "Finally delete attachment?"
+msgstr "Eklentiyi sil"
+
+#: templates/metadata.tmpl:751
+msgid "Format"
+msgstr ""
+
+#: templates/metadata.tmpl:378
 #, fuzzy
 msgid "Hide"
 msgstr "Yardımı gizle"
 
-#: templates/metadata.tmpl:502 templates/metadata.tmpl:594
-#: templates/metadata.tmpl:616
+#: templates/metadata.tmpl:539 templates/metadata.tmpl:693
+#: templates/metadata.tmpl:715
 msgid "Hide attachment in normal topic view."
 msgstr ""
 
-#: templates/metadata.tmpl:726
+#: templates/metadata.tmpl:929
 #, fuzzy
 msgid "Hide options"
 msgstr "Diğer konu aksiyonları..."
 
-#: templates/metadata.tmpl:666
+#: templates/metadata.tmpl:841
 msgid "Hiding ..."
 msgstr ""
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:276
+#: templates/metadata.tmpl:555
+msgid "Image Information"
+msgstr ""
+
+#: templates/metadata.tmpl:603
+msgid "Last renamed on %1"
+msgstr ""
+
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:279
 msgid "Manage properties of %1"
 msgstr ""
 
-#: templates/metadata.tmpl:366
+#: templates/metadata.tmpl:368
 #, fuzzy
 msgid "More actions"
 msgstr "Diğer konu aksiyonları..."
 
-#: templates/metadata.tmpl:375 templates/metadata.tmpl:539
+#: templates/metadata.tmpl:380 templates/metadata.tmpl:607
 msgid "Move"
 msgstr "Taşı"
 
-#: templates/metadata.tmpl:517
+#: templates/metadata.tmpl:566
 msgid "Move attachment(s) to a different topic"
 msgstr ""
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:279
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:282
 msgid "Move or delete %1"
 msgstr ""
 
-#: templates/metadata.tmpl:276
+#: templates/metadata.tmpl:275
 msgid "Move this attachment to a different topic"
 msgstr ""
 
-#: templates/metadata.tmpl:187
+#: templates/metadata.tmpl:183
+#, fuzzy
+msgid "Moved By"
+msgstr "Taşı"
+
+#: templates/metadata.tmpl:182
+msgid "Moved When"
+msgstr ""
+
+#: templates/metadata.tmpl:179
 #, fuzzy
 msgid "Name"
 msgstr "Konu adı:"
 
-#: templates/metadata.tmpl:556 templates/metadata.tmpl:705
+#: templates/metadata.tmpl:631 templates/metadata.tmpl:653
+#: templates/metadata.tmpl:886 templates/metadata.tmpl:908
 msgid "No, thanks"
 msgstr ""
 
-#: templates/metadata.tmpl:499 templates/metadata.tmpl:591
-#: templates/metadata.tmpl:613
+#: templates/metadata.tmpl:651 templates/metadata.tmpl:884
+msgid "Note that this action cannot be undone."
+msgstr ""
+
+#: templates/metadata.tmpl:536 templates/metadata.tmpl:690
+#: templates/metadata.tmpl:712
 msgid "Options"
 msgstr ""
 
-#: templates/metadata.tmpl:561
+#: templates/metadata.tmpl:766
+msgid "Original Image"
+msgstr ""
+
+#: templates/metadata.tmpl:788
+msgid "Overwrite"
+msgstr ""
+
+#: templates/metadata.tmpl:658
 #, fuzzy
 msgid "Paste attachment"
 msgstr "(dosya ekini sil)"
 
-#: templates/metadata.tmpl:437
+#: templates/metadata.tmpl:471
 #, fuzzy
 msgid "Preview"
 msgstr "önizleme"
 
-#: templates/metadata.tmpl:272 templates/metadata.tmpl:274
+#: templates/metadata.tmpl:273
 #, fuzzy
 msgid "Preview this attachment"
 msgstr "(dosya ekini sil)"
 
-#: templates/metadata.tmpl:537
+#: templates/metadata.tmpl:762
+msgid "Quality"
+msgstr ""
+
+#: templates/metadata.tmpl:602
 #, fuzzy
 msgid "Restore attachment"
 msgstr "(dosya ekini sil)"
 
-#: templates/metadata.tmpl:195
+#: templates/metadata.tmpl:190
 #, fuzzy
 msgid "Results per page"
 msgstr "%1 için arama sonuçları"
 
-#: templates/metadata.tmpl:511
+#: templates/metadata.tmpl:549
 msgid "Save"
 msgstr ""
 
-#: templates/metadata.tmpl:181
+#: templates/metadata.tmpl:172
 msgid "Search"
 msgstr "Arama"
 
-#: templates/metadata.tmpl:385
+#: templates/metadata.tmpl:390
 #, fuzzy
 msgid "Select all"
 msgstr "Konuyu sil"
 
-#: templates/metadata.tmpl:261
-#, fuzzy
-msgid "Select this attachment"
-msgstr "Eklentiyi sil"
-
-#: templates/metadata.tmpl:727
+#: templates/metadata.tmpl:930
 #, fuzzy
 msgid "Show options"
 msgstr "Diğer konu aksiyonları..."
 
-#: templates/metadata.tmpl:729
+#: templates/metadata.tmpl:932
 msgid "Show/hide advanced options"
 msgstr ""
 
-#: templates/metadata.tmpl:190
+#: templates/metadata.tmpl:184
 msgid "Size"
 msgstr ""
 
-#: templates/metadata.tmpl:185
+#: templates/metadata.tmpl:177
 msgid "Sort by"
 msgstr ""
 
-#: templates/metadata.tmpl:533
+#: templates/metadata.tmpl:596
 msgid "The new topic chosen must already exist."
 msgstr ""
 
-#: templates/metadata.tmpl:530
+#: templates/metadata.tmpl:585
 msgid "To topic"
 msgstr ""
 
-#: templates/metadata.tmpl:526
+#: templates/metadata.tmpl:574
 msgid "To web"
 msgstr ""
 
-#: templates/metadata.tmpl:191
+#: templates/metadata.tmpl:185
 msgid "Type"
 msgstr ""
 
-#: templates/metadata.tmpl:374
+#: templates/metadata.tmpl:379
 msgid "Unhide"
 msgstr ""
 
-#: templates/metadata.tmpl:682
+#: templates/metadata.tmpl:857
 msgid "Unhiding ..."
 msgstr ""
 
-#: templates/metadata.tmpl:721
+#: templates/metadata.tmpl:924
 #, fuzzy
 msgid "Upload files"
 msgstr "Dosya ekle"
 
-#: templates/metadata.tmpl:507
+#: templates/metadata.tmpl:544
 msgid "Use as a thumbnail for the page."
 msgstr ""
 
-#: templates/metadata.tmpl:317 templates/metadata.tmpl:432
+#: templates/metadata.tmpl:322 templates/metadata.tmpl:453
 #, fuzzy
 msgid "Version %1"
 msgstr "Versiyon"
 
-#: templates/metadata.tmpl:555
+#: templates/metadata.tmpl:630 templates/metadata.tmpl:652
+#: templates/metadata.tmpl:885
 #, fuzzy
 msgid "Yes, delete"
 msgstr "(sil)"
 
-#: templates/metadata.tmpl:704
+#: templates/metadata.tmpl:907
 msgid "Yes, please"
 msgstr ""
 
-#: templates/metadata.tmpl:201
+#: templates/metadata.tmpl:196
 msgid "all"
 msgstr ""
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:282
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:285
+#: templates/metadata.tmpl:781
 #, fuzzy
 msgid "delete"
 msgstr "(sil)"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:273
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:276
 #: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:43
 msgid "edit"
 msgstr "düzenle"
 
-#: templates/metadata.tmpl:294
+#: templates/metadata.tmpl:292
 msgid "hidden"
 msgstr ""
 
-#: templates/metadata.tmpl:333
+#: templates/metadata.tmpl:776
+msgid "hide"
+msgstr ""
+
+#: templates/metadata.tmpl:337
 #, fuzzy
 msgid "hide other revisions"
 msgstr "Revizyonları karşılaştır"
 
-#: templates/metadata.tmpl:333
+#: templates/metadata.tmpl:771
+msgid "keep"
+msgstr ""
+
+#: templates/metadata.tmpl:337
 msgid "less"
 msgstr ""
 
-#: templates/metadata.tmpl:333
+#: templates/metadata.tmpl:337
 msgid "more"
 msgstr ""
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:279
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:282
 msgid "move"
 msgstr ""
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:276
+#: templates/metadata.tmpl:799
+msgid "no, skip existing"
+msgstr ""
+
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:279
 msgid "props"
 msgstr ""
 
-#: templates/metadata.tmpl:385
+#: templates/metadata.tmpl:390
 msgid "select all attachments on this topic"
 msgstr ""
 
-#: templates/metadata.tmpl:333
+#: templates/metadata.tmpl:337
 #, fuzzy
 msgid "show previous revisions"
 msgstr "Revizyonları karşılaştır"
 
-#: templates/metadata.tmpl:296
+#: templates/metadata.tmpl:294
 msgid "thumbnail"
 msgstr ""
 
-#: templates/metadata.tmpl:386
+#: templates/metadata.tmpl:391
 msgid "unselect all previously select attachments"
 msgstr ""
+
+#: templates/metadata.tmpl:794
+msgid "yes, replace existing"
+msgstr ""
+
+#, fuzzy
+#~ msgid "yes, delete"
+#~ msgstr "(sil)"
+
+#, fuzzy
+#~ msgid "Select this attachment"
+#~ msgstr "Eklentiyi sil"

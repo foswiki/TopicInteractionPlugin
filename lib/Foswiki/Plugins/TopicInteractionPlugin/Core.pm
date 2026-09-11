@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2024 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2010-2026 Michael Daum http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -43,7 +43,6 @@ use constant TRACE => 0; # toggle me
 # 110: stream not found for file
 # 111: zero-sized file upload
 
-##############################################################################
 sub new {
   my $class = shift;
   my $session = shift;
@@ -60,14 +59,24 @@ sub new {
   return $this;
 }
 
-##############################################################################
 sub addAssets {
   my $this = shift;
+
+  return if $this->{_doneAssets};
+  $this->{_doneAssets} = 1;
+
+  my $dragAndDropEnabled = Foswiki::Func::isTrue(Foswiki::Func::getPreferencesValue("TOPICINTERACTION_DRAGANDDROPENABLED"), 1);
+
+  # the editor handles uploads by itself
+  if (Foswiki::Func::getContext()->{edit}) {
+    $dragAndDropEnabled = 0;
+  }
 
   my $prefs = {
     officeSuite => Foswiki::Func::getPreferencesValue("WEBDAV_OFFICE_SUITE") || $Foswiki::cfg{TopicInteractionPlugin}{DefaultOfficeSuite} || '',
     attachFileSizeLimit => Foswiki::Func::getPreferencesValue("ATTACHFILESIZELIMIT") || 0,
     uploaderEnabled => Foswiki::Func::isTrue(Foswiki::Func::getPreferencesValue("TOPICINTERACTION_UPLOADERENABLED"), 1),
+    dragAndDropEnabled => $dragAndDropEnabled,
   };
 
   # export configuration to javascript
@@ -75,7 +84,6 @@ sub addAssets {
   Foswiki::Func::addToZone("script", "JQUERYPLUGIN::UPLOADER::META", $content, "JQUERYPLUGIN::FOSWIKI::PREFERENCES");
 }
 
-##############################################################################
 sub restChangeProperties {
   my ($this, $subject, $verb, $response) = @_;
   
@@ -92,7 +100,6 @@ sub restChangeProperties {
   return;
 }
 
-##############################################################################
 sub restDelete {
   my ($this, $subject, $verb, $response) = @_;
   
@@ -105,7 +112,6 @@ sub restDelete {
   return;
 }
 
-##############################################################################
 sub restMove {
   my ($this, $subject, $verb, $response) = @_;
   
@@ -118,7 +124,6 @@ sub restMove {
   return;
 }
 
-##############################################################################
 sub restUpload {
   my ($this, $subject, $verb, $response) = @_;
   
@@ -131,7 +136,6 @@ sub restUpload {
   return;
 }
 
-##############################################################################
 sub restCreateLink {
   my ($this, $subject, $verb, $response) = @_;
   
@@ -142,7 +146,16 @@ sub restCreateLink {
   return;
 }
 
-##############################################################################
+sub restGetLink {
+  my ($this, $subject, $verb, $response) = @_;
+  
+  require Foswiki::Plugins::TopicInteractionPlugin::Action::CreateLinks;
+  my $action = Foswiki::Plugins::TopicInteractionPlugin::Action::CreateLinks->new();
+  $action->handleGetLink($response);
+
+  return;
+}
+
 sub restCreateImageGallery {
   my ($this, $subject, $verb, $response) = @_;
   
@@ -153,7 +166,16 @@ sub restCreateImageGallery {
   return;
 }
 
-##############################################################################
+sub restConvertImages {
+  my ($this, $subject, $verb, $response) = @_;
+  
+  require Foswiki::Plugins::TopicInteractionPlugin::Action::ConvertImages;
+  my $action = Foswiki::Plugins::TopicInteractionPlugin::Action::ConvertImages->new();
+  $action->handle($response);
+
+  return;
+}
+
 sub restDownload {
   my ($this, $subject, $verb, $response) = @_;
   
@@ -164,7 +186,6 @@ sub restDownload {
   return;
 }
 
-##############################################################################
 sub restHide {
   my ($this, $subject, $verb, $response) = @_;
   
@@ -175,7 +196,6 @@ sub restHide {
   return;
 }
 
-##############################################################################
 sub restUnhide {
   my ($this, $subject, $verb, $response) = @_;
   
@@ -186,7 +206,6 @@ sub restUnhide {
   return;
 }
 
-##############################################################################
 sub deleteAttachmentArchives {
   my ($this, $web, $topic) = @_;
 
@@ -216,11 +235,9 @@ sub deleteAttachmentArchives {
   }
 }
 
-##############################################################################
 sub writeDebug {
   my $this = shift;
   print STDERR "- TopicInteractionPlugin - $_[0]\n" if TRACE;
 }
-
 
 1;

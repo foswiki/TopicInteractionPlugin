@@ -3,7 +3,8 @@
 }
 .foswikiAttachmentsCount {
   display:inline-block;
-  margin:0 0.1em;
+  margin:0 0 0 0.1em;
+  color:var(--color-highlight-foreground);
 }
 .foswikiMetaData .jqTab {
   border-color: var(--tabpane-border-color, #ddd);
@@ -97,6 +98,7 @@
 .foswikiThumbnail img {
   max-width: 54px;
   max-height: 54px;
+  border-radius:var(--thumbnail-border-radius, 3px);
 }
 
 .foswikiAttachments .foswikiAttachmentEditor .foswikiFormSteps {
@@ -130,6 +132,10 @@
 .foswikiAttachmentContainer {
   padding: 10px 5px;
 }
+.foswikiAttachmentRevInfo,
+.foswikiAttachmentRevInfo a {
+  color:var(--color-gray, #8a8a8a);
+}
 
 .foswikiAttachmentControl {
   position:absolute;
@@ -138,8 +144,13 @@
   background-color: var(--color-background, #fff);
   display:none;
 }
+.foswikiAttachmentControl .jqLike,
 .foswikiAttachmentControl a {
   margin-left:0.6923em;
+  float:left;
+}
+.foswikiAttachmentControl a:active {
+  text-shadow:0 0 1rem var(--color-active-foreground)
 }
 .foswikiSelected .foswikiAttachmentControl {
   background-color: var(--color-selected-background, #efffd8);
@@ -226,6 +237,9 @@
 .foswikiDataForm .foswikiLayoutTable {
   width:100%;
   border-bottom:1px solid var(--color-border, #ddd);
+}
+.foswikiDataForm table a {
+  word-break:break-all;
 }
 .foswikiDataFormTitle,
 .foswikiDataFormTitle a {

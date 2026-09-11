@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2024 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2026 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,6 +18,7 @@ package Foswiki::Plugins::TopicInteractionPlugin::Uploader;
 use strict;
 use warnings;
 
+use JSON ();
 use Foswiki::Plugins ();
 use Foswiki::Plugins::TopicInteractionPlugin ();
 use Foswiki::Plugins::JQueryPlugin::Plugin ();
@@ -48,5 +49,11 @@ sub new {
   return $this;
 }
 
-1;
+sub init {
+  my $this = shift;
+  return unless $this->SUPER::init();
 
+  Foswiki::Plugins::TopicInteractionPlugin::getCore()->addAssets();
+}
+
+1;

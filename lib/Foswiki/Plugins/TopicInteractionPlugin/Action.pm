@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# Copyright (C) 2010-2024 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2026 Michael Daum, http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -49,6 +49,7 @@ sub prepareAction {
 
   $opts ||= {};
   $opts->{requireFileName} = 1 unless defined $opts->{requireFileName};
+  $opts->{requireTopic} = 1 unless defined $opts->{requireTopic};
 
   $this->writeDebug("*** called handleRest()");
 
@@ -80,11 +81,12 @@ sub prepareAction {
 
   # read parameters 
   my $topic = $params->{topic} || $this->{session}{topicName};
-  my $web = $this->{session}{webName};
+  my $web = $params->{web} || $this->{session}{webName};
   ($web, $topic) = Foswiki::Func::normalizeWebTopicName($web, $topic);
 
   my $fileName = $params->{name} || $params->{filename} || '';
-  if ($opts->{requireFileName} && !$fileName) {
+  my @fileNames = $params->{filenames} ? @{$params->{filenames}} : ();
+  if ($opts->{requireFileName} && !$fileName && !scalar(@fileNames)) {
     $this->printJSONRPC($response, 103, "No filename", $id);
     return;
   }
@@ -94,6 +96,7 @@ sub prepareAction {
     $this->validateWebName($web);
     $this->validateTopicName($topic);
     $this->validateAttachmentName($fileName) if $fileName;
+    $this->validateAttachmentName($_) foreach @fileNames;
   } catch Error with {
     $error = shift;
     $error =~ s/ at .*$//s;
@@ -105,11 +108,10 @@ sub prepareAction {
   }
 
   #print STDERR "topic='$topic'\n";
-  unless (Foswiki::Func::topicExists($web, $topic)) {
+  if ($opts->{requireTopic} && !Foswiki::Func::topicExists($web, $topic)) {
     $this->printJSONRPC($response, 101, "Topic $web.$topic does not exist", $id);
     return;
   }
-
 
   # check permissions
   my $wikiName = Foswiki::Func::getWikiName();
@@ -120,13 +122,10 @@ sub prepareAction {
     return;
   }
 
-
   # playback to params to be used by delegates
-  $params->{filename} = $fileName;
   $params->{topic} = $topic;
   $params->{web} = $web;
   $params->{id} = $id;
-
   $this->{params} = $params;
 
   return $params;
@@ -165,7 +164,6 @@ sub printJSONRPC {
   $response->print($message);
 }
 
-##############################################################################
 sub getFileNames {
   my ($this, $meta) = @_;
 
@@ -180,7 +178,6 @@ sub getFileNames {
   return @fileNames;
 }
 
-##############################################################################
 # collects all params either sent via url or via post
 sub getRequestParams {
   my ($this, $request) = @_;
@@ -192,6 +189,9 @@ sub getRequestParams {
       my @val = $request->multi_param($key);
       $params{$key} = $val[0];
       $params{$key."s"} = [@val];
+    } elsif ($key eq 'filenames') {
+      my @val = $request->multi_param($key);
+      $params{$key} = [@val];
     } else {
       my $val = $request->param($key);
       $params{$key} = $val if defined $val;
@@ -216,11 +216,10 @@ sub getRequestParams {
   return \%params;
 }
 
-##############################################################################
 sub setThumbnail {
   my ($this, $meta, $name, $value) = @_;
 
-  $value = 1 unless defined $value;
+  $value //= 1;
 
   my $attachment = $meta->get("FILEATTACHMENT", $name);
   return unless $attachment; # does not exist
@@ -255,9 +254,15 @@ sub setThumbnail {
 
   # save
   $meta->save();      
+
+  # need to index the topic again to get the thumbnail right, otherwise it is one save behind for some reason
+  if (Foswiki::Func::getContext()->{DBCachePluginEnabled}) {
+    require Foswiki::Plugins::DBCachePlugin;
+    my $db = Foswiki::Plugins::DBCachePlugin::getDB($meta->web);
+    $db->load(1, $meta->web, $meta->topic);
+  }
 }
 
-##############################################################################
 # local version
 sub sanitizeAttachmentName {
   my ($this, $fileName) = @_;
@@ -279,56 +284,68 @@ sub sanitizeAttachmentName {
   return Foswiki::Sandbox::untaintUnchecked($fileName);
 }
 
-##############################################################################
+# from Foswiki::UI::Rename
+sub trashAttachment {
+  my ($this, $meta, $name, $trash) = @_;
+
+  my $trashWeb = Foswiki::Func::getPreferencesValue("TRASHWEB") || $Foswiki::cfg{TrashWebName};
+  ($trash) = Foswiki::Func::readTopic($trashWeb, 'TrashAttachment')
+    unless defined $trash;
+
+  # from Foswiki::UI::Rename
+  # look for a non-conflicting name in the trash web
+
+  my $toAttachment = $name;
+  my $base = $toAttachment;
+  my $ext = '';
+
+  if ( $base =~ s/^(.*)(\..*?)$/$1_/ ) {
+    $ext = $2;
+  }
+
+  # look for a non-conflicting name in the trash web
+  my $n = 1;
+  while ($trash->hasAttachment($toAttachment)) {
+    $toAttachment = $base . $n . $ext;
+    $n++;
+  }
+
+  return $meta->moveAttachment($name, $trash, new_name => $toAttachment);
+}
+
 sub validateAttachmentName {
   my ($this, $fileName) = @_;
 
-  throw Error::Simple("invalid attachmnent name")
-    unless Foswiki::Sandbox::untaint( $fileName, \&Foswiki::Sandbox::validateAttachmentName );
+  # not using Foswiki::Sandbox::untaint( $fileName, \&Foswiki::Sandbox::validateAttachmentName
+  # as it still allows path components
+
+  my ($sanitizedFileName) = Foswiki::Sandbox::sanitizeAttachmentName($fileName);
+
+  throw Error::Simple("invalid attachmnent name") unless $fileName eq $sanitizedFileName;
 }
 
-##############################################################################
 sub validateWebName {
   my ($this, $web) = @_;
 
   throw Error::Simple("invalid web name")
-    unless Foswiki::Sandbox::untaint($web, \&Foswiki::Sandbox::validateWebName);
+    unless $web eq Foswiki::Sandbox::untaint($web, \&Foswiki::Sandbox::validateWebName);
 }
 
-##############################################################################
 sub validateTopicName {
   my ($this, $topic) = @_;
 
   throw Error::Simple("invalid topic name")
-    unless Foswiki::Sandbox::untaint($topic, \&Foswiki::Sandbox::validateTopicName);
+    unless $topic eq Foswiki::Sandbox::untaint($topic, \&Foswiki::Sandbox::validateTopicName);
 }
 
-##############################################################################
-sub sanitizeString {
-  my ($this, $str) = @_;
-
-  return unless defined $str;
-  my $orig = $str;
-
-  $str =~ s/([[\x01-\x09\x0b\x0c\x0e-\x1f"%&\$'*<=>@\]_\|])/'&#'.ord($1).';'/ge;
-
-  print STDERR "WARNING: string needed sanitize. possible attempt of an XSS attack in '$orig', stripped down to '$str'\n"
-    unless $orig eq $str;
-
-  return $str;
-}
-
-##############################################################################
 sub writeDebug {
   my $this = shift;
   print STDERR "- TopicInteractionPlugin - $_[0]\n" if TRACE;
 }
 
-##############################################################################
 sub writeError {
   my $this = shift;
   print STDERR "- TopicInteractionPlugin - $_[0]\n";
 }
-
 
 1;

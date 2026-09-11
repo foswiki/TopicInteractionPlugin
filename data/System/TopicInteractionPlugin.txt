@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ProjectContributor" comment="" date="1543254331" format="1.1" version="1"}%
+%META:TOPICINFO{author="ProjectContributor" comment="" date="1738945102" format="1.1" version="1"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Description"}%
 
@@ -36,6 +36,8 @@ Other features are:
 <a href='%ATTACHURLPATH%/TopicInteractionPluginSnap5.png' class='foswikiImage'><img src='%ATTACHURLPATH%/TopicInteractionPluginSnap5.png' width='500' /></a>
 
 ---++ Settings
+
+---+++ Skin
 To activate you'll need to add =topicinteraction= to your SKIN path setting in your !SitePreferences, like
 
 <verbatim>
@@ -50,7 +52,19 @@ Use the =insidetab= setting of !MetaCommentPlugin to render comments inside a ta
     * Set COMMENTFORMAT = insidetab
 </verbatim>
 
-Note you won't need using Foswiki:Extensions/NatSkin as that's integrated automatically.
+Note you won't need [[https://foswiki.org/Extensions/NatSkin][NatSkin]] as that's integrated automatically.
+
+---+++ Disabling the uploader
+
+There are some features which can be disabled using preference settings.
+To disable the file uploader all together use:
+
+<verbatim>   * Set TOPICINTERACTION_UPLOADERENABLED = off</verbatim>
+
+Drag and Drop can be disabled by:
+
+<verbatim>   * Set TOPICINTERACTION_DRAGANDDROP = off</verbatim>
+
 
 ---++ Creating a link to an attachment
 
@@ -59,7 +73,9 @@ of attachments you may now specify different code to be inserted into the topic 
 various preference settings. The actual setting being used is chosen in the given precedence:
 
    1 =ATTACHED_&lt;file-extension>_FORMAT= 
+   1 =ATTACHED_&lt;file-extension>_EMBED_FORMAT= 
    1 =ATTACHED_&lt;mime-type>_FORMAT= 
+   1 =ATTACHED_&lt;mime-type>_EMBED_FORMAT= 
    1 =ATTACHEDIMAGEFORMAT= (provided for compatibility, left out in below examples)
    1 =ATTACHED_FILE_FORMAT=
    1 =ATTACHEDFILELINKFORMAT= (provided for compatibility, left out in below examples)
@@ -106,6 +122,15 @@ Using !WebDAVContrib (please adjust the webdav://wiki/dav prefix to your needs):
    * Set WEBDAV_OFFICE_SUITE = msoffice, libreoffice or openoffice (defaults to settings in =configure=)
 </verbatim>
 
+You can differ formats for _embeding_ an attachment to a topic or creating a _link_ to the attachment as in:
+
+<verbatim>
+
+   * Set ATTACHED_PDF_EMBED_FORMAT = $percntIMAGE{"$filename" size="200"}$percnt 
+   * Set ATTACHED_PDF_FORMAT = [[$fileurl][$percntJQICON{"fa-pdf"}$percnt $filename]]
+</verbatim>
+
+The first setting will create a thumbnail preview of the pdf whereas the second one creates a link to it.
 
 The =..._FORMAT= strings support the following variables:
 
@@ -213,7 +238,10 @@ The following variables can be used in the format parameter:
    * $movedwhen(&lt;format>): date when the attachment was moved with a custom date format string
    * $version: version of the attachment
    * $oldversions: list of old version information in the format =$date;$user;$rev;$comment=, delimitted by the =maxversions= parameter
-   * $encode(...): helper to url encode the enclosed string
+   * $encode(property): helper to url encode attachment's property
+   * $entity(property): helper to entity encode attachment's property
+   * $quotes(property): helper to quotes encode attachment's property
+   * $entityRecode(property): helper to decode and encode again an attachment's property
    * $exists: boolean to indicate whether the attachment really exists
 
 
@@ -252,6 +280,7 @@ generates:
 
 ---++ Change History
 %TABLE{columnwidths="7em" tablewidth="100%"}%
+|  11 Nov 2025: | added =TOPICINTERACTION_DRAGANDDROP= preference setting |
 |  11 Sep 2024: | improved handling all attachments in a batch operation |
 |  23 May 2024: | added new parameter =maxversions= for the =%ATTACHMENTS= macro |
 |  30 Apr 2024: | refactored javascript implementation |
@@ -326,7 +355,7 @@ generates:
 
 %META:FORM{name="PackageForm"}%
 %META:FIELD{name="Author" title="Author" value="Michael Daum"}%
-%META:FIELD{name="Copyright" title="Copyright" value="&copy; 2010-2024 Michael Daum"}%
+%META:FIELD{name="Copyright" title="Copyright" value="&copy; 2010-2026 Michael Daum"}%
 %META:FIELD{name="Description" title="Description" value="%25$SHORTDESCRIPTION%25"}%
 %META:FIELD{name="Home" title="Home" value="Foswiki:Extensions/%25TOPIC%25"}%
 %META:FIELD{name="License" title="License" value="[[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]]"}%
@@ -334,9 +363,9 @@ generates:
 %META:FIELD{name="Repository" title="Repository" value="https://github.com/foswiki/%25TOPIC%25"}%
 %META:FIELD{name="Support" title="Support" value="Foswiki:Support/%25TOPIC%25"}%
 %META:FIELD{name="Version" title="Version" value="%25$VERSION%25"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap5.png" attachment="TopicInteractionPluginSnap5.png" attr="" comment="" date="1543254331" size="36218" user="ProjectContributor" version="1"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap4.png" attachment="TopicInteractionPluginSnap4.png" attr="" comment="" date="1543254331" size="45039" user="ProjectContributor" version="1"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap3.png" attachment="TopicInteractionPluginSnap3.png" attr="" comment="" date="1543254331" size="99574" user="ProjectContributor" version="1"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap2.png" attachment="TopicInteractionPluginSnap2.png" attr="" comment="" date="1543254331" size="111026" user="ProjectContributor" version="1"}%
-%META:FILEATTACHMENT{name="TopicInteractionPluginSnap1.png" attachment="TopicInteractionPluginSnap1.png" attr="" comment="" date="1543254331" size="16199" user="ProjectContributor" version="1"}%
-%META:FILEATTACHMENT{name="LibreOfficeWebDAV.reg" attachment="LibreOfficeWebDAV.reg" attr="" comment="" date="1543254331" moveby="micha" movedto="System.TopicInteractionPlugin.LibreOfficeWebDAV.reg" movedwhen="1470922302" movefrom="Sandbox.OpenToEditTest.LibreOfficeWebDAV.reg" size="1126" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap5.png" attachment="TopicInteractionPluginSnap5.png" attr="" comment="" date="1738945102" size="36218" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap4.png" attachment="TopicInteractionPluginSnap4.png" attr="" comment="" date="1738945102" size="45039" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap3.png" attachment="TopicInteractionPluginSnap3.png" attr="" comment="" date="1738945102" size="99574" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap2.png" attachment="TopicInteractionPluginSnap2.png" attr="" comment="" date="1738945102" size="111026" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="TopicInteractionPluginSnap1.png" attachment="TopicInteractionPluginSnap1.png" attr="" comment="" date="1738945102" size="16199" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="LibreOfficeWebDAV.reg" attachment="LibreOfficeWebDAV.reg" attr="" comment="" date="1738945102" moveby="micha" movedto="System.TopicInteractionPlugin.LibreOfficeWebDAV.reg" movedwhen="1470922302" movefrom="Sandbox.OpenToEditTest.LibreOfficeWebDAV.reg" size="1126" user="ProjectContributor" version="1"}%

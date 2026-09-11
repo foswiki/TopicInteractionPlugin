@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# Copyright (C) 2010-2024 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2026 Michael Daum, http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -53,15 +53,12 @@ sub handle {
   my $fileCreateLink = $params->{createlink} || '0';
   $fileCreateLink = $fileCreateLink eq 'on' ? 1 : 0;
 
-  my $fileHide = $params->{hidefile};
-  $fileHide = 'off' unless defined $fileHide;
+  my $fileHide = $params->{hidefile} // 'off';
   $fileHide = $fileHide eq 'on' ? 1 : 0;
 
-  my $fileComment = $this->sanitizeString($params->{filecomment});
-  $fileComment = '' unless defined $fileComment;
+  my $fileComment = $params->{filecomment} // '';
 
-  my $isThumbnail = $params->{isthumbnail};
-  $isThumbnail = 'off' unless defined $isThumbnail && $isThumbnail eq 'on';
+  my $isThumbnail = $params->{isthumbnail} // 'off';
   $isThumbnail = $isThumbnail eq 'on' ? 1 : 0;
 
   $this->writeDebug("fileName=$fileName, newFileName=$newFileName, comment=$fileComment, hide=$fileHide, createlink=$fileCreateLink, isThumbnail=$isThumbnail");
@@ -82,7 +79,7 @@ sub handle {
         my $att = $meta->get("FILEATTACHMENT", $fileName);
         my $fileSize = $att ? $att->{size} : undef;
 
-        $meta->moveAttachment($fileName, $meta, new_name => $newFileName);
+        $meta->moveAttachment($fileName, $meta, new_name => $newFileName); # calls afterRenameHandler
         $meta->attach(
           name => $newFileName,
           attachment => $newFileName,
@@ -91,7 +88,7 @@ sub handle {
           createlink => $fileCreateLink,
           filesize => $fileSize,
           size => $fileSize,
-        );
+        ); # calls afterUploadHandler
 
       } else {
         my $att = $meta->get("FILEATTACHMENT", $fileName);
@@ -109,13 +106,13 @@ sub handle {
           createlink => $fileCreateLink,
           filesize => $fileSize,
           size => $fileSize,
-        );
+        ); # calls afterUploadHandler
       }
 
       $this->setThumbnail($meta, $newFileName, $isThumbnail);
     }
   } catch Error::Simple with {
-    $error = shift->{-text};
+    $error = shift;
     $this->writeDebug("ERROR: $error");
   };
 

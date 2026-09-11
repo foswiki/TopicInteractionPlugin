@@ -1,6 +1,7 @@
 !noci
 data/System/TopicInteractionPlugin.txt 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin/Action/ChangeProperties.pm 0644
+lib/Foswiki/Plugins/TopicInteractionPlugin/Action/ConvertImages.pm 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin/Action/CreateImageGallery.pm 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin/Action/CreateLinks.pm 0644
 lib/Foswiki/Plugins/TopicInteractionPlugin/Action/DeleteAttachment.pm 0644

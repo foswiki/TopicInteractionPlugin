@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# Copyright (C) 2005-2024 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2005-2026 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,7 +22,6 @@ use Encode ();
 use Error qw(:try);
 
 #use Data::Dump qw(dump);
-###############################################################################
 sub new {
   my $class = shift;
   my $session = shift;
@@ -41,14 +40,12 @@ sub new {
   return $this;
 }
 
-###############################################################################
 sub finish {
   my $this = shift;
 
   undef $this->{_attachmentInfo};
 }
 
-###############################################################################
 sub handle {
   my ($this, $params, $theTopic, $theWeb, $obj, $compat) = @_;
 
@@ -126,11 +123,17 @@ sub handle {
   } elsif ($theSort eq 'date') {
     %sorting = map {$_ => ($_->{date}||0)} @attachments;
     $isNumeric = 1;
+  } elsif ($theSort eq 'movedwhen') {
+    %sorting = map {$_ => ($_->{movedwhen}||0)} @attachments;
+    $isNumeric = 1;
   } elsif ($theSort eq 'size') {
     %sorting = map {$_ => ($_->{size}||0)} @attachments;
     $isNumeric = 1;
   } elsif ($theSort eq 'user') {
     %sorting = map {$_ => lc($_->{user}||'')} @attachments;
+    $isNumeric = 0;
+  } elsif ($theSort eq 'movedby') {
+    %sorting = map {$_ => lc($_->{movedby}||'')} @attachments;
     $isNumeric = 0;
   } elsif ($theSort eq 'comment') {
     %sorting = map {$_ => lc($_->{comment}||'')} @attachments;
@@ -378,6 +381,9 @@ sub handle {
     $text =~ s/\$web\b/$thisWeb/g;
     $text =~ s/\$topic\b/$thisTopic/g;
     $text =~ s/\$encode\((.*?)\)/_urlEncode($attachment, $1)/ges;
+    $text =~ s/\$entity\((.*?)\)/_entityEncode($attachment, $1)/ges;
+    $text =~ s/\$quotes\((.*?)\)/_quotesEncode($attachment, $1)/ges;
+    $text =~ s/\$entityRecode\((.*?)\)/_entityRecode($attachment, $1)/ges;
     $text =~ s/\$exists\b/$attachment->{exists}/g;
 
     push @result, $text if $text;
@@ -413,7 +419,6 @@ sub handle {
   return Foswiki::Func::decodeFormatTokens($result);
 }
 
-##############################################################################
 sub getAttachmentInfo {
   my ($this, $web, $topic, $attachment) = @_;
 
@@ -482,7 +487,6 @@ sub getAttachmentInfo {
 
   ($info->{userWeb}, $info->{userTopic}) = Foswiki::Func::normalizeWebTopicName('', $info->{user});
   ($info->{movedbyWeb}, $info->{movedbyTopic}) = Foswiki::Func::normalizeWebTopicName('', $info->{movedby});
-
   $this->{_attachmentInfo}{$key} = $info;
 
   return $info;
@@ -511,7 +515,6 @@ sub _humanizeBytes {
   return $result;
 }
 
-##############################################################################
 sub renderPager {
   my ($web, $topic, $params) = @_;
 
@@ -587,7 +590,6 @@ sub renderPager {
   return $result;
 }
 
-##############################################################################
 sub _urlEncode {
   my ($attachment, $property) = @_;
 
@@ -603,7 +605,49 @@ sub _urlEncode {
   return $text;
 }
 
-##############################################################################
+sub _quotesEncode {
+  my ($attachment, $property) = @_;
+
+  my $text = defined($property)?$attachment->{$property}:$attachment;
+  return $text unless $text;
+
+  $text =~ s/\"/\\"/g;
+  return $text;
+}
+
+sub _entityEncode {
+  my ($attachment, $property) = @_;
+
+  my $text = defined($property)?$attachment->{$property}:$attachment;
+  return $text unless $text;
+
+  $text =~ s/([[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>\\@[_\|])/'&#'.ord($1).';'/ge;
+
+  return $text;
+}
+
+sub _entityDecode {
+  my ($attachment, $property) = @_;
+
+  my $text = defined($property)?$attachment->{$property}:$attachment;
+  return $text unless $text;
+
+  $text =~ s/&#(\d+);/chr($1)/ge;
+  return $text;
+}
+
+sub _entityRecode {
+  my ($attachment, $property) = @_;
+
+  my $text = defined($property)?$attachment->{$property}:$attachment;
+  return $text unless $text;
+
+  $text =~ s/&#(\d+);/chr($1)/ge; # decode
+  $text =~ s/([[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>\\@[_\|])/'&#'.ord($1).';'/ge; #encode
+
+  return $text;
+}
+
 sub _encodeName {
   my $text = shift;
 

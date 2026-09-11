@@ -1,7 +1,7 @@
 /*
- * foswiki file upload plugin 2.3
+ * foswiki file upload plugin 2.4
  *
- * Copyright (c) 2016-2024 Michael Daum http://michaeldaumconsulting.com
+ * Copyright (c) 2016-2026 Michael Daum http://michaeldaumconsulting.com
  *
  * Licensed GPL http://www.gnu.org/licenses/gpl.html
  *
@@ -66,49 +66,62 @@
         data.files = data.files;
         data.formData = self.opts;
         data.formData.id = Math.ceil(Math.random()*1000);
+
+        if (foswiki.eventClient) {
+          data.formData.clientId = foswiki.eventClient.id;
+        }
+
         data.submit();
       },
       paste: function(e, data) {
-        if (typeof(data.files) !== 'undefined' && data.files.length) {
-          self.currentData = data;
+        if (typeof(data.files) === 'undefined' || !data.files.length) {
+          return false;
+        } 
 
-          foswiki.loadTemplate({
-            name: "metadata",
-            expand:"attachments::paste",
-            topic: self.opts.topic,
-            filename: "clipboard"
-          }).done(function(data) {
-            var $dialog = $(data.expand);
-
-            $("body").append($dialog);
-
-            if (typeof(self.prevFileName) !== 'undefined') {
-              $dialog.find("input[name='filename']").val(self.prevFileName);
-            }
-
-            $dialog.find("form").on("submit", function() {
-              var fileName = $dialog.find("input[name='filename']").val();
-
-              if (fileName) {
-                if (self.currentData.files.length > 1) {
-                  $.each(self.currentData.files, function(index, file) {
-                    file.uploadName = fileName + index;
-                    self.prevFileName = file.uploadName;
-                  });
-                } else {
-                    self.currentData.files[0].uploadName = fileName;
-                    self.prevFileName = fileName;
-                }
-                self.add(self.currentData);
-
-                self.currentData = undefined;
-              }
-              $dialog.dialog("close");
-              return false;
-            });
-          });
+        const $target = $(e.originalEvent.delegatedEvent.target);
+        if ($target.is(":text") || $target.is("textarea") || $target.is("[cm-text]") || $target.is("[class^='cm-']")) {
           return false;
         }
+
+        self.currentData = data;
+
+
+        foswiki.loadTemplate({
+          name: "metadata",
+          expand:"attachments::paste",
+          topic: self.opts.topic,
+          filename: "clipboard"
+        }).done(function(data) {
+          var $dialog = $(data.expand);
+
+          $("body").append($dialog);
+
+          if (typeof(self.prevFileName) !== 'undefined') {
+            $dialog.find("input[name='filename']").val(self.prevFileName);
+          }
+
+          $dialog.find("form").on("submit", function() {
+            var fileName = $dialog.find("input[name='filename']").val();
+
+            if (fileName) {
+              if (self.currentData.files.length > 1) {
+                $.each(self.currentData.files, function(index, file) {
+                  file.uploadName = fileName + index;
+                  self.prevFileName = file.uploadName;
+                });
+              } else {
+                  self.currentData.files[0].uploadName = fileName;
+                  self.prevFileName = fileName;
+              }
+              self.add(self.currentData);
+
+              self.currentData = undefined;
+            }
+            $dialog.dialog("close");
+            return false;
+          });
+        });
+        return false;
       },
       start: function() {
         self.uploadedFiles = [];
@@ -116,15 +129,13 @@
           self.progressBar.start();
         }
       },
-      dragover: function() {
-        if (self.dragoverTimer) {
-          window.clearTimeout(self.dragoverTimer);
+      dragover: function(ev) {
+        if (!self.dragoverTimer) {
+          self.elem.addClass("jqUploadDragging");
+          self.dragoverTimer = window.setTimeout(function() {
+            self.elem.removeClass("jqUploadDragging");
+          }, 1000);
         }
-        self.elem.addClass("jqUploadDragging");
-        self.dragoverTimer = window.setTimeout(function() {
-          self.dragoverTimer = null;
-          self.elem.removeClass("jqUploadDragging");
-        }, 1000);
       },
       drop: function() {
         if (self.dragoverTimer) {
@@ -152,6 +163,7 @@
         self.elem.trigger("afterUpload", [self.uploadedFiles]);
 
         // integrate into WebSocketPlugin
+        /*
         let ec = foswiki.eventClient;
         if (ec) {
           ec.send("upload", {
@@ -161,15 +173,15 @@
             files: self.uploadedFiles
           });
         }
+        */
 
       },
       fail: function(e, data) {
         var response = data.jqXHR.responseJSON || {
 	    error: { 
-	      message: data.jqXHR.responseText || "unknown error"
+	      message: data.jqXHR.responseText || "Upload failed"
 	    } 
 	  };
-        console.log("upload failed. xhr=",data.jqXHR);
         $.pnotify({
           text: $.i18n("Error: %msg%", {msg: response.error.message}),
           type: "error"
@@ -331,15 +343,18 @@
       // set defaults
       defaults.topic = foswiki.getPreference("WEB")+"."+foswiki.getPreference("TOPIC");
 
-      if (foswiki.getPreference("TopicInteractionPlugin").uploaderEnabled) {
+      const prefs = foswiki.getPreference("TopicInteractionPlugin") || {};
+      if (prefs.uploaderEnabled) {
         // create progress bar for uploads
         $("body").uploadProgress();
 
         // create foswiki uploader
-        $("body").foswikiUploader({
-          dropZone: $(document),
-          pasteZone: $(document)
-        });
+        if (prefs.dragAndDropEnabled) {
+          $("body").foswikiUploader({
+            dropZone: $(document),
+            pasteZone: $(document)
+          });
+        }
 
         // create upload buttons
         $(".jqUploadButton").livequery(function() {

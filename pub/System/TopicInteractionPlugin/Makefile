@@ -1,5 +1,6 @@
 FOSWIKI_ROOT?=~/foswiki/trunk/core
 TARGET= \
+  build \
   build/metadata.js \
   build/metadata.css \
   build/uploader.js \
@@ -28,6 +29,9 @@ build/metadata.js: $(METADATA_SOURCE)
 
 clean:
 	rm -f build/* igp_* genpdf_* src/*.jslint 
+
+build:
+	@mkdir build
 
 .PHONY: git
 

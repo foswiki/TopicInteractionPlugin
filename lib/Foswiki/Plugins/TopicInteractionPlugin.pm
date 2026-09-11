@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2009-2024 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2009-2026 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@ use Foswiki::Func ();
 use Foswiki::Request();
 use Foswiki::Plugins::JQueryPlugin ();
 
-our $VERSION = '11.01';
+our $VERSION = '12.00';
 our $RELEASE = '%$RELEASE%';
 our $SHORTDESCRIPTION = 'Improved interaction with attachments and !DataForms';
 our $LICENSECODE = '%$LICENSECODE%';
@@ -39,7 +39,6 @@ BEGIN {
     }
 }
 
-##############################################################################
 sub initPlugin {
 
   Foswiki::Plugins::JQueryPlugin::registerPlugin("Uploader", 'Foswiki::Plugins::TopicInteractionPlugin::Uploader');
@@ -107,8 +106,24 @@ sub initPlugin {
     http_allow => 'POST',
   );
 
+  Foswiki::Func::registerRESTHandler('getlink', sub {
+      return getCore(shift)->restGetLink(@_);
+    },
+    authenticate => 1,
+    validate => 0,
+    http_allow => 'GET,POST',
+  );
+
   Foswiki::Func::registerRESTHandler('createimagegallery', sub {
       return getCore(shift)->restCreateImageGallery(@_);
+    },
+    authenticate => 1,
+    validate => 1,
+    http_allow => 'POST',
+  );
+
+  Foswiki::Func::registerRESTHandler('convertimages', sub {
+      return getCore(shift)->restConvertImages(@_);
     },
     authenticate => 1,
     validate => 1,
@@ -118,7 +133,7 @@ sub initPlugin {
   Foswiki::Func::registerRESTHandler('download', sub {
       return getCore(shift)->restDownload(@_);
     },
-    authenticate => 1,
+    authenticate => 0,
     validate => 1,
     http_allow => 'POST',
   );
@@ -145,7 +160,6 @@ sub initPlugin {
   return 1;
 }
 
-##############################################################################
 sub finishPlugin {
   undef $core;
 
@@ -154,7 +168,6 @@ sub finishPlugin {
     undef $attachments;
   }
 }
-##############################################################################
 sub getCore {
   my $session = shift;
 
@@ -166,7 +179,6 @@ sub getCore {
   return $core;
 }
 
-##############################################################################
 sub getAttachments {
   my $session = shift;
 
@@ -178,7 +190,6 @@ sub getAttachments {
   return $attachments;
 }
 
-##############################################################################
 # keep a t=thumbnail attr in attachments
 sub beforeUploadHandler {
   my ($attachment, $meta) = @_;
@@ -190,7 +201,6 @@ sub beforeUploadHandler {
   }
 }
 
-##############################################################################
 sub afterUploadHandler {
   my ($attachment, $meta) = @_;
 
@@ -209,11 +219,9 @@ sub afterUploadHandler {
   }
 }
 
-##############################################################################
 sub afterCommonTagsHandler {
-  if ($core) {
-    getCore()->addAssets();
-  }
+  $core->addAssets() if $core;
 }
+
 
 1;

@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2024 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2026 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ use constant DRY => 0; # toggle me
 sub handle {
   my ($this, $response) = @_;
 
-  my $params = $this->prepareAction($response);
+  my $params = $this->prepareAction($response, {requireTopic => 1, requireFileName => 1});
   return unless $params;
 
   my $web = $params->{web};
@@ -79,7 +79,16 @@ sub handle {
     }
 
     $this->writeDebug("createlink fileName=$fileName, web=$web, topic=$topic, doHideFile=".($doHideFile//'undef').", type=$type");
-    $text .= $this->getAttachmentLink($meta, $fileName, $type);
+    my $link = $this->getAttachmentLink($meta, $fileName, $type);
+
+    # this is deliberatley orderd that way to prevent some makros from being executed
+    $link = Foswiki::Func::expandCommonVariables($link, $topic, $web, $meta) if $link =~ /%/;
+    $link = Foswiki::Func::decodeFormatTokens($link);
+
+    # better late than never
+    $link =~ s/\$text\b/$fileName/;
+
+    $text .= "\n\n$link";
   }
 
   try {
@@ -99,8 +108,45 @@ sub handle {
   }
 }
 
+sub handleGetLink {
+  my ($this, $response) = @_;
+
+  my $params = $this->prepareAction($response, {requireTopic => 0});
+  return unless $params;
+
+  my $id = $params->{id};
+  my $type = $params->{type} || '';
+  my $fileName = $params->{filename} || '';
+  my $expand = Foswiki::Func::isTrue($params->{expand}, 0);
+  my $web = $params->{web};
+  my $topic = $params->{topic};
+  my $text = $params->{text};
+
+  my ($meta) = Foswiki::Func::readTopic($web, $topic);
+  my $tml = $this->getAttachmentLink($meta, $fileName, $type, $text);
+  $tml = Foswiki::Func::decodeFormatTokens($tml);
+
+  my $html;
+
+  if ($expand) {
+    $html = $tml;
+    $html = Foswiki::Func::expandCommonVariables($html, $topic, $web, $meta) if $html =~ /%/;
+    $html = Foswiki::Func::renderText($html, $web, $topic);
+  } 
+
+  # better late than never
+  $text = $fileName unless defined $text && $text ne "";
+  $tml =~ s/\$text\b/$text/;
+  $html =~ s/\$text\b/$text/ if $html;
+
+  $this->printJSONRPC($response, 0, {
+    html => $html,
+    tml => $tml
+  }, $id)
+}
+
 sub getAttachmentLink {
-  my ($this, $meta, $fileName, $type) = @_;
+  my ($this, $meta, $fileName, $type, $text) = @_;
 
   my $attachment = $meta->get('FILEATTACHMENT', $fileName);
   my $fileComment = $attachment->{comment} // '';
@@ -108,13 +154,27 @@ sub getAttachmentLink {
   my $filePath = $Foswiki::cfg{PubDir} . '/' . $meta->web . '/' . $meta->topic . '/' . $fileName;
   my ($fileExt) = $fileName =~ m/(?:.*\.)*([^.]*)/;
   $fileExt //= '';
-  my $fileUrl = Foswiki::Func::getPubUrlPath($meta->web, $meta->topic, $fileName);
+  my $web = $meta->web;
+  my $topic = $meta->topic;
+
+  if ($topic eq 'none') {
+    $web = '%WEB%';
+    $topic = '%TOPIC%';
+  }
+
+  my $fileUrl = Foswiki::Func::getPubUrlPath($web, $topic, $fileName);
+
 
   my $width = "";
   my $height = "";
   my $geom = "";
+  my $format;
 
-  my $format = $this->getAttachmentFormat($fileName, $type);
+  if (defined $text && $text ne "") {
+    $format = $this->getAttachmentFileFormat($web, $topic);
+  } else {
+    $format = $this->getAttachmentFormat($fileName, $type);
+  }
   return "" if $format eq "";
 
   # only support values if ImagePlugin is installed
@@ -123,26 +183,26 @@ sub getAttachmentLink {
     $geom = "width='$width' height='$height'";
   }
 
-  $format =~ s/\$name/$fileName/;    # deprecated
-  $format =~ s/\$filename/$fileName/g;
-  $format =~ s/\$fileurl/$fileUrl/g;
-  $format =~ s/\$fileext/$fileExt/;
+
+  $format =~ s/\$name\b/$fileName/;    # deprecated
+  $format =~ s/\$filename\b/$fileName/g;
+  $format =~ s/\$web\b/$web/g;
+  $format =~ s/\$topic\b/$topic/g;
+  $format =~ s/\$fileurl\b/$fileUrl/g;
+  $format =~ s/\$fileext\b/$fileExt/;
 
   # SMELL: backwards compatibility ... 
   $format =~ s/\\t/\t/g;
   $format =~ s/\\n/\n/g;
 
-  $format =~ s/\$comment/$fileComment/g;
-  $format =~ s/\$size/$geom/g;
+  $format =~ s/\$comment\b/$fileComment/g;
+  $format =~ s/\$size\b/$geom/g;
+  $format =~ s/\$width\b/$width/g;
+  $format =~ s/\$height\b/$height/g;
+  $format =~ s/\$date\b/$fileTime/g;
 
-  # new
-  $format =~ s/\$width/$width/g;
-  $format =~ s/\$height/$height/g;
-  $format =~ s/\$date/$fileTime/g;
-
-  # this is deliberatley orderd that way to prevent some makros from being executed
-  $format = Foswiki::Func::expandCommonVariables($format) if $format =~ /%/;
-  $format = Foswiki::Func::decodeFormatTokens($format);
+  $format =~ s/^\s+//;
+  $format =~ s/\s+$//;
 
   return $format;
 }
@@ -158,26 +218,22 @@ sub getAttachmentFormat {
 
   my $format;
   my @prefNames = ();
-
   $type = $type?"_$type":"";
+  $type =~ s/^_+/_/;
 
-  if ($type ne '_file') {
-
-    if ($fileName =~ /(?:.*\.)*([^.]*)/) {
-      push @prefNames, 'ATTACHED_'.uc($1).uc($type).'_FORMAT' if $type;
-      push @prefNames, 'ATTACHED_'.uc($1).'_FORMAT';
-    }
-
-    my ($mimeType) = $this->getMappedMimeType($fileName);
-    if ($mimeType) {
-      push @prefNames, 'ATTACHED_'.uc($mimeType).uc($type).'_FORMAT' if $type;
-      push @prefNames, 'ATTACHED_'.uc($mimeType).'_FORMAT';
-      
-      push @prefNames, 'ATTACHEDIMAGEFORMAT' if $mimeType eq 'image';
-    }
+  if ($fileName =~ /(?:.*\.)*([^.]*)/) {
+    push @prefNames, 'ATTACHED_'.uc($1).uc($type).'_FORMAT' if $type;
+    push @prefNames, 'ATTACHED_'.uc($1).'_FORMAT';
   }
 
-  push @prefNames, 'ATTACHED_FILE'.uc($type).'_FORMAT' if $type;
+  my ($mimeType) = $this->getMappedMimeType($fileName);
+  if ($mimeType) {
+    push @prefNames, 'ATTACHED_'.uc($mimeType).uc($type).'_FORMAT' if $type;
+    push @prefNames, 'ATTACHED_'.uc($mimeType).'_FORMAT';
+    
+    push @prefNames, 'ATTACHEDIMAGEFORMAT' if $mimeType eq 'image';
+  }
+
   push @prefNames, 'ATTACHED_FILE_FORMAT';
   push @prefNames, 'ATTACHEDFILELINKFORMAT'; # backwards compatibility
 
@@ -191,6 +247,29 @@ sub getAttachmentFormat {
   return $format;
 }
 
+sub getAttachmentFileFormat {
+  my ($this, $web, $topic) = @_;
+
+  my $format;
+  my @prefNames = ();
+
+  push @prefNames, 'ATTACHED_FILE_FORMAT';
+  push @prefNames, 'ATTACHEDFILELINKFORMAT'; # backwards compatibility
+
+  foreach my $prefName (@prefNames) {
+    $format = Foswiki::Func::getPreferencesValue($prefName);
+    last if $format;
+  }
+
+  $format = '[[$percntPUBURLPATH$percnt/$web/$topic/$filename][$text]]' unless $format;
+
+  #if ($web eq $this->{session}{webName} && $topic eq $this->{session}{topicName}) {
+  #  $format =~ s/\$percntPUBURLPATH\$percnt\/\$web\/\$topic/\$percntATTACHURLPATH\$percnt/g;
+  #  $format =~ s/\$percntPUBURL\$percnt\/\$web\/\$topic/\$percntATTACHURL\$percnt/g;
+  #}
+
+  return $format;
+}
 
 sub types {
   my $this = shift;

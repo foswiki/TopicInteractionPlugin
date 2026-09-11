@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2024 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2026 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -57,6 +57,8 @@ sub handle {
 
   # loop thru all uploads
   my $uploads = $request->uploads();
+  $request->uploads({}); # consume them
+
   my @result = ();
   foreach my $fileName (keys %$uploads) {
     my $upload = $uploads->{$fileName};
@@ -93,7 +95,7 @@ sub handle {
     }
 
     my $prevAttachment;
-    my $fileComment = $this->sanitizeString($params->{filecomment});
+    my $fileComment = $params->{filecomment};
     unless (defined $fileComment) {
       # get prev comment as we override it otherwise
       $prevAttachment = $meta->get('FILEATTACHMENT', $fileName) || {};

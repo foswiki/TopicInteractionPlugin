@@ -15,476 +15,593 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2.1\n"
 
-#: templates/metadata.tmpl:380
+#: templates/metadata.tmpl:385
 #, fuzzy
 msgid "%1 attachment(s)"
 msgstr "Bifogade filer"
 
-#: templates/metadata.tmpl:303
+#: templates/metadata.tmpl:301
 msgid ""
 "<b>Warning</b>: attachment '%name%' does not exist anymore. Please contact "
 "<a href='%1'>a wiki administrator</a> in case you want to restore it."
 msgstr ""
 
-#: templates/metadata.tmpl:552
+#: templates/metadata.tmpl:628
 msgid "Are you sure that you want to delete %1?"
 msgstr ""
 
-#: templates/metadata.tmpl:565
+#: templates/metadata.tmpl:878
+#, fuzzy
+msgid "Are you sure that you want to finally delete %1 attachment(s)?"
+msgstr "Flytta eller radera bifogad fil"
+
+#: templates/metadata.tmpl:649
+msgid "Are you sure that you want to finally delete %1?"
+msgstr ""
+
+#: templates/metadata.tmpl:881
+#, fuzzy
+msgid "Are you sure that you want to finally delete all attachments?"
+msgstr "Flytta eller radera bifogad fil"
+
+#: templates/metadata.tmpl:663
 msgid "Attach"
 msgstr "Bifoga fil"
 
-#: templates/metadata.tmpl:122
+#: templates/metadata.tmpl:104
 #, fuzzy
 msgid "Attachments %1"
 msgstr "Bifogade filer till %1"
 
-#: templates/metadata.tmpl:189
+#: templates/metadata.tmpl:181
 msgid "Author"
 msgstr ""
 
-#: templates/metadata.tmpl:512 templates/metadata.tmpl:540
-#: templates/metadata.tmpl:566
+#: templates/metadata.tmpl:550 templates/metadata.tmpl:608
+#: templates/metadata.tmpl:664 templates/metadata.tmpl:810
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: templates/metadata.tmpl:386
+#: templates/metadata.tmpl:391
 msgid "Clear all"
 msgstr "Nollställ alla"
 
-#: templates/attach.topicinteraction.tmpl:10 templates/metadata.tmpl:442
+#: templates/attach.topicinteraction.tmpl:10 templates/metadata.tmpl:476
+#: templates/metadata.tmpl:562
 msgid "Close"
 msgstr "Stäng"
 
-#: templates/metadata.tmpl:495
+#: templates/metadata.tmpl:532
 msgid "Comment"
 msgstr "Kommentar"
 
-#: templates/metadata.tmpl:89
+#: templates/metadata.tmpl:72
 #, fuzzy
 msgid "Comments %1"
 msgstr "Kommentarer:"
 
-#: templates/metadata.tmpl:571
+#: templates/metadata.tmpl:669
 #, fuzzy
 msgid "Confirmation required"
 msgstr "Varning! Bekräftelse nödvändig"
 
-#: templates/metadata.tmpl:370
+#: templates/metadata.tmpl:809
+#, fuzzy
+msgid "Convert"
+msgstr "(ta bort)"
+
+#: templates/metadata.tmpl:375
+msgid "Convert image format"
+msgstr ""
+
+#: templates/metadata.tmpl:807
+#, fuzzy
+msgid "Converting images ..."
+msgstr "Skapa en ny grupp"
+
+#: templates/metadata.tmpl:372
 #, fuzzy
 msgid "Create image gallery"
 msgstr "Skapa en ny grupp"
 
-#: templates/metadata.tmpl:367
+#: templates/metadata.tmpl:369
 #, fuzzy
 msgid "Create link(s)"
 msgstr "Uppdatera referenser"
 
-#: templates/metadata.tmpl:634
+#: templates/metadata.tmpl:733
 #, fuzzy
 msgid "Creating image gallery ..."
 msgstr "Skapa en ny grupp"
 
-#: templates/metadata.tmpl:597
+#: templates/metadata.tmpl:696
 #, fuzzy
 msgid "Creating links ..."
 msgstr "Uppdatera referenser"
 
-#: templates/metadata.tmpl:102
+#: templates/metadata.tmpl:84
 #, fuzzy
 msgid "Data form"
 msgstr "(redigera formulär)"
 
-#: templates/metadata.tmpl:188
+#: templates/metadata.tmpl:180
 msgid "Date"
 msgstr "Datum"
 
-#: templates/metadata.tmpl:376
+#: templates/metadata.tmpl:381
 msgid "Delete"
 msgstr "Radera"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:282
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:285
 #, fuzzy
 msgid "Delete %1"
 msgstr "Radera"
 
-#: templates/metadata.tmpl:545
+#: templates/metadata.tmpl:618
 #, fuzzy
 msgid "Delete attachment?"
 msgstr "Radera bifogad fil"
 
-#: templates/metadata.tmpl:277
+#: templates/metadata.tmpl:276
 #, fuzzy
 msgid "Delete this attachment"
 msgstr "Radera bifogad fil"
 
-#: templates/metadata.tmpl:698
+#: templates/metadata.tmpl:901
 #, fuzzy
 msgid "Deleting ..."
 msgstr "Radera"
 
-#: templates/metadata.tmpl:206
+#: templates/metadata.tmpl:202
 msgid "Display hidden"
 msgstr ""
 
-#: templates/metadata.tmpl:628
+#: templates/metadata.tmpl:268
+msgid "Display image information"
+msgstr ""
+
+#: templates/metadata.tmpl:742
+#, fuzzy
+msgid "Do you really want to convert %1 image(s)?"
+msgstr "Flytta eller radera bifogad fil"
+
+#: templates/metadata.tmpl:745
+#, fuzzy
+msgid "Do you really want to convert all images?"
+msgstr "Flytta eller radera bifogad fil"
+
+#: templates/metadata.tmpl:727
 msgid "Do you really want to create an image gallery for %1 attachment(s)?"
 msgstr ""
 
-#: templates/metadata.tmpl:631
+#: templates/metadata.tmpl:730
 #, fuzzy
 msgid "Do you really want to create an image gallery for all attachments?"
 msgstr "Flytta eller radera bifogad fil"
 
-#: templates/metadata.tmpl:584
+#: templates/metadata.tmpl:683
 msgid "Do you really want to create links to %1 attachment(s)?"
 msgstr ""
 
-#: templates/metadata.tmpl:587
+#: templates/metadata.tmpl:686
 #, fuzzy
 msgid "Do you really want to create links to all attachments?"
 msgstr "Flytta eller radera bifogad fil"
 
-#: templates/metadata.tmpl:692
+#: templates/metadata.tmpl:895
 #, fuzzy
 msgid "Do you really want to delete %1 attachment(s)?"
 msgstr "Flytta eller radera bifogad fil"
 
-#: templates/metadata.tmpl:695
+#: templates/metadata.tmpl:898
 #, fuzzy
 msgid "Do you really want to delete all attachments?"
 msgstr "Flytta eller radera bifogad fil"
 
-#: templates/metadata.tmpl:644
+#: templates/metadata.tmpl:819
 msgid "Do you really want to download %1 attachment(s)?"
 msgstr ""
 
-#: templates/metadata.tmpl:647
+#: templates/metadata.tmpl:822
 #, fuzzy
 msgid "Do you really want to download all attachments?"
 msgstr "Flytta eller radera bifogad fil"
 
-#: templates/metadata.tmpl:606
+#: templates/metadata.tmpl:705
 #, fuzzy
 msgid "Do you really want to embed %1 attachment(s)?"
 msgstr "Flytta eller radera bifogad fil"
 
-#: templates/metadata.tmpl:609
+#: templates/metadata.tmpl:708
 #, fuzzy
 msgid "Do you really want to embed all attachments?"
 msgstr "Flytta eller radera bifogad fil"
 
-#: templates/metadata.tmpl:660
+#: templates/metadata.tmpl:835
 #, fuzzy
 msgid "Do you really want to hide %1 attachment(s)?"
 msgstr "Flytta eller radera bifogad fil"
 
-#: templates/metadata.tmpl:663
+#: templates/metadata.tmpl:838
 #, fuzzy
 msgid "Do you really want to hide all attachments?"
 msgstr "Flytta eller radera bifogad fil"
 
-#: templates/metadata.tmpl:676
+#: templates/metadata.tmpl:851
 msgid "Do you really want to unhide %1 attachment(s)?"
 msgstr ""
 
-#: templates/metadata.tmpl:679
+#: templates/metadata.tmpl:854
 #, fuzzy
 msgid "Do you really want to unhide all attachments?"
 msgstr "Flytta eller radera bifogad fil"
 
-#: templates/metadata.tmpl:372
+#: templates/metadata.tmpl:377
 msgid "Download"
 msgstr ""
 
-#: templates/metadata.tmpl:650
+#: templates/metadata.tmpl:825
 #, fuzzy
 msgid "Downloading ..."
 msgstr "Ladda upp fil"
 
-#: templates/metadata.tmpl:484
+#: templates/metadata.tmpl:266
+#, fuzzy
+msgid "Edit Image"
+msgstr "(redigera formulär)"
+
+#: templates/metadata.tmpl:518
 #, fuzzy
 msgid "Edit attachment"
 msgstr "(ta bort bifogad fil)"
 
-#: templates/metadata.tmpl:104
+#: templates/metadata.tmpl:86
 #, fuzzy
 msgid "Edit form"
 msgstr "(redigera formulär)"
 
-#: templates/metadata.tmpl:268
+#: templates/metadata.tmpl:264
 #, fuzzy
 msgid "Edit properties of this attachment"
 msgstr "Flytta eller radera bifogad fil"
 
-#: templates/metadata.tmpl:105
+#: templates/metadata.tmpl:87
 #, fuzzy
 msgid "Edit this !DataForm"
 msgstr "Redigera denna tabell"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:273
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:276
 #: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:43
-#: templates/metadata.tmpl:266
+#: templates/metadata.tmpl:262
 #, fuzzy
 msgid "Edit this attachment"
 msgstr "Redigera denna tabell"
 
-#: templates/metadata.tmpl:368
+#: templates/metadata.tmpl:370
 msgid "Embed"
 msgstr ""
 
-#: templates/metadata.tmpl:619
+#: templates/metadata.tmpl:718
 #, fuzzy
 msgid "Embedding attachments ..."
 msgstr "(ta bort bifogad fil)"
 
-#: templates/metadata.tmpl:205
+#: templates/metadata.tmpl:201
 msgid "Enable/disable displaying hidden attachments"
 msgstr ""
 
-#: templates/metadata.tmpl:182
+#: templates/metadata.tmpl:173
 msgid "Enter a search pattern to filter the list of attachments"
 msgstr ""
 
-#: templates/metadata.tmpl:491 templates/metadata.tmpl:563
+#: templates/metadata.tmpl:528 templates/metadata.tmpl:661
 #, fuzzy
 msgid "File name"
 msgstr "Förnamn:"
 
-#: templates/metadata.tmpl:373
+#: templates/metadata.tmpl:867
+#, fuzzy
+msgid "Finally delete attachment(s)?"
+msgstr "Radera bifogad fil"
+
+#: templates/metadata.tmpl:635
+#, fuzzy
+msgid "Finally delete attachment?"
+msgstr "Radera bifogad fil"
+
+#: templates/metadata.tmpl:751
+msgid "Format"
+msgstr ""
+
+#: templates/metadata.tmpl:378
 #, fuzzy
 msgid "Hide"
 msgstr "Göm fil"
 
-#: templates/metadata.tmpl:502 templates/metadata.tmpl:594
-#: templates/metadata.tmpl:616
+#: templates/metadata.tmpl:539 templates/metadata.tmpl:693
+#: templates/metadata.tmpl:715
 #, fuzzy
 msgid "Hide attachment in normal topic view."
 msgstr "Filen kommer inte att visas när man tittar på sidan."
 
-#: templates/metadata.tmpl:726
+#: templates/metadata.tmpl:929
 #, fuzzy
 msgid "Hide options"
 msgstr "Ytterligare sökmöjligheter:"
 
-#: templates/metadata.tmpl:666
+#: templates/metadata.tmpl:841
 #, fuzzy
 msgid "Hiding ..."
 msgstr "Ladda upp fil"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:276
+#: templates/metadata.tmpl:555
+msgid "Image Information"
+msgstr ""
+
+#: templates/metadata.tmpl:603
+msgid "Last renamed on %1"
+msgstr ""
+
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:279
 #, fuzzy
 msgid "Manage properties of %1"
 msgstr "Ändra endast egenskaper"
 
-#: templates/metadata.tmpl:366
+#: templates/metadata.tmpl:368
 #, fuzzy
 msgid "More actions"
 msgstr "Fler alternativ för denna sida..."
 
-#: templates/metadata.tmpl:375 templates/metadata.tmpl:539
+#: templates/metadata.tmpl:380 templates/metadata.tmpl:607
 msgid "Move"
 msgstr "Flytta"
 
-#: templates/metadata.tmpl:517
+#: templates/metadata.tmpl:566
 #, fuzzy
 msgid "Move attachment(s) to a different topic"
 msgstr "Flytta bifogad fil till avdelning:"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:279
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:282
 #, fuzzy
 msgid "Move or delete %1"
 msgstr "Flytta eller radera bifogad fil"
 
-#: templates/metadata.tmpl:276
+#: templates/metadata.tmpl:275
 #, fuzzy
 msgid "Move this attachment to a different topic"
 msgstr "Kopiera den här sidan (och alla bifogade filer) till en ny sida."
 
-#: templates/metadata.tmpl:187
+#: templates/metadata.tmpl:183
+#, fuzzy
+msgid "Moved By"
+msgstr "Flytta"
+
+#: templates/metadata.tmpl:182
+msgid "Moved When"
+msgstr ""
+
+#: templates/metadata.tmpl:179
 #, fuzzy
 msgid "Name"
 msgstr "Enbart sidnamn"
 
-#: templates/metadata.tmpl:556 templates/metadata.tmpl:705
+#: templates/metadata.tmpl:631 templates/metadata.tmpl:653
+#: templates/metadata.tmpl:886 templates/metadata.tmpl:908
 msgid "No, thanks"
 msgstr ""
 
-#: templates/metadata.tmpl:499 templates/metadata.tmpl:591
-#: templates/metadata.tmpl:613
+#: templates/metadata.tmpl:651 templates/metadata.tmpl:884
+msgid "Note that this action cannot be undone."
+msgstr ""
+
+#: templates/metadata.tmpl:536 templates/metadata.tmpl:690
+#: templates/metadata.tmpl:712
 #, fuzzy
 msgid "Options"
 msgstr "Åtgärd"
 
-#: templates/metadata.tmpl:561
+#: templates/metadata.tmpl:766
+msgid "Original Image"
+msgstr ""
+
+#: templates/metadata.tmpl:788
+msgid "Overwrite"
+msgstr ""
+
+#: templates/metadata.tmpl:658
 #, fuzzy
 msgid "Paste attachment"
 msgstr "(ta bort bifogad fil)"
 
-#: templates/metadata.tmpl:437
+#: templates/metadata.tmpl:471
 #, fuzzy
 msgid "Preview"
 msgstr "förhandsgranska"
 
-#: templates/metadata.tmpl:272 templates/metadata.tmpl:274
+#: templates/metadata.tmpl:273
 #, fuzzy
 msgid "Preview this attachment"
 msgstr "Flytta bifogad fil"
 
-#: templates/metadata.tmpl:537
+#: templates/metadata.tmpl:762
+msgid "Quality"
+msgstr ""
+
+#: templates/metadata.tmpl:602
 #, fuzzy
 msgid "Restore attachment"
 msgstr "(ta bort bifogad fil)"
 
-#: templates/metadata.tmpl:195
+#: templates/metadata.tmpl:190
 #, fuzzy
 msgid "Results per page"
 msgstr "Sökresultat från avdelning %1"
 
-#: templates/metadata.tmpl:511
+#: templates/metadata.tmpl:549
 #, fuzzy
 msgid "Save"
 msgstr "Sparat i:"
 
-#: templates/metadata.tmpl:181
+#: templates/metadata.tmpl:172
 msgid "Search"
 msgstr "Sök"
 
-#: templates/metadata.tmpl:385
+#: templates/metadata.tmpl:390
 #, fuzzy
 msgid "Select all"
 msgstr "Välj alla"
 
-#: templates/metadata.tmpl:261
-#, fuzzy
-msgid "Select this attachment"
-msgstr "Radera bifogad fil"
-
-#: templates/metadata.tmpl:727
+#: templates/metadata.tmpl:930
 #, fuzzy
 msgid "Show options"
 msgstr "Ytterligare sökmöjligheter:"
 
-#: templates/metadata.tmpl:729
+#: templates/metadata.tmpl:932
 #, fuzzy
 msgid "Show/hide advanced options"
 msgstr "Ytterligare sökmöjligheter:"
 
-#: templates/metadata.tmpl:190
+#: templates/metadata.tmpl:184
 msgid "Size"
 msgstr "Storlek"
 
-#: templates/metadata.tmpl:185
+#: templates/metadata.tmpl:177
 #, fuzzy
 msgid "Sort by"
 msgstr "Sortera resultat efter:"
 
-#: templates/metadata.tmpl:533
+#: templates/metadata.tmpl:596
 msgid "The new topic chosen must already exist."
 msgstr "Det nya sidnamnet måste redan finnas."
 
-#: templates/metadata.tmpl:530
+#: templates/metadata.tmpl:585
 #, fuzzy
 msgid "To topic"
 msgstr "Till sidan:"
 
-#: templates/metadata.tmpl:526
+#: templates/metadata.tmpl:574
 #, fuzzy
 msgid "To web"
 msgstr "Till avdelning:"
 
-#: templates/metadata.tmpl:191
+#: templates/metadata.tmpl:185
 msgid "Type"
 msgstr ""
 
-#: templates/metadata.tmpl:374
+#: templates/metadata.tmpl:379
 msgid "Unhide"
 msgstr ""
 
-#: templates/metadata.tmpl:682
+#: templates/metadata.tmpl:857
 #, fuzzy
 msgid "Unhiding ..."
 msgstr "Ladda upp fil"
 
-#: templates/metadata.tmpl:721
+#: templates/metadata.tmpl:924
 #, fuzzy
 msgid "Upload files"
 msgstr "Ladda upp fil"
 
-#: templates/metadata.tmpl:507
+#: templates/metadata.tmpl:544
 msgid "Use as a thumbnail for the page."
 msgstr ""
 
-#: templates/metadata.tmpl:317 templates/metadata.tmpl:432
+#: templates/metadata.tmpl:322 templates/metadata.tmpl:453
 #, fuzzy
 msgid "Version %1"
 msgstr "Version"
 
-#: templates/metadata.tmpl:555
+#: templates/metadata.tmpl:630 templates/metadata.tmpl:652
+#: templates/metadata.tmpl:885
 #, fuzzy
 msgid "Yes, delete"
 msgstr "(ta bort)"
 
-#: templates/metadata.tmpl:704
+#: templates/metadata.tmpl:907
 msgid "Yes, please"
 msgstr ""
 
-#: templates/metadata.tmpl:201
+#: templates/metadata.tmpl:196
 #, fuzzy
 msgid "all"
 msgstr "Välj alla"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:282
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:285
+#: templates/metadata.tmpl:781
 #, fuzzy
 msgid "delete"
 msgstr "(ta bort)"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:273
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:276
 #: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:43
 msgid "edit"
 msgstr "redigera"
 
-#: templates/metadata.tmpl:294
+#: templates/metadata.tmpl:292
 msgid "hidden"
 msgstr ""
 
-#: templates/metadata.tmpl:333
+#: templates/metadata.tmpl:776
+msgid "hide"
+msgstr ""
+
+#: templates/metadata.tmpl:337
 #, fuzzy
 msgid "hide other revisions"
 msgstr "Ny version:"
 
-#: templates/metadata.tmpl:333
+#: templates/metadata.tmpl:771
+msgid "keep"
+msgstr ""
+
+#: templates/metadata.tmpl:337
 msgid "less"
 msgstr ""
 
-#: templates/metadata.tmpl:333
+#: templates/metadata.tmpl:337
 #, fuzzy
 msgid "more"
 msgstr "(mer)"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:279
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:282
 msgid "move"
 msgstr ""
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:276
+#: templates/metadata.tmpl:799
+msgid "no, skip existing"
+msgstr ""
+
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:279
 msgid "props"
 msgstr ""
 
-#: templates/metadata.tmpl:385
+#: templates/metadata.tmpl:390
 #, fuzzy
 msgid "select all attachments on this topic"
 msgstr "Kopiera den här sidan (och alla bifogade filer) till en ny sida."
 
-#: templates/metadata.tmpl:333
+#: templates/metadata.tmpl:337
 #, fuzzy
 msgid "show previous revisions"
 msgstr "Ingen tidigare version finns."
 
-#: templates/metadata.tmpl:296
+#: templates/metadata.tmpl:294
 msgid "thumbnail"
 msgstr ""
 
-#: templates/metadata.tmpl:386
+#: templates/metadata.tmpl:391
 #, fuzzy
 msgid "unselect all previously select attachments"
 msgstr "Välj en ny lokal fil för att uppdatera den bifogade filen."
+
+#: templates/metadata.tmpl:794
+msgid "yes, replace existing"
+msgstr ""
+
+#, fuzzy
+#~ msgid "yes, delete"
+#~ msgstr "(ta bort)"
+
+#, fuzzy
+#~ msgid "Select this attachment"
+#~ msgstr "Radera bifogad fil"

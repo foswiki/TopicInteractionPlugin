@@ -1,6 +1,5 @@
 # TopicInteractionPlugin translations
-# Copyright (C) 2012-2021 Michael Daum
-# This file is distributed under the same license as the EditChapterPlugin package.
+# Copyright (C) 2012-2026 Michael Daum
 # Michael Daum <foswiki@michaeldaumconsulting.com>, 2014.
 msgid ""
 msgstr ""
@@ -16,11 +15,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: templates/metadata.tmpl:380
+#: templates/metadata.tmpl:385
 msgid "%1 attachment(s)"
 msgstr "%1 Anhänge"
 
-#: templates/metadata.tmpl:303
+#: templates/metadata.tmpl:301
 msgid ""
 "<b>Warning</b>: attachment '%name%' does not exist anymore. Please contact "
 "<a href='%1'>a wiki administrator</a> in case you want to restore it."
@@ -29,403 +28,503 @@ msgstr ""
 "den<a href='%1'>Wiki-Administrator</a>, falls Sie ihn widerherstellen "
 "möchten.."
 
-#: templates/metadata.tmpl:552
+#: templates/metadata.tmpl:628
 msgid "Are you sure that you want to delete %1?"
 msgstr "Sind Sie sicher, dass Sie %1 löschen wollen?"
 
-#: templates/metadata.tmpl:565
+#: templates/metadata.tmpl:878
+msgid "Are you sure that you want to finally delete %1 attachment(s)?"
+msgstr "Sind Sie sicher, dass Sie %1 Anhänge endgültig löschen wollen?"
+
+#: templates/metadata.tmpl:649
+msgid "Are you sure that you want to finally delete %1?"
+msgstr "Sind Sie sicher, dass Sie %1 endgültig löschen wollen?"
+
+#: templates/metadata.tmpl:881
+msgid "Are you sure that you want to finally delete all attachments?"
+msgstr "Sind Sie sicher, dass Sie endgültig alle Anhänge löschen wollen?"
+
+#: templates/metadata.tmpl:663
 msgid "Attach"
 msgstr "Anhängen"
 
-#: templates/metadata.tmpl:122
+#: templates/metadata.tmpl:104
 msgid "Attachments %1"
 msgstr "Anhänge %1"
 
-#: templates/metadata.tmpl:189
+#: templates/metadata.tmpl:181
 msgid "Author"
 msgstr "Autor"
 
-#: templates/metadata.tmpl:512 templates/metadata.tmpl:540
-#: templates/metadata.tmpl:566
+#: templates/metadata.tmpl:550 templates/metadata.tmpl:608
+#: templates/metadata.tmpl:664 templates/metadata.tmpl:810
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: templates/metadata.tmpl:386
+#: templates/metadata.tmpl:391
 msgid "Clear all"
 msgstr "Alles abwählen"
 
-#: templates/attach.topicinteraction.tmpl:10 templates/metadata.tmpl:442
+#: templates/attach.topicinteraction.tmpl:10 templates/metadata.tmpl:476
+#: templates/metadata.tmpl:562
 msgid "Close"
 msgstr "Schließen"
 
-#: templates/metadata.tmpl:495
+#: templates/metadata.tmpl:532
 msgid "Comment"
 msgstr "Kommentar"
 
-#: templates/metadata.tmpl:89
+#: templates/metadata.tmpl:72
 msgid "Comments %1"
 msgstr "Kommentare %1"
 
-#: templates/metadata.tmpl:571
+#: templates/metadata.tmpl:669
 msgid "Confirmation required"
 msgstr "Bestätigung erforderlich"
 
-#: templates/metadata.tmpl:370
+#: templates/metadata.tmpl:809
+msgid "Convert"
+msgstr "Umwandeln"
+
+#: templates/metadata.tmpl:375
+msgid "Convert image format"
+msgstr "Bildformat umwandeln"
+
+#: templates/metadata.tmpl:807
+msgid "Converting images ..."
+msgstr "Bilder werden ungewandelt ..."
+
+#: templates/metadata.tmpl:372
 msgid "Create image gallery"
 msgstr "Bilder-Galerie anlegen"
 
-#: templates/metadata.tmpl:367
+#: templates/metadata.tmpl:369
 msgid "Create link(s)"
 msgstr "Verweis(e) einfügen"
 
-#: templates/metadata.tmpl:634
+#: templates/metadata.tmpl:733
 msgid "Creating image gallery ..."
 msgstr "Bilder-Galerie wird angelegt ..."
 
-#: templates/metadata.tmpl:597
+#: templates/metadata.tmpl:696
 msgid "Creating links ..."
 msgstr "Füge Verweise ein ..."
 
-#: templates/metadata.tmpl:102
+#: templates/metadata.tmpl:84
 msgid "Data form"
 msgstr "Daten-Formular"
 
-#: templates/metadata.tmpl:188
+#: templates/metadata.tmpl:180
 msgid "Date"
 msgstr "Datum"
 
-#: templates/metadata.tmpl:376
+#: templates/metadata.tmpl:381
 msgid "Delete"
 msgstr "Löschen"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:282
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:285
 msgid "Delete %1"
 msgstr "Lösche %1"
 
-#: templates/metadata.tmpl:545
+#: templates/metadata.tmpl:618
 msgid "Delete attachment?"
 msgstr "Anhang löschen?"
 
-#: templates/metadata.tmpl:277
+#: templates/metadata.tmpl:276
 msgid "Delete this attachment"
 msgstr "Diesen Anhang löschen"
 
-#: templates/metadata.tmpl:698
+#: templates/metadata.tmpl:901
 msgid "Deleting ..."
 msgstr "Lösche ..."
 
-#: templates/metadata.tmpl:206
+#: templates/metadata.tmpl:202
 msgid "Display hidden"
 msgstr "Versteckte einblenden"
 
-#: templates/metadata.tmpl:628
+#: templates/metadata.tmpl:268
+msgid "Display image information"
+msgstr "Bildinformation anzeigen"
+
+#: templates/metadata.tmpl:742
+msgid "Do you really want to convert %1 image(s)?"
+msgstr "Wollen Sie wirklich %1 Bild(er) umwandeln?"
+
+#: templates/metadata.tmpl:745
+msgid "Do you really want to convert all images?"
+msgstr "Wollen Sie wirklich alle Bilder umwandeln?"
+
+#: templates/metadata.tmpl:727
 msgid "Do you really want to create an image gallery for %1 attachment(s)?"
 msgstr "Wollen Sie wirklich eine Bilder-Galerie für %1 Anhänge anlegen?"
 
-#: templates/metadata.tmpl:631
+#: templates/metadata.tmpl:730
 msgid "Do you really want to create an image gallery for all attachments?"
 msgstr "Wollen Sie wirklich eine Bilder-Galerie für alle Anhänge anlegen?"
 
-#: templates/metadata.tmpl:584
+#: templates/metadata.tmpl:683
 msgid "Do you really want to create links to %1 attachment(s)?"
 msgstr "Wollen Sie wirklich zu %1 Anhängen Verweise einfügen?"
 
-#: templates/metadata.tmpl:587
+#: templates/metadata.tmpl:686
 msgid "Do you really want to create links to all attachments?"
 msgstr "Wollen Sie wirklich zu allen Anhängen Verweise einfügen?"
 
-#: templates/metadata.tmpl:692
+#: templates/metadata.tmpl:895
 msgid "Do you really want to delete %1 attachment(s)?"
 msgstr "Wollen Sie wirklich %1 Anhänge löschen?"
 
-#: templates/metadata.tmpl:695
+#: templates/metadata.tmpl:898
 msgid "Do you really want to delete all attachments?"
 msgstr "Wollen Sie wirklich alle Anhänge löschen?"
 
-#: templates/metadata.tmpl:644
+#: templates/metadata.tmpl:819
 msgid "Do you really want to download %1 attachment(s)?"
 msgstr "Wollen Sie wirklich %1 Anhänge herunterladen?"
 
-#: templates/metadata.tmpl:647
+#: templates/metadata.tmpl:822
 msgid "Do you really want to download all attachments?"
 msgstr "Wollen Sie wirklich alle Anhänge herunterladen?"
 
-#: templates/metadata.tmpl:606
+#: templates/metadata.tmpl:705
 msgid "Do you really want to embed %1 attachment(s)?"
 msgstr "Wollen Sie wirklich %1 Anhänge einbetten?"
 
-#: templates/metadata.tmpl:609
+#: templates/metadata.tmpl:708
 msgid "Do you really want to embed all attachments?"
 msgstr "Wollen Sie wirklich alle Anhänge einbetten?"
 
-#: templates/metadata.tmpl:660
+#: templates/metadata.tmpl:835
 msgid "Do you really want to hide %1 attachment(s)?"
 msgstr "Wollen Sie wirklich %1 Anhänge verbergen?"
 
-#: templates/metadata.tmpl:663
+#: templates/metadata.tmpl:838
 msgid "Do you really want to hide all attachments?"
 msgstr "Wollen Sie wirklich alle Anhänge verbergen?"
 
-#: templates/metadata.tmpl:676
+#: templates/metadata.tmpl:851
 msgid "Do you really want to unhide %1 attachment(s)?"
 msgstr "Wollen Sie wirklich %1 Anhänge wieder anzeigen?"
 
-#: templates/metadata.tmpl:679
+#: templates/metadata.tmpl:854
 msgid "Do you really want to unhide all attachments?"
 msgstr "Wollen Sie wirklich alle Anhänge wieder anzeigen?"
 
-#: templates/metadata.tmpl:372
+#: templates/metadata.tmpl:377
 msgid "Download"
 msgstr "Herunterladen"
 
-#: templates/metadata.tmpl:650
+#: templates/metadata.tmpl:825
 msgid "Downloading ..."
 msgstr "Lade Dateien herunter ..."
 
-#: templates/metadata.tmpl:484
+#: templates/metadata.tmpl:266
+msgid "Edit Image"
+msgstr "Bild bearbeiten"
+
+#: templates/metadata.tmpl:518
 msgid "Edit attachment"
 msgstr "Anhang bearbeiten"
 
-#: templates/metadata.tmpl:104
+#: templates/metadata.tmpl:86
 msgid "Edit form"
 msgstr "Formular bearbeiten"
 
-#: templates/metadata.tmpl:268
+#: templates/metadata.tmpl:264
 msgid "Edit properties of this attachment"
 msgstr "Eigenschaften dieses Anhangs bearbeiten"
 
-#: templates/metadata.tmpl:105
+#: templates/metadata.tmpl:87
 msgid "Edit this !DataForm"
 msgstr "Dieses Formular bearbeiten"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:273
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:276
 #: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:43
-#: templates/metadata.tmpl:266
+#: templates/metadata.tmpl:262
 msgid "Edit this attachment"
 msgstr "Anhang bearbeiten"
 
-#: templates/metadata.tmpl:368
+#: templates/metadata.tmpl:370
 msgid "Embed"
 msgstr "Einbetten"
 
-#: templates/metadata.tmpl:619
+#: templates/metadata.tmpl:718
 msgid "Embedding attachments ..."
 msgstr "Bette Anhänge ein ..."
 
-#: templates/metadata.tmpl:205
+#: templates/metadata.tmpl:201
 msgid "Enable/disable displaying hidden attachments"
 msgstr "Verborgene Anhänge ein-/ausschalten"
 
-#: templates/metadata.tmpl:182
+#: templates/metadata.tmpl:173
 msgid "Enter a search pattern to filter the list of attachments"
 msgstr "Geben Sie einen Suchbegriff ein, um die Anhangliste zu filtern"
 
-#: templates/metadata.tmpl:491 templates/metadata.tmpl:563
+#: templates/metadata.tmpl:528 templates/metadata.tmpl:661
 msgid "File name"
 msgstr "Dateiname"
 
-#: templates/metadata.tmpl:373
+#: templates/metadata.tmpl:867
+msgid "Finally delete attachment(s)?"
+msgstr "Anhänge endgültig löschen?"
+
+#: templates/metadata.tmpl:635
+msgid "Finally delete attachment?"
+msgstr "Anhang endgültig löschen?"
+
+#: templates/metadata.tmpl:751
+msgid "Format"
+msgstr "Format"
+
+#: templates/metadata.tmpl:378
 msgid "Hide"
 msgstr "Verbergen"
 
-#: templates/metadata.tmpl:502 templates/metadata.tmpl:594
-#: templates/metadata.tmpl:616
+#: templates/metadata.tmpl:539 templates/metadata.tmpl:693
+#: templates/metadata.tmpl:715
 msgid "Hide attachment in normal topic view."
 msgstr "Anhang in der normalen Ansicht verbergen"
 
-#: templates/metadata.tmpl:726
+#: templates/metadata.tmpl:929
 msgid "Hide options"
 msgstr "Optionen verbergen"
 
-#: templates/metadata.tmpl:666
+#: templates/metadata.tmpl:841
 msgid "Hiding ..."
 msgstr "Verstecke Dateien ..."
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:276
+#: templates/metadata.tmpl:555
+msgid "Image Information"
+msgstr "Bildinformation"
+
+#: templates/metadata.tmpl:603
+msgid "Last renamed on %1"
+msgstr "Zuletzt umbenannt am %1"
+
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:279
 msgid "Manage properties of %1"
 msgstr "Eigenschaften von %1 verwalten"
 
-#: templates/metadata.tmpl:366
+#: templates/metadata.tmpl:368
 msgid "More actions"
 msgstr "Weitere Aktionen"
 
-#: templates/metadata.tmpl:375 templates/metadata.tmpl:539
+#: templates/metadata.tmpl:380 templates/metadata.tmpl:607
 msgid "Move"
 msgstr "Verschieben"
 
-#: templates/metadata.tmpl:517
+#: templates/metadata.tmpl:566
 msgid "Move attachment(s) to a different topic"
 msgstr "Verschiebe Dateien zu einem anderen Topic"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:279
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:282
 msgid "Move or delete %1"
 msgstr "Verschieben oder löschen von %1"
 
-#: templates/metadata.tmpl:276
+#: templates/metadata.tmpl:275
 msgid "Move this attachment to a different topic"
 msgstr "Diese Datei an ein anderes Topic anhängen"
 
-#: templates/metadata.tmpl:187
+#: templates/metadata.tmpl:183
+msgid "Moved By"
+msgstr "Verschoben durch"
+
+#: templates/metadata.tmpl:182
+msgid "Moved When"
+msgstr "Verschoben am"
+
+#: templates/metadata.tmpl:179
 msgid "Name"
 msgstr "Name"
 
-#: templates/metadata.tmpl:556 templates/metadata.tmpl:705
+#: templates/metadata.tmpl:631 templates/metadata.tmpl:653
+#: templates/metadata.tmpl:886 templates/metadata.tmpl:908
 msgid "No, thanks"
 msgstr "Nein, danke"
 
-#: templates/metadata.tmpl:499 templates/metadata.tmpl:591
-#: templates/metadata.tmpl:613
+#: templates/metadata.tmpl:651 templates/metadata.tmpl:884
+msgid "Note that this action cannot be undone."
+msgstr "Beachten Sie, dass dies nicht rückgängig gemacht werden kann."
+
+#: templates/metadata.tmpl:536 templates/metadata.tmpl:690
+#: templates/metadata.tmpl:712
 msgid "Options"
 msgstr "Optionen"
 
-#: templates/metadata.tmpl:561
+#: templates/metadata.tmpl:766
+msgid "Original Image"
+msgstr "Ursprüngliches Bild"
+
+#: templates/metadata.tmpl:788
+msgid "Overwrite"
+msgstr "Überschreiben"
+
+#: templates/metadata.tmpl:658
 msgid "Paste attachment"
 msgstr "Anhang einfügen"
 
-#: templates/metadata.tmpl:437
+#: templates/metadata.tmpl:471
 msgid "Preview"
 msgstr "Vorschau"
 
-#: templates/metadata.tmpl:272 templates/metadata.tmpl:274
+#: templates/metadata.tmpl:273
 msgid "Preview this attachment"
 msgstr "Vorschau für diesen Anhang"
 
-#: templates/metadata.tmpl:537
+#: templates/metadata.tmpl:762
+msgid "Quality"
+msgstr "Qualität"
+
+#: templates/metadata.tmpl:602
 msgid "Restore attachment"
 msgstr "Anhang wiederherstellen"
 
-#: templates/metadata.tmpl:195
+#: templates/metadata.tmpl:190
 msgid "Results per page"
 msgstr "Ergebnisse pro Seite"
 
-#: templates/metadata.tmpl:511
+#: templates/metadata.tmpl:549
 msgid "Save"
 msgstr "Speichern"
 
-#: templates/metadata.tmpl:181
+#: templates/metadata.tmpl:172
 msgid "Search"
 msgstr "Suchen"
 
-#: templates/metadata.tmpl:385
+#: templates/metadata.tmpl:390
 msgid "Select all"
 msgstr "Alles auswählen"
 
-#: templates/metadata.tmpl:261
-msgid "Select this attachment"
-msgstr "Diesen Anhang auswählen"
-
-#: templates/metadata.tmpl:727
+#: templates/metadata.tmpl:930
 msgid "Show options"
 msgstr "Optionen anzeigen"
 
-#: templates/metadata.tmpl:729
+#: templates/metadata.tmpl:932
 msgid "Show/hide advanced options"
 msgstr "Anzeigen/Verbergen von weiteren Optionen"
 
-#: templates/metadata.tmpl:190
+#: templates/metadata.tmpl:184
 msgid "Size"
 msgstr "Größe"
 
-#: templates/metadata.tmpl:185
+#: templates/metadata.tmpl:177
 msgid "Sort by"
 msgstr "Sortieren nach"
 
-#: templates/metadata.tmpl:533
+#: templates/metadata.tmpl:596
 msgid "The new topic chosen must already exist."
 msgstr "Das neu auszuwählende Topic muß bereits existieren."
 
-#: templates/metadata.tmpl:530
+#: templates/metadata.tmpl:585
 msgid "To topic"
 msgstr "Nach Topic"
 
-#: templates/metadata.tmpl:526
+#: templates/metadata.tmpl:574
 msgid "To web"
 msgstr "Nach Web"
 
-#: templates/metadata.tmpl:191
+#: templates/metadata.tmpl:185
 msgid "Type"
 msgstr "Typ"
 
-#: templates/metadata.tmpl:374
+#: templates/metadata.tmpl:379
 msgid "Unhide"
 msgstr "Anzeigen"
 
-#: templates/metadata.tmpl:682
+#: templates/metadata.tmpl:857
 msgid "Unhiding ..."
 msgstr "Blende Anzeige ein ..."
 
-#: templates/metadata.tmpl:721
+#: templates/metadata.tmpl:924
 msgid "Upload files"
 msgstr "Dateien hochladen"
 
-#: templates/metadata.tmpl:507
+#: templates/metadata.tmpl:544
 msgid "Use as a thumbnail for the page."
 msgstr "Als Miniaturbild für diese Seite verwenden"
 
-#: templates/metadata.tmpl:317 templates/metadata.tmpl:432
+#: templates/metadata.tmpl:322 templates/metadata.tmpl:453
 msgid "Version %1"
 msgstr "Version %1"
 
-#: templates/metadata.tmpl:555
+#: templates/metadata.tmpl:630 templates/metadata.tmpl:652
+#: templates/metadata.tmpl:885
 msgid "Yes, delete"
 msgstr "Ja, löschen"
 
-#: templates/metadata.tmpl:704
+#: templates/metadata.tmpl:907
 msgid "Yes, please"
 msgstr "Ja, bitte"
 
-#: templates/metadata.tmpl:201
+#: templates/metadata.tmpl:196
 msgid "all"
 msgstr "alles"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:282
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:285
+#: templates/metadata.tmpl:781
 msgid "delete"
 msgstr "löschen"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:273
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:276
 #: lib/Foswiki/Plugins/TopicInteractionPlugin/WebDAVUrl.pm:43
 msgid "edit"
 msgstr "bearbeiten"
 
-#: templates/metadata.tmpl:294
+#: templates/metadata.tmpl:292
 msgid "hidden"
 msgstr "versteckt"
 
-#: templates/metadata.tmpl:333
+#: templates/metadata.tmpl:776
+msgid "hide"
+msgstr "verstecken"
+
+#: templates/metadata.tmpl:337
 msgid "hide other revisions"
 msgstr "andere Versionen verbergen"
 
-#: templates/metadata.tmpl:333
+#: templates/metadata.tmpl:771
+msgid "keep"
+msgstr "beibehalten"
+
+#: templates/metadata.tmpl:337
 msgid "less"
 msgstr "weniger"
 
-#: templates/metadata.tmpl:333
+#: templates/metadata.tmpl:337
 msgid "more"
 msgstr "mehr"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:279
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:282
 msgid "move"
 msgstr "verschieben"
 
-#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:276
+#: templates/metadata.tmpl:799
+msgid "no, skip existing"
+msgstr "nein, überspringe existierende"
+
+#: lib/Foswiki/Plugins/TopicInteractionPlugin/Attachments.pm:279
 msgid "props"
 msgstr "Eigensch."
 
-#: templates/metadata.tmpl:385
+#: templates/metadata.tmpl:390
 msgid "select all attachments on this topic"
 msgstr "alle Anhänge an diesem Topic auswählen"
 
-#: templates/metadata.tmpl:333
+#: templates/metadata.tmpl:337
 msgid "show previous revisions"
 msgstr "vorherige Versionen anzeigen"
 
-#: templates/metadata.tmpl:296
+#: templates/metadata.tmpl:294
 msgid "thumbnail"
 msgstr "thumbnail"
 
-#: templates/metadata.tmpl:386
+#: templates/metadata.tmpl:391
 msgid "unselect all previously select attachments"
 msgstr "alle Anhänge abwählen"
 
-#~ msgid "<a href='%1'>Version %2</a> uploaded by %3 on %4"
-#~ msgstr "<a href='%1'>Version %2</a> hochgeladen von %3 am %4"
+#: templates/metadata.tmpl:794
+msgid "yes, replace existing"
+msgstr "ja, existierende überschreiben"
+
+#~ msgid "Restore"
+#~ msgstr "Wiederherstellen"

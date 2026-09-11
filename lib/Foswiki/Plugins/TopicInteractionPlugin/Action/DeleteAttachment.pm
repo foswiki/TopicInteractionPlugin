@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 # 
-# Copyright (C) 2010-2024 Michael Daum, http://michaeldaumconsulting.com
+# Copyright (C) 2010-2026 Michael Daum, http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -63,25 +63,7 @@ sub handle {
     next unless $fileName;
 
     try {
-
-      # from Foswiki::UI::Rename
-      # look for a non-conflicting name in the trash web
-      my $base = $fileName;
-      my $ext = '';
-      if ( $base =~ s/^(.*)(\..*?)$/$1_/ ) {
-        $ext = $2;
-      }
-      my $toAttachment = $fileName;
-      my $n = 1;
-      while ($toObj->hasAttachment($toAttachment)) {
-        $toAttachment = $base . $n . $ext;
-        $n++;
-      }
-
-      $this->writeDebug("moving $web.$topic.$fileName to $newWeb.$newTopic.$toAttachment");
-
-      $fromObj->moveAttachment($fileName, $toObj, new_name => $toAttachment) unless DRY;
-
+      $this->trashAttachment($fromObj, $fileName);
     } catch Error::Simple with {
       $error = shift->{-text};
       $this->writeDebug("ERROR: $error");
